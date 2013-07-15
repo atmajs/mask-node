@@ -1,0 +1,14 @@
+
+:document {
+
+
+	h4 > 'Smily'
+
+	ul > % repeat='1..10' {
+		li > '~[:_repeatIndex]'
+	}
+
+	div.class > '~[name]'
+
+}
+
