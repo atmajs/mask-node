@@ -41,9 +41,7 @@ function bootstrap(container) {
 	var el = metaNode.nextSibling;
 	
 	
-	//stop_NODE = els[els.length - 1].nextSibling;
-	
-	
+	window.model = model;
 	
 	setup(el, model, {}, el.parentNode, compo);
 

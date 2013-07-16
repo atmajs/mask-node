@@ -24,15 +24,18 @@
 
         :document {
 
-            :todoApp name="app" {
-                :user > '~[user.name]'
-            }
-            
-            :test >
-                div x-signal='click: name' data-name='~[bind: user.name]'
-                    > '~[user.name]'
+            // :todoApp name="app" {
+            //     :user > '~[user.name]'
+            // }
+
+            // :test >
+            //     div x-signal='click: name' data-name='~[bind: user.name]'
+            //         > '~[user.name]'
 
             
+            //h4 > '~[bind: user.name]'
+            input type=text >
+                :bind value='user.name';
 
         }
 

@@ -1,11 +1,11 @@
 if (custom_Tags[meta.compoName] != null) {
 
-	if (meta.mask) {
+	if (meta.mask != null) {
 		var _node = {
 			type: Dom.COMPONENT,
 			compoName: meta.compoName,
 			attr: meta.attr,
-			nodes: mask.parse(meta.mask)
+			nodes: meta.mask ? mask.parse(meta.mask) : null
 		};
 		
 		var fragment = mask.render(_node, model, cntx, null, controller);
@@ -25,13 +25,36 @@ if (custom_Tags[meta.compoName] != null) {
 			
 		controller.components.push(compo);
 		
-		var elements = [];
-		
-		node = node.nextSibling;
-		
-		while(node && !(node.nodeType === Node.COMMENT_NODE && node.textContent === '/t#' + meta.ID)){
-			setup(node, model, cntx, container, compo, elements);
+		if (meta.single !== false) {
+			var elements = [],
+				textContent;
+			
 			node = node.nextSibling;
+			while(node != null){
+				
+				if (node.nodeType === Node.COMMENT_NODE) {
+					textContent = node.textContent;
+					
+					if (textContent === '/t#' + meta.ID) {
+						break;
+					}
+					
+					if (textContent === '~') {
+						container = node.previousSibling;
+						node = node.nextSibling;
+						continue;
+					}
+					
+					if (textContent === '/~') {
+						container = container.parentNode;
+						node = node.nextSibling;
+						continue;
+					}
+				}
+				
+				setup(node, model, cntx, container, compo, elements);
+				node = node.nextSibling;
+			}
 		}
 		
 		

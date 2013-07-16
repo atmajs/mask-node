@@ -135,12 +135,10 @@ var Meta = (function(){
 			
 			parse_ID(json);
 			
-			while (parse_property(json)) {
-				
-				if (parser_Index > parser_Length - 2 && string[parser_Index] === '/') {
-					json.single = true;
-				}
-			}
+			while (parse_property(json));
+			
+			if (string[parser_Length - 1] === '/') 
+				json.single = true;
 			
 			return json;
 		}

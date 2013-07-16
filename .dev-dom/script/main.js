@@ -25,11 +25,6 @@ include.js({
                 }
             }));
 
-            //mask.registerUtility('bind', function(){});
-
-            mask.registerUtility('bind', domMask.getUtility('bind'), '');
-
-
 
             var template = $('#layout').html();
 

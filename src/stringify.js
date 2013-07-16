@@ -32,7 +32,7 @@ function html_stringify(document, model, cntx, component) {
 
 		if (html) {
 			var body = html.firstChild;
-			while(body && body.tagName !== 'body'){
+			while(body && body.tagName !== 'BODY'){
 				body = body.nextNode;
 			}
 		

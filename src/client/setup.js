@@ -7,7 +7,7 @@ function setup(node, model, cntx, container, controller, childs) {
 		if (node.firstChild) 
 			setup(node.firstChild, model, cntx, node, controller);
 		
-		if (node.nextSibling && childs == null) 
+		if (childs == null && node.nextSibling) 
 			setup(node.nextSibling, model, cntx, container, controller);
 		
 		
@@ -20,6 +20,16 @@ function setup(node, model, cntx, container, controller, childs) {
 	var metaContent = node.textContent;
 	
 	if (metaContent === '/m') {
+		return;
+	}
+	
+	if (metaContent === '~') {
+		setup(node.nextSibling, model, cntx, node.previousSibling, controller);
+		return;
+	}
+	
+	if (metaContent === '/~') {
+		setup(node.nextSibling, model, cntx, node.parentNode, controller);
 		return;
 	}
 	
