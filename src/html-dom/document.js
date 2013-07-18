@@ -10,6 +10,10 @@ var document = {
 		return new html_TextNode(text);
 	},
 
+	createComment: function(text){
+		return new html_Comment(text);
+	},
+	
 	createComponent: function(compo, model, cntx, container, controller){
 		return new html_Component(compo, model, cntx, container, controller);
 	}

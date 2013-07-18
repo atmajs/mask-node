@@ -53,17 +53,19 @@ var builder_build = (function() {
 			
 			var instance = element.instance;
 			
-			if (instance.model) {
-				model = instance.model;
+			if (instance != null) {
+				if (instance.model) {
+					model = instance.model;
+					
+					element.modelID = cntx._model.append(model);
+				}
 				
-				element.modelID = cntx._model.append(model);
+				if (instance.render) {
+					return element;
+				}
+				
+				node = instance;	
 			}
-			
-			if (instance.render) {
-				return element;
-			}
-			
-			
 		}
 
 		var nodes = node.nodes;
@@ -105,6 +107,17 @@ var builder_build = (function() {
 
 
 		builder_html(template, model, cntx, doc, component);
+		
+		if (cntx.async === true) {
+			
+			cntx.done(function(){
+				var html = html_stringify(doc, model, cntx, component);
+				
+				cntx.resolve(html);
+			});
+			
+			return null;
+		}
 
 		return html_stringify(doc, model, cntx, component);
 	};

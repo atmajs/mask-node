@@ -12,7 +12,7 @@ html_DocumentFragment.prototype = obj_inherit(html_DocumentFragment, html_Node, 
 
 		while (element != null) {
 			string += element.toString();
-			element = element.nextNode;
+			element = element.nextSibling;
 		}
 
 		return string;

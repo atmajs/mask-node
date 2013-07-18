@@ -4,7 +4,6 @@ function html_Element(name) {
 	this.attributes = {};
 }
 
-window.El = html_Element;
 
 html_Element.prototype = obj_inherit(html_Element, html_Node, {
 	
@@ -59,7 +58,7 @@ html_Element.prototype = obj_inherit(html_Element, html_Node, {
 		
 		while (element != null) {
 			string += element.toString();
-			element = element.nextNode;
+			element = element.nextSibling;
 		}
 		
 		if (isSingleTag) 

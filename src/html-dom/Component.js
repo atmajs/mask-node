@@ -100,7 +100,7 @@ html_Component.prototype = obj_inherit(html_Component, html_Node, {
 			
 		while (element != null) {
 			string += element.toString();
-			element = element.nextNode;
+			element = element.nextSibling;
 		}
 		
 		

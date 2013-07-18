@@ -26,7 +26,7 @@ var mock_UtilHandler = (function() {
 			while (element != null) {
 				string += element.toString();
 				
-				element = element.nextNode;
+				element = element.nextSibling;
 			}
 			
 			if (this.firstChild != null) {

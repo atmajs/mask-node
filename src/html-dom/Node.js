@@ -5,7 +5,7 @@ html_Node.prototype = {
 	firstChild: null,
 	lastChild: null,
 	
-	nextNode: null,
+	nextSibling: null,
 	
 	
 	get length() {
@@ -14,7 +14,7 @@ html_Node.prototype = {
 			
 		while (el != null) {
 			count++;
-			el = el.nextNode;
+			el = el.nextSibling;
 		}
 		return count;
 	},
@@ -26,7 +26,7 @@ html_Node.prototype = {
 		while (el != null) {
 			array.push(el);
 			
-			el = el.nextNode;
+			el = el.nextSibling;
 		}
 		
 		return array;
@@ -39,7 +39,7 @@ html_Node.prototype = {
 		}
 		else {
 			
-			this.lastChild.nextNode = child;
+			this.lastChild.nextSibling = child;
 			this.lastChild = child;
 		}
 		
@@ -50,8 +50,8 @@ html_Node.prototype = {
 		var prev = this.firstChild;
 		
 		if (prev !== anchor) {
-			while (prev != null && prev.nextNode !== anchor) {
-				prev = prev.nextNode;
+			while (prev != null && prev.nextSibling !== anchor) {
+				prev = prev.nextSibling;
 			}
 		}
 		
@@ -63,11 +63,11 @@ html_Node.prototype = {
 		if (prev === this.firstChild) {
 			this.firstChild = child;
 			
-			child.nextNode = prev;
+			child.nextSibling = prev;
 			return;
 		}
 		
-		prev.nextNode = child;
-		child.nextNode = anchor;
+		prev.nextSibling = child;
+		child.nextSibling = anchor;
 	}
 };

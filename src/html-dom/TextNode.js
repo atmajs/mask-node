@@ -6,7 +6,7 @@ function html_TextNode(text){
 html_TextNode.prototype = {
 	constructor: html_TextNode,
 	nodeType: Dom.TEXTNODE,
-	nextNode: null,
+	nextSibling: null,
 
 	toString: function(){
 		return this.textContent || '';

@@ -1,5 +1,5 @@
 
-// import client/bootstrap.js
+
 
 function html_stringify(document, model, cntx, component) {
 
@@ -12,7 +12,7 @@ function html_stringify(document, model, cntx, component) {
 	
 
 	var first = document.firstChild,
-		isDocument = first instanceof html_Component && first.instance.isDocument,
+		documentElement = trav_getDoc(first),
 		headerJson = {
 			model: cntx._model.stringify()
 		},
@@ -26,15 +26,13 @@ function html_stringify(document, model, cntx, component) {
 		metaClose = Meta.close(headerJson, headerInfo);
 	
 	
-	if (isDocument) {
+	if (documentElement) {
 
-		var html = first.firstChild.nextNode;
-
+		var html = trav_getChild(documentElement, 'HTML');
+		
 		if (html) {
-			var body = html.firstChild;
-			while(body && body.tagName !== 'BODY'){
-				body = body.nextNode;
-			}
+			var body = trav_getChild(html, 'BODY');
+			
 		
 			if (body){
 				body.insertBefore(new html_TextNode(meta), body.firstChild);

@@ -24,13 +24,14 @@ var html_SingleTags = {
 	'wbr': 1,
 };
 
-// import utils.js
+// import util/node.js
+// import util/traverse.js
 // import Node.js
 // import Doctype.js
 // import DocumentFragment.js
 // import Element.js
 // import TextNode.js
 // import Component.js
-
+// import Comment.js
 
 // import document.js

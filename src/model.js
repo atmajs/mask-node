@@ -9,6 +9,10 @@ var ModelBuilder = (function(){
 	
 	ModelBuilder.prototype = {
 		append: function(model){
+			if (model === null) 
+				return -1;
+			
+			
 			
 			for (var i = 0, x, imax = this._models.length; i < imax; i++){
 				x = this._models[i];
