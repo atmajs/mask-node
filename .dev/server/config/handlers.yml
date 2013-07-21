@@ -1,0 +1,3 @@
+
+handlers:
+	'.less' : '/server/http/handler/less.js'

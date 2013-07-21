@@ -1,0 +1,7 @@
+layout:view master='default' {
+	
+	@content #content {
+		'Hello'
+	}
+	
+}

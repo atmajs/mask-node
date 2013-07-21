@@ -7,8 +7,6 @@ var builder_build = (function() {
 	
 
 
-	var _controllerID = 0;
-
 	function builder_html(node, model, cntx, container, controller) {
 
 		if (node == null) {
@@ -47,6 +45,7 @@ var builder_build = (function() {
 		}
 
 		if (type === 4 /* Dom.COMPONENT */) {
+			
 			element = document.createComponent(node, model, cntx, container, controller);
 			container.appendChild(element);
 			container = element;
@@ -54,16 +53,21 @@ var builder_build = (function() {
 			var instance = element.instance;
 			
 			if (instance != null) {
+				if (instance.render) 
+					return element;
+				
+				
+				
 				if (instance.model) {
 					model = instance.model;
 					
-					element.modelID = cntx._model.append(model);
+					if (instance.mode !== 'server:all') {
+						element.modelID = cntx._model.append(model);
+					}
 				}
 				
-				if (instance.render) {
-					return element;
-				}
 				
+				controller = instance;
 				node = instance;	
 			}
 		}
@@ -82,7 +86,8 @@ var builder_build = (function() {
 
 				if (type === 4 /* Dom.COMPONENT */ && childNode.type === 1 /* Dom.NODE */){
 					
-					childNode.attr['x-compo-id'] = element.ID;
+					if (controller.mode !== 'server:all') 
+						childNode.attr['x-compo-id'] = element.ID;
 				}
 
 				builder_html(childNode, model, cntx, container, controller);
@@ -104,6 +109,7 @@ var builder_build = (function() {
 		}
 		
 		cntx._model = new ModelBuilder(model);
+		cntx._id = 0;
 
 
 		builder_html(template, model, cntx, doc, component);

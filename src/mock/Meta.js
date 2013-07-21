@@ -68,8 +68,11 @@ var Meta = (function(){
 	return {
 		stringify: function(json, info){
 			
-			if (info.mode === 'server') 
-				return '';
+			switch (info.mode) {
+				case 'server':
+				case 'server:all':
+					return '';
+			}
 			
 			
 			var	type = info.type,
@@ -106,8 +109,11 @@ var Meta = (function(){
 		},
 		
 		close: function(json, info){
-			if (info.mode === 'server') 
-				return '';
+			switch (info.mode) {
+				case 'server':
+				case 'server:all':
+					return '';
+			}
 			
 			
 			return '<!--/'

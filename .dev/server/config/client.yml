@@ -1,0 +1,9 @@
+
+
+client:
+		
+	scripts:
+		- '/public/script/main.js'
+		
+	styles:
+		- '/public/style/main.less'

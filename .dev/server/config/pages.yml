@@ -1,0 +1,13 @@
+
+
+page:
+	route: '/public/page/{0}.mask'
+	master: '/server/http/page/master/index.mask'
+
+pages:
+	!/:
+		view: 'index'
+		
+	
+		
+			

@@ -1,0 +1,12 @@
+
+compos-info:
+	
+	':scripts' :
+		mode: 'server:all'
+	
+	'layout:master':
+		mode: server
+		
+	'layout:view' :
+		mode: server
+	

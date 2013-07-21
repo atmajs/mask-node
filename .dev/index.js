@@ -1,70 +1,39 @@
-global.Class = require('./libjs/class.js').Class;
+
+require('./lib/atma/lib.js');
+
+include
+	.cfg('autoreload', true)
+	.done(initialize);
 
 
+function initialize() {
+		
+	global.app = atma
+		.Application({
+			configs: [
+				'compos-info',
+				'include',
+				'client',
+				'handlers',
+				'pages'
+				]
+		})
+		.ready(function(app) {
+			
+			
+		
+			var connect = require('connect'),
+				port = 5777;
+		
+		
+			connect()
+				.use(connect.favicon()) 
+				.use(connect.logger('dev'))
+				.use(app.responder())
+				.use(connect.static(__dirname))
+				.listen(port);
+		
+		
+		});	
 
-require('./libjs/include.node.js');
-
-
-var resource = include;
-
-resource
-.cfg({
-	autoreload: true,
-})
-.routes({
-	view: '/app/view/{0}.mask',
-	controller: '/app/controller/{0}.js',
-	compo: '/app/compo/{0}.js'
-});
-
-
-
-resource
-.js('app/routes.js::Routes', '../lib/mask.node.js::Mask')
-.done(function(resp) {
-
-
-	var sys = require("sys"),
-		http = require("http"),
-		connect = require('connect'),
-		app = connect(),
-		port = 5777;
-
-	global.mask = resp.Mask;
-
-
-
-
-	app //
-	.use(connect.favicon()) //
-	.use(connect.logger('dev')) //
-	.use(function(request, response, next) {
-
-		var controller = resp.Routes.resolve(request.url);
-
-		if (controller) {
-
-			resource.js({
-				controller: controller + '::Controller'
-			}).done(function(resp) {
-
-				response.writeHeader(200, {
-					"Content-Type": "text/html"
-				});
-
-				resp.Controller.request(request, response);
-			});
-
-			return;
-		}
-
-		next();
-
-	})
-	.use(connect.static(__dirname));
-
-
-
-	http.createServer(app).listen(port);
-
-});
+}

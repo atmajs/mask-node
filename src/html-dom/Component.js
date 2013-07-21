@@ -1,22 +1,42 @@
 function html_Component(node, model, cntx, container, controller) {
+	
+	this.ID = ++ cntx._id;
+	
 	var typeof_Instance = typeof node.controller === 'function',
-		handler = typeof_Instance ? new node.controller(model) : node.controller;
+		handler = typeof_Instance
+			? new node.controller(model)
+			: node.controller;
 
-	if (handler == null) {
+	
+	if (controller.mode === 'server:all') {
+		this.mode = 'server:all';
+		
+		if (handler) 
+			handler.mode = 'server:all';;
+		
+		
+	}
+		
+	
+	if (handler == null) 
 		return;
+	
+
+	var attr = util_extend(handler.attr, node.attr),
+		key;
+	
+	obj_extend(handler, {
+		compoName : node.compoName || node.tagName,
+		attr : attr,
+		model : model,
+		parent : controller
+	});
+	
+	if (!handler.nodes) {
+		handler.nodes = node.nodes;
 	}
 
 	
-
-	var key, attr;
-
-	handler.compoName = node.compoName || node.tagName;
-	
-	handler.attr = attr = util_extend(handler.attr, node.attr);
-	handler.model = model;
-	handler.nodes = node.nodes;
-	handler.parent = controller;
-
 
 	for (key in attr) {
 		if (typeof attr[key] === 'function') {
@@ -54,7 +74,6 @@ function html_Component(node, model, cntx, container, controller) {
 
 	if (typeof_Instance) {
 		this.instance = handler;
-		this.ID = ++_controllerID;
 	}
 }
 
@@ -71,21 +90,28 @@ html_Component.prototype = obj_inherit(html_Component, html_Node, {
 		var element = this.firstChild,
 			instance = this.instance;
 		
-		if (instance == null){
-			debugger;
+		var mode = this.mode,
+			compoName,
+			attr,
+			nodes;
+		
+		if (instance != null) {
+			compoName = instance.compoName;
+			attr = instance.attr;
+			mode = instance.mode;
+			
+			nodes = instance.nodes;
 		}
+	
 		
-		
-		var	instance = this.instance,
-			mode = instance.mode,
-			json = {
+		var	json = {
 				ID: this.ID,
 				modelID: this.modelID,
 				
-				compoName: instance.compoName,
-				attr: instance.attr,
+				compoName: compoName,
+				attr: attr,
 				mask: mode === 'client'
-						? mask.stringify(instance.nodes, 0)
+						? mask.stringify(nodes, 0)
 						: null
 			},
 			info = {
@@ -93,7 +119,6 @@ html_Component.prototype = obj_inherit(html_Component, html_Node, {
 				type: 't',
 				mode: mode
 			};
-		
 		
 		var string = Meta.stringify(json, info),
 			element = this.firstChild;

@@ -1,0 +1,23 @@
+
+layout:master #default {
+
+	:document {
+		
+		head {
+			:styles;
+		}
+		
+		body {
+			
+			@placeholder #header {
+				header > @placeholder;
+			}
+			
+			
+			@placeholder #content;
+			
+			
+			:scripts;
+		}
+	}
+}
