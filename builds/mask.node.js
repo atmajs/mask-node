@@ -9,8 +9,10 @@
 	// import ../../mask/src/util/string.js
 	// import ../../mask/src/util/condition.js
 	
+	// import ../src/util/is.js
 	// import ../src/util/object.js
 	// import ../src/util/function.js
+	
 	
 	
 	// import ../../mask/src/expression/exports.js

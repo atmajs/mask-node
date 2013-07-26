@@ -1,0 +1,76 @@
+
+
+page:
+	route: '/public/page/{0}/{1}.mask'
+	master: '/public/page/master/index.mask'
+
+pages:
+	# Page urls
+	# Default page path is /server/http/page/index/index.mask
+	# Each page item also has some additional infos
+	# - title - Page Title
+	
+	
+	!/:
+		view: 'index'
+		title: 'Atma.js'
+		styles: 'index'
+		menuHidden: true
+		
+	/get:
+		title: 'Source'
+		view: 'get'
+		controller: 'get'
+	
+	/feedback:
+		title: 'Feedback'
+	
+	/class:
+		title: 'ClassJS - Atma'
+		view: 'class'
+		controller: 'class'
+	
+	/mask: 
+		title: 'MaskJS - Atma'
+		controller: 'mask'
+	
+	/include: 
+		title: 'IncludeJS - Atma'
+	
+	/atma-tool: 
+		title: 'Atma Toolkit'
+	
+	
+	/utest: 
+		title: 'UTest - Atma'
+	
+
+	/mask-j: 
+		title: 'mask.J'
+	
+	/mask-binding: 
+		title: 'mask.Binding'
+	
+	/mask-compo: 
+		title: 'mask.Compo'
+	
+	/sys: 
+		title: 'Handler: Percent'
+	
+	/ruqq: 
+		title: 'RuqqJS'
+	
+	/mask-animation: 
+		title: 'Animations'
+	
+
+	/compos: 
+		title: 'Component'
+		controller: 'compos'
+	
+	
+		
+		
+	
+		
+			

@@ -31,7 +31,7 @@ html_Element.prototype = obj_inherit(html_Element, html_Node, {
 				+ key
 				+ '="'
 				+ (typeof value === 'string'
-						? value.replace(/"/g, '\\"')
+						? value.replace(/"/g, '&quot;')
 						: value)
 				+ '"';
 		}

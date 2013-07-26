@@ -14,6 +14,10 @@ var Meta = (function(){
 		parser_Length,
 		parser_String;
 		
+	var tag_OPEN = '<!--',
+		tag_CLOSE = '-->';
+			
+		
 	function parse_ID(json){
 		
 		if (parser_String[parser_Index] !== '#') {
@@ -32,17 +36,14 @@ var Meta = (function(){
 	}
 	
 	function parse_property(json) {
-		if (parser_Index > parser_Length - 5) {
+		if (parser_Index > parser_Length - 5) 
+			return false;
+		
+		
+		if (parser_String[parser_Index++] !== seperator_CHAR || parser_String[parser_Index++] !== ' '){
+			parser_Index = -1;
 			return false;
 		}
-		
-		if (parser_String[parser_Index++] !== seperator_CHAR || parser_String[parser_Index++] !== ' ') {
-			console.warn('[meta parser] "SB " Expected');
-			
-			return false;
-		}
-		
-		
 		
 		var index = parser_Index,
 			str = parser_String;
@@ -78,7 +79,7 @@ var Meta = (function(){
 			var	type = info.type,
 				isSingle = info.single,
 			
-				string = '<!--' + type;
+				string = tag_OPEN + type;
 				
 				if (json.ID) 
 					string += '#' + json.ID;
@@ -103,7 +104,7 @@ var Meta = (function(){
 			if (isSingle)
 				string += '/';
 				
-			string += '-->';
+			string += tag_CLOSE;
 			
 			return string;
 		},
@@ -116,10 +117,11 @@ var Meta = (function(){
 			}
 			
 			
-			return '<!--/'
+			return tag_OPEN
+				+'/'
 				+ info.type
 				+ (json.ID ? '#' + json.ID : '')
-				+ '-->';
+				+ tag_CLOSE;
 		},
 		
 		parse: function (string){
@@ -142,6 +144,10 @@ var Meta = (function(){
 			parse_ID(json);
 			
 			while (parse_property(json));
+			
+			if (parser_Index === -1) 
+				return {};
+			
 			
 			if (string[parser_Length - 1] === '/') 
 				json.single = true;

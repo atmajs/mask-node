@@ -1,0 +1,17 @@
+
+<script type='text/javascript' src='%INCLUDE%'></script>
+<script type='text/javascript'>
+	
+	include
+		.cfg(%CFG%)
+		.js(%SCRIPTS%)
+		.done(function(){
+			
+			var start = Date.now();
+			
+			mask.Compo.bootstrap();
+			
+			console.log('Render - ', Date.now() - start);
+		});
+	
+</script>

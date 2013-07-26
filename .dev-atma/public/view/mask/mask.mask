@@ -1,0 +1,320 @@
+layout:view master='view' {
+
+    @content #title {
+        a href='https://github.com/tenbits/MaskJS' target=_blank > 'github@MaskJS';
+    }
+
+
+
+    @content #tabs {
+        :radio .radioButtons {
+            button.active name='info' > 'Info'
+            button name='examples' > 'Examples'
+            button name='syntax' > 'Syntax'
+            button name='api' > 'API'
+            button name='snippets' > 'Snippets'
+        }
+    }
+    
+    @content #side-menu {
+        
+        % if='sideMenu' >
+            % each='sideMenu' >
+                :radio .group name='~[name]' >
+                    % each='list' >
+                        .side-menu-item name='~[name]'
+                                > '~[title]'
+                                
+        :radio .group name='syntax' {
+            .side-menu-item name='tags' > 'Tags'
+            .side-menu-item name='literals' > 'Literals'
+            .side-menu-item name='values' > 'Values'
+            .side-menu-item name='expressions' > 'Expressions'
+            .side-menu-item name='utils' > 'Utils'
+            .side-menu-item name='comments' > 'Comments'
+        }
+        
+       
+        
+    }
+
+    @content #content {
+        .container.tabPanel {
+            
+            .info.active data-name='info' {
+                img src='/images/mask.png' style='float:right; max-height: 150px';
+
+                .info {
+                    h4 > 'Syntax'
+                    p {
+                        div > tt > '- simple (css/sass/less alike)'
+                        div > tt > '- structure oriented'
+                    }
+                }
+
+                .info {
+                    h4 > 'Engine'
+                    p {
+                        div > tt > '- dom based'
+                    }
+                }
+
+                .info {
+                    h4 > 'Dynamic'
+                    p {
+                        div > tt > '- interpolations'
+                        div > tt > '- bindings'
+                        div > tt > '- expressions'
+                    }
+                }
+
+                .info {
+                    h4 > 'Customizable'
+                    p {
+                        div > tt > '- tags'
+                        div > tt > '- attributes'
+                        div > tt > '- value preprocessors'
+                    }
+                }
+
+                .info {
+                    h4 > 'OOP'
+                    p {
+                        div > tt > '- hierarchical'
+                        div > tt > '- controller driven'
+                        div > tt > '- dependency injection'
+                        div > tt > '- abstraction'
+                    }
+                }
+
+                .info {
+                    h4 > 'Performance'
+                    p {
+                        div > tt > '- html compared'
+                        div > tt > '- mobile oriented'
+                        div > tt > '- no precompilation needed'
+                    }
+                }
+
+                .info {
+                    h4 > 'cross-browser'
+                }
+
+                .info {
+                    h4 > 'nodejs'
+                    p {
+                        div > tt > '- maskdom ast to html'
+                    }
+                }
+
+                .info {
+                    h4 > 'no dependencies'
+                }
+            }
+            
+            .examples data-name='examples' {
+                :tabs #tabs-examples >
+                    @panels >
+                        % each='examples' >
+                            div name='~[name]' {
+                            
+                                
+                                a name='~[title]';
+                                .example {
+                                    h4 > '~[title]'
+                                    
+                                    
+                                    h6 > 'Template'
+                                    prism > '~[template]'
+                                    h6 > 'Javascript'
+                                    prism > '~[javascript]'
+                                    h6 > 'Result'
+                                    
+                                    .result > '~[result]'
+                                
+                                }
+                            }
+            }
+            
+            .syntax data-name='syntax' {
+                :tabs #tabs-syntax scrollbar {
+                    @panels {
+                        div name='tags' {
+                            h3 > 'Tags'
+                            p {
+                                h5 > 'Declaration'
+                                prism > formatter:pre > '
+                                    tag#id.class
+                                    span
+                                    span.title
+                                    .content
+                                    #content
+                                '
+                                .hint > 'Tag Name can be omitted if class or id is used. Tag Name will be then "div"'
+                                
+                                h5 > 'Attributes'
+                                prism > formatter:pre > '
+                                    tag key=\'value\' ...
+                                    tag key="value" ...
+                                    tag key=value ...
+                                    tag key = value ...
+                                '
+                                .hint > 'Quotes could be omitted if value itself contains no spaces'
+                                
+                                h5 > 'Content'
+                                table style='margin-left:30px;'  {
+                                    tr { td > '«;»' td > ' — close tag, if it has no content' }
+                                    tr { td > '«>»' td > ' — if it has only one item (tag or literal)' }
+                                    tr { td > '«{»' td > ' — if it has one or more items. Then close it with «}».' }
+                                }
+                                p > 'And the content itself is other tags or literals'
+                            }
+                        }
+        
+                        div name='literals' {
+                            h3 > 'Literals'
+                            p {
+                                h5 > 'Like Javascript strings'
+                                prism > '"Text Node Content"'
+                                prism > "'Text Node Content'"
+                                prism > "'I \' am a quote in literal, and should be escaped as in javascript string'"
+                                //.hint {
+                                //    'If a template is defined in javascript string, then to escape a quote you need to escape the slash also '
+                                //    'Different quote escaping examples:'
+                                //    div > prism > """ var a = "div > ' I\\'am a quote '"; """
+                                //    div > prism > """ var a = "div > \" I\\\"am a quote \""; """
+                                //    div > prism > """ var a = "div > ' I\\\"am a quote '"; """
+                                //}
+            
+                                h5 > 'Block Literals with many quotes'
+            
+                                div > code > "''' text ''' "
+                                div > code > '""" text """ '
+            
+            
+                                div > 'This allows to write any number of any quotes in literals without need to escape them.
+                                    (But remember about javascript string quote escaping.)'
+                                
+                            }
+                        }
+                         
+                        div name='values' {   
+                            h3 > 'Template Values'
+                            prism { '~' '[propertyName.andChainingAlsoPossible]' }
+                            div > small {
+                                'To change interpolation quotes use: '
+                                code > 'mask.setInterpolationQuotes("#{","}")'
+                            }
+                            
+                            .hint > '! Data is resolved from a model object only, as opposed to "expressions"'
+                        }
+                        
+                        div name='expressions'{
+                            h3 > 'Template Value Expressions'
+                            prism { '~' '[:index > 10 ? property : "Some other string"]' }
+                            prism { '~' '[:controllerFunction(user) + "!"]' }
+                            prism { '~' '[: username.toLowerCase() + "!" ]' }
+        
+                            .hint {
+                                div > 'Mask uses internal and very fast expression parser / evaluater'
+                                p {
+                                    'Variable/Function lookup:'
+                                    ol {
+                                        li > 'model'
+                                        li > 'context'
+                                        li > 'controller'
+                                        li > 'parents controller'
+                                        li > ' .. up in controllers tree'
+                                    }
+                                }
+                            }
+                        }
+                        
+                        div name='utils' {
+                            h3 > 'Template Value Utilities'
+                            'Template Values Can be Transformed before inserting'
+                            prism {
+                                '~' '[utilityName:data]'
+                            }
+                            div.hint {
+                                a href='#/mask/api/Mask/registerUtility' > '@see mask.registerUtility'
+                            }
+        
+                        }
+                    
+                        
+                        div name='comments' {
+                            h3 > 'Comments'
+                            p{
+                                'Single Line Comments'
+                                prism > '// this is comment'
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            .api data-name='api'{
+                apiViewer src='/api/mask.html' base='/mask/api';
+            }
+
+
+            .snippets data-name='snippets' {
+                ul.tiny {
+                    li {
+                        prism language=css > 'div'
+                        prism language=markup > '<div></div>'
+                    }
+                    li {
+                        prism language=css > '.class#id.other;'
+                        prism language='markup' > '<div id="id" class="class other"></div>'
+                    }
+                    li {
+                        prism language=css > 'span #id .class.other;'
+                        prism language='markup' > '<span id="id" class="class other"></span>'
+                    }
+                    li {
+                        prism language=css > 'div data-key=value > "hi";'
+                        prism language='markup' > '<div data-key="value">hi</div>'
+                    }
+                    li {
+                        prism language=css > 'p.container > .panel > button > "Press Me";'
+                        prism language='markup' > '<p class="container"><div class="panel"><button>Press Me</button></div></p>'
+                    }
+                    li {
+                        prism language=css > formatter:pre > '
+                            p {
+                                button > "Press"
+                                button > "Cancel"
+                            }'
+                        prism language='markup' > '<p><button>Press</button><button>Cancel</button></p>'
+                    }
+                    li {
+                        prism language=css { 'p.~''[klass] data-id="~''[id]" > "~''[info.name]"' }
+                        prism > '{ id: "post234", klass: "red", info: {name: "RD"} }'
+                        prism language='markup' > '<p class="red" data-id="post234">RD</p>'
+                    }
+                    li {
+                        prism language=css { 'span { \'~''[: current > 10 ? "More Than 10" ]\' }' }
+                        prism > '{ current: 11 }'
+                        prism language='markup' > '<span>More Than 10</span>'
+                    }
+                    li {
+                        prism language=css { 'ul > % each="arr" > li > "~''[.]"' }
+                        prism > '{ arr: [1,2,3] }'
+                        prism language='markup' > '<ul><li>1</li><li>2</li><li>3</li></ul>'
+                    }
+                    li {
+                        prism language=css > formatter:pre { '
+                            % if="number>10" > h4 > "Under"
+                            % else > h3 > "Below"'
+                        }
+                        prism > '{ number: 9 }'
+                        prism language='markup' > '<h3>Below</h3>'
+                    }
+
+                }
+            }
+        }
+    }
+}

@@ -6,7 +6,7 @@ html_DOCTYPE.prototype = {
 	constructor: html_DOCTYPE,
 	nodeType: Dom.DOCTYPE,
 
-	toString: function(){
+	toString: function(buffer){
 		return this.doctype;
 	}
 

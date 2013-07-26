@@ -1,41 +1,50 @@
 function html_Component(node, model, cntx, container, controller) {
 	
+	var compo, attr, key;
+	
 	this.ID = ++ cntx._id;
 	
-	var typeof_Instance = typeof node.controller === 'function',
-		handler = typeof_Instance
-			? new node.controller(model)
-			: node.controller;
-
 	
-	if (controller.mode === 'server:all') {
-		this.mode = 'server:all';
+	compo = is_Function(node.controller)
+		? new node.controller(model)
+		: (node.controller);
 		
-		if (handler) 
-			handler.mode = 'server:all';;
-		
-		
+	
+	if (compo == null) {
+		compo = {
+			model: node.model,
+			container: node.container
+		};
 	}
+	
+	this.compo = compo;
+	
+	
+	if (mode_SERVER_ALL === controller.mode) 
+		compo.mode = mode_SERVER_ALL;
+	
+	if (mode_SERVER_CHILDREN === controller.mode) 
+		compo.mode = mode_SERVER_ALL;
+	
+		
+
+	attr = util_extend(compo.attr, node.attr);
 		
 	
-	if (handler == null) 
-		return;
 	
-
-	var attr = util_extend(handler.attr, node.attr),
-		key;
+	this.compoName = compo.compoName = node.compoName || node.tagName;
+	compo.attr = attr;
+	compo.parent = controller;
 	
-	obj_extend(handler, {
-		compoName : node.compoName || node.tagName,
-		attr : attr,
-		model : model,
-		parent : controller
-	});
 	
-	if (!handler.nodes) {
-		handler.nodes = node.nodes;
+	
+	if (cntx.debug && cntx.debug.breakOn === compo.compoName) {
+		debugger;
 	}
 
+	
+	if (compo.nodes == null) 
+		compo.nodes = node.nodes;
 	
 
 	for (key in attr) {
@@ -45,36 +54,33 @@ function html_Component(node, model, cntx, container, controller) {
 	}
 
 
-	if (typeof handler.renderStart === 'function') {
-		handler.renderStart(model, cntx, container);
+	if (typeof compo.renderStart === 'function') {
+		compo.renderStart(model, cntx, container);
+	}
+	
+	if (controller) {
+		(controller.components || (controller.components = []))
+			.push(compo);
+	}
+	
+	if (compo.async === true) {
+		compo.await(build_resumeDelegate(compo, model, cntx, this));
+		return;
 	}
 
-	// temporal workaround for backwards compo where we used this.tagName = 'div' in .render fn
-	if (handler.tagName != null && handler.tagName !== node.compoName) {
-		handler.nodes = {
-			tagName: handler.tagName,
-			attr: handler.attr,
-			nodes: handler.nodes,
+	
+	if (compo.tagName != null && compo.tagName !== node.compoName) {
+		compo.nodes = {
+			tagName: compo.tagName,
+			attr: compo.attr,
+			nodes: compo.nodes,
 			type: 1
 		};
 	}
 
-
-
-	if (controller) {
-		(controller.components || (controller.components = []))
-			.push(node);
-	}
-
-
-
-	if (typeof handler.render === 'function') {
-		handler.render(model, cntx, this, this);
-	}
-
-	if (typeof_Instance) {
-		this.instance = handler;
-	}
+	if (typeof compo.render === 'function') 
+		compo.render(model, cntx, this, compo);
+	
 }
 
 
@@ -82,25 +88,26 @@ function html_Component(node, model, cntx, container, controller) {
 html_Component.prototype = obj_inherit(html_Component, html_Node, {
 	nodeType: Dom.COMPONENT,
 	
+	compoName: null,
 	instance: null,
 	components: null,
 	ID: null,
 	toString: function() {
 		
 		var element = this.firstChild,
-			instance = this.instance;
+			compo = this.compo;
 		
-		var mode = this.mode,
+		var mode = compo.mode,
 			compoName,
 			attr,
 			nodes;
 		
-		if (instance != null) {
-			compoName = instance.compoName;
-			attr = instance.attr;
-			mode = instance.mode;
+		if (compo != null) {
+			compoName = compo.compoName;
+			attr = compo.attr;
+			mode = compo.mode;
 			
-			nodes = instance.nodes;
+			nodes = compo.nodes;
 		}
 	
 		
@@ -120,12 +127,18 @@ html_Component.prototype = obj_inherit(html_Component, html_Node, {
 				mode: mode
 			};
 		
-		var string = Meta.stringify(json, info),
-			element = this.firstChild;
+		var string = Meta.stringify(json, info);
+		
+		if (compo.toHtml != null) {
 			
-		while (element != null) {
-			string += element.toString();
-			element = element.nextSibling;
+			string += compo.toHtml();
+		} else {
+			
+			var element = this.firstChild;
+			while (element != null) {
+				string += element.toString();
+				element = element.nextSibling;
+			}
 		}
 		
 		
@@ -136,3 +149,92 @@ html_Component.prototype = obj_inherit(html_Component, html_Node, {
 	}
 });
 
+
+function build_resumeDelegate(controller, model, cntx, container, childs){
+	var anchor = container.appendChild(document.createComment(''));
+	
+	return function(){
+		return build_resumeController(controller, model, cntx, anchor, childs);
+	};
+}
+
+
+function build_resumeController(controller, model, cntx, anchor, childs) {
+	
+	
+	if (controller.tagName != null && controller.tagName !== controller.compoName) {
+		controller.nodes = {
+			tagName: controller.tagName,
+			attr: controller.attr,
+			nodes: controller.nodes,
+			type: 1
+		};
+	}
+	
+	if (controller.model != null) {
+		model = controller.model;
+	}
+	
+	
+	var nodes = controller.nodes,
+		elements = [];
+	if (nodes != null) {
+
+		
+		var isarray = nodes instanceof Array,
+			length = isarray === true ? nodes.length : 1,
+			i = 0,
+			childNode = null,
+			fragment = document.createDocumentFragment();
+
+		for (; i < length; i++) {
+			childNode = isarray === true ? nodes[i] : nodes;
+			
+			if (childNode.type === 1 /* Dom.NODE */) {
+				
+				if (controller.mode !== 'server:all') 
+					childNode.attr['x-compo-id'] = controller.ID;
+			}
+			
+			builder_html(childNode, model, cntx, fragment, controller, elements);
+		}
+		
+		anchor.parentNode.insertBefore(fragment, anchor);
+	}
+	
+		
+	// use or override custom attr handlers
+	// in Compo.handlers.attr object
+	// but only on a component, not a tag controller
+	if (controller.tagName == null) {
+		var attrHandlers = controller.handlers && controller.handlers.attr,
+			attrFn;
+		for (key in controller.attr) {
+			
+			attrFn = null;
+			
+			if (attrHandlers && is_Function(attrHandlers[key])) {
+				attrFn = attrHandlers[key];
+			}
+			
+			if (attrFn == null && is_Function(custom_Attributes[key])) {
+				attrFn = custom_Attributes[key];
+			}
+			
+			if (attrFn != null) {
+				attrFn(node, controller.attr[key], model, cntx, elements[0], controller);
+			}
+		}
+	}
+	
+
+	if (childs != null && childs !== elements){
+		var il = childs.length,
+			jl = elements.length;
+
+		j = -1;
+		while(++j < jl){
+			childs[il + j] = elements[j];
+		}
+	}
+}

@@ -34,6 +34,7 @@ Mask.registerHandler = function(tagName, compo){
 	
 	if (compo.prototype.mode === 'client') {
 		custom_Tags[tagName] = mock_TagHandler.create(tagName, compo, 'client');
+		return;
 	}
 	
 	custom_Tags[tagName] = compo;

@@ -1,10 +1,64 @@
 var builder_build = (function() {
 
+	var mode_SERVER = 'server',
+		mode_SERVER_ALL = 'server:all',
+		mode_SERVER_CHILDREN = 'server:children',
+		mode_CLIENT = 'client',
+		mode_model_NONE = 'none';
+
 	// import model.js
 	// import stringify.js
 	// import html-dom/lib.js
 	// import handler/document.js
 	
+	
+	
+	var logger_dimissCircular = (function() {
+		var cache;
+
+		function clone(mix) {
+			if (mix == null) {
+				return null;
+			}
+
+
+			var cloned;
+
+			if (mix instanceof Array) {
+				cloned = [];
+				for (var i = 0, imax = mix.length; i < imax; i++) {
+					cloned[i] = clone(mix[i]);
+				}
+				return cloned;
+			}
+
+			if (typeof mix === 'object') {
+
+				if (~cache.indexOf(mix)) {
+					return '[object Circular]';
+				}
+				cache.push(mix);
+
+				cloned = {};
+				for (var key in mix) {
+					cloned[key] = clone(mix[key]);
+				}
+				return cloned;
+			}
+
+			return mix;
+		}
+
+		return function(mix) {
+			if (typeof mix === 'object' && mix != null) {
+				cache = [];
+				mix = clone(mix);
+				cache = null;
+			}
+
+			return mix;
+		};
+	}());
 
 
 	function builder_html(node, model, cntx, container, controller) {
@@ -50,22 +104,22 @@ var builder_build = (function() {
 			container.appendChild(element);
 			container = element;
 			
-			var instance = element.instance;
+			var instance = element.compo;
 			
 			if (instance != null) {
-				if (instance.render) 
-					return element;
-				
-				
 				
 				if (instance.model) {
 					model = instance.model;
 					
-					if (instance.mode !== 'server:all') {
+					if (mode_SERVER_ALL !== instance.mode
+						&& mode_model_NONE !== instance.modeModel) {
+						
 						element.modelID = cntx._model.append(model);
 					}
 				}
 				
+				if (instance.render) 
+					return element;
 				
 				controller = instance;
 				node = instance;	
@@ -94,30 +148,65 @@ var builder_build = (function() {
 			}
 
 		}
+		
+		if (container.nodeType === Dom.COMPONENT) {
+			
+			if (container.onRenderEndServer) {
+				container.onRenderEndServer();
+			}
+			
+		}
 
 
 		return container;
 	}
 
 
-	return function(template, model, cntx) {
-		var doc = new html_DocumentFragment(),
-			component = new Component();
-			
-		if (cntx == null) {
-			cntx = {};
+	return function(template, model, cntx, container, controller) {
+		if (container == null) 
+			container = new html_DocumentFragment();
+		
+		if (controller == null) {
+			controller = new Component();
 		}
+			
+		if (cntx == null) 
+			cntx = {};
+		
 		
 		cntx._model = new ModelBuilder(model);
 		cntx._id = 0;
+		
+		var html;
 
-
-		builder_html(template, model, cntx, doc, component);
+		//var profiler = require('profiler');
+		
+		//profiler.resume();
+		
+		console.time('-build-')
+		builder_html(template, model, cntx, container, controller);
+		console.log(console.timeEnd('-build-'));
+		
+		//profiler.pause();
+		
+		if (cntx.req && cntx.req.query.debug === 'tree') {
+			cntx.async = false;
+			return JSON.stringify(logger_dimissCircular(container));
+		}
+		
+		
 		
 		if (cntx.async === true) {
 			
+			console.time('-build-async-wait-');
 			cntx.done(function(){
-				var html = html_stringify(doc, model, cntx, component);
+				console.log(console.timeEnd('-build-async-wait-'));
+				
+				console.time('-stringify-')
+				html = html_stringify(container, model, cntx, controller);
+				
+				console.log(console.timeEnd('-stringify-'));
+				
 				
 				cntx.resolve(html);
 			});
@@ -125,7 +214,16 @@ var builder_build = (function() {
 			return null;
 		}
 
-		return html_stringify(doc, model, cntx, component);
+		console.time('-stringify-')
+		html = html_stringify(container, model, cntx, controller);
+		
+		console.log(console.timeEnd('-stringify-'));
+		
+		
+		return html;
 	};
 
+	
+	
+	
 }());

@@ -14,13 +14,13 @@ var ModelBuilder = (function(){
 			
 			
 			
-			for (var i = 0, x, imax = this._models.length; i < imax; i++){
-				x = this._models[i];
-				
-				if (x === model) {
-					return i;
-				}
-			}
+			//for (var i = 0, x, imax = this._models.length; i < imax; i++){
+			//	x = this._models[i];
+			//	
+			//	if (x === model) {
+			//		return i;
+			//	}
+			//}
 			
 			this._models[this._length++] = model;
 			

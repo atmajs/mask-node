@@ -11,11 +11,15 @@ function setup(node, model, cntx, container, controller, childs) {
 			setup(node.nextSibling, model, cntx, container, controller);
 		
 		
-		return;
+		return node;
 	}
 	
-	if (node.nodeType !== Node.COMMENT_NODE) 
-		return;
+	if (node.nodeType !== Node.COMMENT_NODE) {
+		if (childs == null && node.nextSibling) 
+			setup(node.nextSibling, model, cntx, container, controller);
+		
+		return node;
+	}
 	
 	var metaContent = node.textContent;
 	
@@ -41,24 +45,30 @@ function setup(node, model, cntx, container, controller, childs) {
 	if ('a' === meta.type) {
 		// import setup-attr.js
 		
-		return;
+		return node;
 	}
 	
 	if ('u' === meta.type) {
 		
 		// import setup-util.js
 		
-		return;
+		return node;
 	}
 	
 	if ('t' === meta.type) {
 		
 		// import setup-tag.js
 		
-		if (node && node.nextSibling) {
-			setup(node.nextSibling, model, cntx, container, controller);
-		}
+		
+		if (childs != null) 
+			return node;
+		
 	}
 	
+	
+	if (node && node.nextSibling) {
+		setup(node.nextSibling, model, cntx, container, controller);
+	}
+
 }
 

@@ -35,8 +35,8 @@ function html_stringify(document, model, cntx, component) {
 			
 		
 			if (body){
-				body.insertBefore(new html_TextNode(meta), body.firstChild);
-				body.appendChild(new html_TextNode(metaClose));
+				body.insertBefore(new html_Comment(meta), body.firstChild);
+				body.appendChild(new html_Comment(metaClose));
 			}else{
 				console.warn('Body not found');
 			}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<script src="/.reference/libjs/include/lib/include.js"></script>
+	<script src="/.reference/libjs/mask.node/lib/mask.node.js"></script>
+	<script src="/.reference/libjs/class/lib/class.js"></script>
+	<script src="/.reference/libjs/ruqq/lib/arr.js"></script>
+
+</head>
+
+<body></body>
+
+<script>
+
+include
+//.cfg({
+//	loader: {
+//		example: '/public/script/loader/examples.js'
+//	}
+//})
+
+
+.js('/public/compo/view/default.js')
+.js('/public/view/class/class.js')
+.load('/public/view/class/class.mask')
+.done(function(resp){
+	
+		
+	console.log('----');
+	
+	cntx = {};
+	
+	var T = ':view:class #classView { ' + resp.load.class +  ' } ';
+	
+	console.profile('X');
+	
+	var html = mask.render(T, {}, cntx);
+	
+	console.profileEnd('X');
+	
+	if (cntx.done) {
+		cntx.done(function(html){
+			console.log('async', html)
+		});
+	}
+	
+	document.body.textContent = html;
+	
+})
+
+</script>
+
+</html>

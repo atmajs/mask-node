@@ -7,7 +7,7 @@ function trav_getDoc(el, _deep) {
 	if (el instanceof html_Component === false)
 		return null;
 	
-	if (el.instance.compoName === ':document') 
+	if (el.compoName === ':document') 
 		return el;
 
 	if (_deep == null)

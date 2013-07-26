@@ -1,11 +1,18 @@
-if (custom_Tags[meta.compoName] != null) {
+
+var compoName = meta.compoName,
+	ctor = compoName
+		? custom_Tags[meta.compoName]
+		: {};
+
+if (controller != null) {
 
 	if (meta.mask != null) {
 		var _node = {
 			type: Dom.COMPONENT,
-			compoName: meta.compoName,
+			compoName: compoName,
 			attr: meta.attr,
-			nodes: meta.mask ? mask.parse(meta.mask) : null
+			nodes: meta.mask ? mask.parse(meta.mask) : null,
+			controller: ctor
 		};
 		
 		var fragment = mask.render(_node, model, cntx, null, controller);
@@ -13,9 +20,11 @@ if (custom_Tags[meta.compoName] != null) {
 		node.parentNode.insertBefore(fragment, node);
 	} else {
 	
-		var compo = new custom_Tags[meta.compoName](model);
+		var compo = typeof ctor === 'function'
+			? new ctor(model)
+			: ctor;
 		
-		compo.compoName = meta.compoName;
+		compo.compoName = compoName;
 		compo.attr = meta.attr;
 		compo.parent = controller;
 		compo.ID = meta.ID;
@@ -23,7 +32,9 @@ if (custom_Tags[meta.compoName] != null) {
 		if (controller.components == null) 
 			controller.components = [];
 			
-		controller.components.push(compo);
+		controller
+			.components
+			.push(compo);
 		
 		if (meta.single !== false) {
 			var elements = [],
@@ -52,9 +63,15 @@ if (custom_Tags[meta.compoName] != null) {
 					}
 				}
 				
-				setup(node, model, cntx, container, compo, elements);
-				node = node.nextSibling;
+				var endRef = setup(node, model, cntx, container, compo, elements);
+				
+				if (endRef == null) {
+					debugger;
+				}
+				
+				node = endRef.nextSibling;
 			}
+			
 		}
 		
 		
@@ -74,8 +91,6 @@ if (custom_Tags[meta.compoName] != null) {
 		}
 	}
 	
-	
-	
 }else{
-	console.error('Custom Tag Handler was not defined', meta.compoName);
+	console.error('Custom Tag Handler was not defined', compoName, meta.ID);
 }

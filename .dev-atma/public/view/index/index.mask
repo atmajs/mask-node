@@ -1,0 +1,177 @@
+
+layout:view master='view-full' {
+
+    @content #content > .container.tabPanel{
+        .info.active {
+            
+            .-about-keyvisual > .content {
+                div style='
+                    font-size: 2em;
+                    line-height: 2em;
+                '
+                //> "['ᴧ:ᵻᴧ].js"
+                 {
+                    //span.-i-bracket > "["
+                    //span.-i-atma > "ᐲᒣᗑᐱ"
+                    span.-i-atma- > 'ATMA'
+                    //span.-i-bracket > "]"
+                    span.-i-js > ".js"
+                 }
+                
+                h4 style='padding-left: 50px;'
+                    > blockquote > '„Modern HTML5 Application via Component Composition”'
+                    
+                button > a href='#/get/install' > 'Install'
+                
+            }
+            
+            .-about-content {
+            
+            div style='text-align:justify; padding-right: 15px;' {
+                div >
+                    "As we do not want to keep things tight together as one monolith framework,
+                    this Project is split into stand-alone libraries, which cover all app layers of scalable, performant and testable 
+                    Node.js or HTML5 applications.
+                    
+                    "
+
+                p > "Here are first steps to get acquainted with the project."
+
+                ol.about-list {
+                     li {
+                        .about-title {
+                            a href='#class' > 'ClassJS'
+                        }
+                        .about-description {
+                            "[Business logic Layer]"
+                            br;
+                            "Class-Model Implementation with remote or local serialization/deserialization."
+                        }
+                    }
+                    
+                    li {
+                        .about-title {
+                            a href='#mask' > 'MaskJS'
+                        }
+                        .about-description {
+                            "[HMVC]"
+                            br;
+                            "Mask has in its core newer css/sass alike syntax for your templates, which are parsed into
+                            MaskDOM and then Document Fragment is created. You can extend it with custom tag handlers (controllers),
+                            attributes, etc.  MaskJS contains also jMask, Compo and Bindings libraries,
+                            so that it accomplishes all tasks you would expect from a powerful Javascript Framework. It is also 
+                            Model agnostic, that means you can use raw objects for the models (Data-Centric) or use any class library,
+                            like ClassJS or others.
+                            "
+                        }
+                    }
+
+
+                    li {
+                        .about-title {
+                            a href='#include' > "IncludeJS"
+                        }
+                        .about-description {
+                            "[Resource Loader]"
+                            br;
+                            "Loads components, moduls, styles, templates. You will definitely think, 
+                            that we could use any loader out there, like RequireJS.
+                            But there was plenty of features, that we missed. And we hope, you will like them too.
+                            "
+                        }
+                    }
+                    
+                    li {
+                        .about-title {
+                            a href='#utest' > "UTest"
+                        }
+                        .about-description {
+                            "[Unit Testing and Test Driven Development]"
+                            br;
+                            "Tool, that will help you easily to create unit tests, and start developing in a TDD manner"
+                        }
+                    }
+
+                    //li {
+                    //    .about-title {
+                    //        a href='#includeBuilder' > 'IncludeJS.Builder'
+                    //    }
+                    //    .about-description {
+                    //        "
+                    //        a big brother of IncludeJS. Combines all included resources.
+                    //        It also runs jshint, uglify, css-min and etc.
+                    //        "
+                    //    }
+                    //}
+                    //
+                    li {
+                        .about-title {
+                            a href='#mask-animation' > "Mask.Animation"
+                        }
+                        .about-description {
+                            "CSS3 Animation Library"
+                        }
+                    }
+                   
+                }
+            }
+
+
+                p {
+                    h3 > 'Component Oriented Programming'
+                    div > 'Main Feature of MaskJS, beyond its simple markup and fast parsers, is the MaskDOM and Custom Tags. With it you develop not the application,
+                    but the Components. In this way, you are concentrated all the time on small discrete parts(components) or delegate the development upon your team. 
+                    Once written, you do not need to initialize it itself, or use any placeholders, just load the handler as generic Javascript and you
+                    are ready to use it in templates. IncludeJS would help to load all required resources - css, templates and any javascript helpers. Markup receive more 
+                    generic patterns: '
+                    ul {
+                        li {
+                            h4 > 'Encapsulation'
+                            'Usually dialogs markup looks as such:'
+                            prism language="markup" > pre:indent {"
+        
+                                <div class='overlay'>
+                                    <div class='container'>
+                                        <div class='dialog'>
+                                            <!--content-->
+                                </div></div></div>
+        
+                            "}
+                            
+                            'With MaskJS it could be:'
+                            prism language="css" > pre:indent {"
+                                :dialog {
+                                    // content
+                                }
+                            "}
+                        }
+                        li {
+                            h4 > 'Component Fabric Pattern'
+        
+                            'E.g. : Additional tool in responsible design'
+        
+                            prism > ':screen small="Compo1" big="Compo2" { <!-- template --> }'
+                            prism > "mask.registerHandler(':myCompo', Info.smallScreen ? Compo1 : Compo2); "
+                        }
+                        li {
+                            h4 > 'Inheritance'
+                            div > 'Inherit from any component controller and override or extend the functionality.'
+                        }
+                        li {
+                            h4 > 'Injection'
+                            div > 'Replace any element (even "div" tag) with your implementation (for tests, debug, release). Wrap any markup parts with your handler
+                                and control any behavior.'
+                        }
+        
+                        li {
+                            '... and much more things you can start with it.'
+                        }
+                    }
+                }
+            }
+        }
+
+        
+    }
+
+}

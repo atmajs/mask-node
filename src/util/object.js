@@ -14,7 +14,12 @@ function obj_inherit(target /* source, ..*/ ) {
 			: arguments[i];
 
 		for (key in source) {
+			
 			descriptor = Object.getOwnPropertyDescriptor(source, key);
+			
+			if (descriptor == null) 
+				continue;
+			
 			
 			if (descriptor.hasOwnProperty('value')) {
 				target[key] = descriptor.value;
@@ -33,8 +38,12 @@ function obj_extend(target, source) {
 	if (source == null)
 		return target;
 	
-	for (var key in source) {
-		target[key] = source[key];
+	var key, value;
+	for (key in source) {
+		value = source[key];
+		
+		if (value != null) 
+			target[key] = source[key];
 	}
 	
 	return target;
