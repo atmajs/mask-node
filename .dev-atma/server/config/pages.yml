@@ -1,9 +1,10 @@
 
 
 page:
-	route: '/public/page/{0}/{1}.mask'
+	location: '/public/page/{0}/{1}.mask'
 	master: '/public/page/master/index.mask'
 
+	route: '/?:page/?:tab/?:section'
 pages:
 	# Page urls
 	# Default page path is /server/http/page/index/index.mask
@@ -12,6 +13,7 @@ pages:
 	
 	
 	!/:
+		id: about
 		view: 'index'
 		title: 'Atma.js'
 		styles: 'index'
@@ -33,6 +35,26 @@ pages:
 	/mask: 
 		title: 'MaskJS - Atma'
 		controller: 'mask'
+		tabs:
+			info:
+			examples:
+				navigation: false
+			syntax:
+				navigation: false
+			api:
+			snippets:
+	
+	/mask-j: 
+		title: 'mask.J'
+	
+	/mask-binding: 
+		title: 'mask.Binding'
+	
+	/mask-compo: 
+		title: 'mask.Compo'
+	
+	/mask-animation: 
+		title: 'Animations'
 	
 	/include: 
 		title: 'IncludeJS - Atma'
@@ -44,26 +66,12 @@ pages:
 	/utest: 
 		title: 'UTest - Atma'
 	
-
-	/mask-j: 
-		title: 'mask.J'
-	
-	/mask-binding: 
-		title: 'mask.Binding'
-	
-	/mask-compo: 
-		title: 'mask.Compo'
-	
 	/sys: 
 		title: 'Handler: Percent'
 	
 	/ruqq: 
 		title: 'RuqqJS'
 	
-	/mask-animation: 
-		title: 'Animations'
-	
-
 	/compos: 
 		title: 'Component'
 		controller: 'compos'

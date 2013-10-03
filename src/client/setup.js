@@ -40,22 +40,23 @@ function setup(node, model, cntx, container, controller, childs) {
 	var meta = Meta.parse(metaContent);
 	
 	if (meta.modelID) 
-		model = models[meta.modelID];
+		model = __models[meta.modelID];
 	
 	if ('a' === meta.type) {
-		// import setup-attr.js
 		
-		return node;
+		// import setup-attr.js
 	}
 	
 	if ('u' === meta.type) {
 		
 		// import setup-util.js
-		
-		return node;
 	}
 	
 	if ('t' === meta.type) {
+		
+		if (__ID < meta.ID) 
+			__ID = meta.ID;
+		
 		
 		// import setup-tag.js
 		
@@ -70,5 +71,6 @@ function setup(node, model, cntx, container, controller, childs) {
 		setup(node.nextSibling, model, cntx, container, controller);
 	}
 
+	return node;
 }
 

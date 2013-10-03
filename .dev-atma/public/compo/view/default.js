@@ -22,25 +22,23 @@ include
 	}
 
 	mask.registerHandler(':view:default', Compo({
-		//tagName: 'div',
-		attr: {
-		
+		cache: {
+			byProperty: 'ctx.req.url'
 		},
+		
 		compos: {
 			radio_sideMenu: 'compo: .side-menu',
-			radio_radioButtons: 'compo: .radioButtons'
+			radio_radioButtons: 'compo: .radioButtons',
+			tabs_tabs: 'compo: .tabs'
 		},
 		
-		onRenderStart: function(model, cntx){
-			this.viewName = this.attr.id.replace('View', '');
-			
-			this.cntx = {};
-		},
+		modeModel: 'none',
 		
 		onRenderEnd: function(elements, model, cntx){
-			var $tabs = jmask(this).find(':tabs');
+			this.viewName = this.attr.id;
 			
-			var compos = this.compos;
+			var $tabs = jmask(this).find(':tabs'),
+				compos = this.compos;
 			
 			$tabs.each(function(x){
 				if (x.attr.id == null)
@@ -48,61 +46,67 @@ include
 				
 				compos['tabs' + x.attr.id] = x;
 			});
-			
-			this.cntx = cntx;
 		},
 		
 		events: {
 			'changed: .radioButtons': function(e, target) {
-				debugger;
-				var path = this.viewName + '/' + target.getAttribute('name');
 				
-				window.routes.navigate(path);
+				var path = '/'
+					+ this.viewName
+					+ '/'
+					+ target.getAttribute('name');
+				
+				window
+					.ruta
+					.navigate(path);
 			},
 			'changed: .group': function(event, target){
 				
-				var category = target.getAttribute('name');
+				var section = target.getAttribute('name');
 				
-				var path = this.viewName
+				var path = '/'
+					+ this.viewName
 					+ '/'
 					+ this.compos.radio_radioButtons.getActiveName()
 					+ '/'
-					+ category;
+					+ section;
 				
-				window.routes.navigate(path);
+				window
+					.ruta
+					.navigate(path);
 			}
 		},
 		
-		slots: {
-			'-tabChanged': function(sender, name){
-				
-				var $group = this.$.find('.group.-show'),
-					radio = $group.compo();
-					
-				if (radio) {
-					radio.setActive(name, false);
-				}
-				
-			}
-		},
 		
 		getCurrentTabName: function(){
-			var $active = this.$.find('.tabPanel > .active');
-			
-			return $active.data('name');
+			return this
+				.compos
+				.tabs_tabs
+				.getActiveName();
 		},
 		
 		showTab: function(name){
 			if (this.compos.radio_radioButtons) {
-				this.compos.radio_radioButtons.setActive(name);
+				this
+					.compos
+					.radio_radioButtons
+					.setActive(name);
 			}
 			
 			if (this.compos.radio_sideMenu) {
-				this.compos.radio_sideMenu.setActive(name);
+				this
+					.compos
+					.radio_sideMenu
+					.setActive(name);
 			}
 			
-			this.$.find('.tabPanel > .active').removeClass('active');
-			this.$.find('.tabPanel > .' + name).addClass('active');
+			if (this.compos.tabs_tabs) {
+				this
+					.compos
+					.tabs_tabs
+					.setActive(name);
+			}
+			
 
 		},
 		
@@ -156,19 +160,19 @@ include
 			return true;
 		},
 		
-		section: function(info) {
-			if (!info.category) {
-				info.category = this.defaultCategory || 'info';
+		tab: function(info) {
+			if (!info.tab) {
+				info.tab = this.defaultTab || 'info';
 			}
 			
-			this.showTab(info.category);
+			this.showTab(info.tab);
 			
 			
-			var hasSections = this.showSection(info.anchor);
+			var hasSections = this.showSection(info.section);
 			
-			window
+			app
 				.compos
-				.menu[hasSections ? 'blur' : 'focus']();
+				.navigation[hasSections ? 'blur' : 'focus']();
 
 			this.update(info);
 
@@ -177,8 +181,8 @@ include
 			var scroller = Compo.find(this, 'scroller');
 			scroller && scroller.scroller && scroller.scroller.refresh();
 
-			if (info.anchor) {
-				var element = this.$.find('a[name="' + info.anchor + '"]').get(0);
+			if (info.section) {
+				var element = this.$.find('a[name="' + info.section + '"]').get(0);
 
 				if (element && scroller && scroller.scroller) {
 					scroller.scroller.scrollToElement(element, 100);
@@ -186,8 +190,8 @@ include
 			}
 		},
 		activate: function() {
-			var scroller = Compo.find(this, 'scroller');
-			scroller && scroller.scroller && scroller.scroller.refresh();
+			////var scroller = this.find('scroller');
+			////scroller && scroller.scroller && scroller.scroller.refresh();
 		}
 	}));
 

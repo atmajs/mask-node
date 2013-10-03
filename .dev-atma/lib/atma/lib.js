@@ -12,20 +12,11 @@ include = include
 			less: 'loader/less.js'
 		}
 	})
-	.js([
+	.js(
 		
 		'/.reference/libjs/class/lib/class.js',
-		
-		'./ruta.js',
-		
-		
-		'./server/Application.js',
-		'./server/IHttpHandler.js',
-		'./server/page/Page.js',
-		
-		'../../../lib/mask.node.js::Mask',
-		
-	])
+		'../../../lib/mask.node.js::Mask'
+	)
 	.done(function(resp){
 		
 		
@@ -37,7 +28,15 @@ include = include
 
 	
 		include
-			.js('./layout.js');
+			.js(
+				'./layout.js',
+				'/.reference/libjs/ruta/lib/ruta.js',
+		
+		
+				'./server/Application.js',
+				'./server/IHttpHandler.js',
+				'./server/page/Page.js'
+			);
 		
 	});
 

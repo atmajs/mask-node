@@ -7,8 +7,8 @@ layout:view master='view' {
 
 
     @content #tabs {
-        :radio .radioButtons {
-            button.active name='info' > 'Info'
+        :radio .radioButtons x-route='/-/info' {
+            button name='info' > 'Info'
             button name='examples' > 'Examples'
             button name='syntax' > 'Syntax'
             button name='api' > 'API'
@@ -39,9 +39,10 @@ layout:view master='view' {
     }
 
     @content #content {
-        .container.tabPanel {
+        :tabs.container.tabs x-route='/-/info' >
+        @panels {
             
-            .info.active data-name='info' {
+            .info name='info' {
                 img src='/images/mask.png' style='float:right; max-height: 150px';
 
                 .info {
@@ -112,8 +113,8 @@ layout:view master='view' {
                 }
             }
             
-            .examples data-name='examples' {
-                :tabs #tabs-examples >
+            .examples name='examples' {
+                :tabs #tabs-examples x-route='/-/-/simple'>
                     @panels >
                         % each='examples' >
                             div name='~[name]' {
@@ -136,14 +137,14 @@ layout:view master='view' {
                             }
             }
             
-            .syntax data-name='syntax' {
+            .syntax name='syntax' {
                 :tabs #tabs-syntax scrollbar {
                     @panels {
                         div name='tags' {
                             h3 > 'Tags'
                             p {
                                 h5 > 'Declaration'
-                                prism > formatter:pre > '
+                                prism > '
                                     tag#id.class
                                     span
                                     span.title
@@ -153,7 +154,7 @@ layout:view master='view' {
                                 .hint > 'Tag Name can be omitted if class or id is used. Tag Name will be then "div"'
                                 
                                 h5 > 'Attributes'
-                                prism > formatter:pre > '
+                                prism > '
                                     tag key=\'value\' ...
                                     tag key="value" ...
                                     tag key=value ...
@@ -254,12 +255,12 @@ layout:view master='view' {
                     }
                 }
             }
-            .api data-name='api'{
+            .api name='api'{
                 apiViewer src='/api/mask.html' base='/mask/api';
             }
 
 
-            .snippets data-name='snippets' {
+            .snippets name='snippets' {
                 ul.tiny {
                     li {
                         prism language=css > 'div'
@@ -282,7 +283,7 @@ layout:view master='view' {
                         prism language='markup' > '<p class="container"><div class="panel"><button>Press Me</button></div></p>'
                     }
                     li {
-                        prism language=css > formatter:pre > '
+                        prism language=css > '
                             p {
                                 button > "Press"
                                 button > "Cancel"
@@ -305,7 +306,7 @@ layout:view master='view' {
                         prism language='markup' > '<ul><li>1</li><li>2</li><li>3</li></ul>'
                     }
                     li {
-                        prism language=css > formatter:pre { '
+                        prism language=css > pre:indent { '
                             % if="number>10" > h4 > "Under"
                             % else > h3 > "Below"'
                         }

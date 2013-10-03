@@ -48,3 +48,16 @@ function obj_extend(target, source) {
 	
 	return target;
 }
+
+function obj_getProperty(o, chain) {
+	var value = o,
+		props = chain.split('.'),
+		i = -1,
+		length = props.length;
+
+	while (value != null && ++i < length) {
+		value = value[props[i]];
+	}
+
+	return value;
+}

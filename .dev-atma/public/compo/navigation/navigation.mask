@@ -1,14 +1,14 @@
 
 :template #menuItemTemplate {
 	li.~[class] {
-			//% if='title' >
-				.viewTitle
-					data-view='~[view]'
-					data-navigate='~[navigate]'
+			% if='name' >
+				a.viewTitle
+					href='~[: path ? path : ("/" + id) ]'
+					x-dynamic='~[: !navigate ? "x-dynamic"]'
 					
 						> .roll-link
-							> span data-title='~[title]'
-								> '~[title]'
+							> span data-title='~[name]'
+								> '~[name]'
 						
 			ul > % each='items' >
 				:import #menuItemTemplate;
@@ -24,7 +24,7 @@ menu.~[: menuHidden ? "hidden"] {
 		.menu-logo >
 			img src='http://lorempixel.com/200/120/abstract';
 				
-		% each='menuModel' > section {
+		% each='list' > section {
 			
 			h3.~[class]
 				> '~[title]'

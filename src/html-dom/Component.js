@@ -1,24 +1,51 @@
-function html_Component(node, model, cntx, container, controller) {
+function html_Component(node, model, ctx, container, controller) {
 	
-	var compo, attr, key;
+	var compo,
+		attr,
+		key,
+		cacheInfo;
 	
-	this.ID = ++ cntx._id;
+	var compoName = node.compoName || node.tagName,
+		Ctor = custom_Tags[compoName];
 	
+	if (Ctor != null) 
+		cacheInfo = is_Function(Ctor)
+			? Ctor.prototype.cache
+			: Ctor.cache;
 	
-	compo = is_Function(node.controller)
-		? new node.controller(model)
-		: (node.controller);
+	if (cacheInfo != null) 
+		compo = Cache.getCompo(model, ctx, compoName, Ctor);
+	
+	if (compo != null) {
+		this.compo = compo;
+		
+		if (compo.__cached) {
+			compo.render = fn_empty;
+		}
+		return;
+	}
+	
+	compo = is_Function(Ctor)
+		? new Ctor(model)
+		: Ctor;
 		
 	
 	if (compo == null) {
 		compo = {
 			model: node.model,
-			container: node.container
+			modelRef: node.modelRef,
+			container: node.container,
+			mode: controller.mode,
+			modeModel: controller.modeModel
 		};
 	}
 	
-	this.compo = compo;
+	if (compo.cache) 
+		Cache.cacheCompo(model, ctx, compoName, compo);
 	
+	
+	this.compo = compo;
+	this.ID = this.compo.ID = ++ ctx._id;
 	
 	if (mode_SERVER_ALL === controller.mode) 
 		compo.mode = mode_SERVER_ALL;
@@ -29,16 +56,22 @@ function html_Component(node, model, cntx, container, controller) {
 		
 
 	attr = util_extend(compo.attr, node.attr);
-		
+	
+	if (attr['x-mode'] !== void 0) 
+		compo.mode = attr['x-mode'] ;
+	
+	if (attr['x-mode-model']  !== void 0) 
+		compo.modeModel = attr['x-mode-model'];
 	
 	
-	this.compoName = compo.compoName = node.compoName || node.tagName;
+	
+	this.compoName = compo.compoName = compoName;
 	compo.attr = attr;
 	compo.parent = controller;
 	
 	
 	
-	if (cntx.debug && cntx.debug.breakOn === compo.compoName) {
+	if (ctx.debug && ctx.debug.breakOn === compo.compoName) {
 		debugger;
 	}
 
@@ -49,13 +82,13 @@ function html_Component(node, model, cntx, container, controller) {
 
 	for (key in attr) {
 		if (typeof attr[key] === 'function') {
-			attr[key] = attr[key]('attr', model, cntx, container, controller, key);
+			attr[key] = attr[key]('attr', model, ctx, container, controller, key);
 		}
 	}
 
 
 	if (typeof compo.renderStart === 'function') {
-		compo.renderStart(model, cntx, container);
+		compo.renderStart(model, ctx, container);
 	}
 	
 	if (controller) {
@@ -64,7 +97,7 @@ function html_Component(node, model, cntx, container, controller) {
 	}
 	
 	if (compo.async === true) {
-		compo.await(build_resumeDelegate(compo, model, cntx, this));
+		compo.await(build_resumeDelegate(compo, model, ctx, this));
 		return;
 	}
 
@@ -79,7 +112,7 @@ function html_Component(node, model, cntx, container, controller) {
 	}
 
 	if (typeof compo.render === 'function') 
-		compo.render(model, cntx, this, compo);
+		compo.render(model, ctx, this, compo);
 	
 }
 
@@ -96,6 +129,11 @@ html_Component.prototype = obj_inherit(html_Component, html_Node, {
 		
 		var element = this.firstChild,
 			compo = this.compo;
+			
+		if (compo.__cached !== void 0) {
+			console.log('from Cache size: ', compo.__cached.length);
+			return compo.__cached;
+		}
 		
 		var mode = compo.mode,
 			compoName,
@@ -145,21 +183,26 @@ html_Component.prototype = obj_inherit(html_Component, html_Node, {
 		if (mode !== 'client') 
 			string += Meta.close(json, info);
 		
+		
+		if (compo.cache) {
+			compo.__cached = string;
+		}
+		
 		return string;
 	}
 });
 
 
-function build_resumeDelegate(controller, model, cntx, container, childs){
+function build_resumeDelegate(controller, model, ctx, container, childs){
 	var anchor = container.appendChild(document.createComment(''));
 	
 	return function(){
-		return build_resumeController(controller, model, cntx, anchor, childs);
+		return build_resumeController(controller, model, ctx, anchor, childs);
 	};
 }
 
 
-function build_resumeController(controller, model, cntx, anchor, childs) {
+function build_resumeController(controller, model, ctx, anchor, childs) {
 	
 	
 	if (controller.tagName != null && controller.tagName !== controller.compoName) {
@@ -181,7 +224,7 @@ function build_resumeController(controller, model, cntx, anchor, childs) {
 	if (nodes != null) {
 
 		
-		var isarray = nodes instanceof Array,
+		var isarray = is_Array(nodes),
 			length = isarray === true ? nodes.length : 1,
 			i = 0,
 			childNode = null,
@@ -196,7 +239,7 @@ function build_resumeController(controller, model, cntx, anchor, childs) {
 					childNode.attr['x-compo-id'] = controller.ID;
 			}
 			
-			builder_html(childNode, model, cntx, fragment, controller, elements);
+			builder_html(childNode, model, ctx, fragment, controller, elements);
 		}
 		
 		anchor.parentNode.insertBefore(fragment, anchor);
@@ -209,7 +252,7 @@ function build_resumeController(controller, model, cntx, anchor, childs) {
 	if (controller.tagName == null) {
 		var attrHandlers = controller.handlers && controller.handlers.attr,
 			attrFn;
-		for (key in controller.attr) {
+		for (var key in controller.attr) {
 			
 			attrFn = null;
 			
@@ -222,11 +265,14 @@ function build_resumeController(controller, model, cntx, anchor, childs) {
 			}
 			
 			if (attrFn != null) {
-				attrFn(node, controller.attr[key], model, cntx, elements[0], controller);
+				attrFn(node, controller.attr[key], model, ctx, elements[0], controller);
 			}
 		}
 	}
 	
+	if (controller.onRenderEndServer) {
+		controller.onRenderEndServer(elements, model, ctx, anchor.parentNode);
+	}
 
 	if (childs != null && childs !== elements){
 		var il = childs.length,

@@ -42,7 +42,7 @@ layout:master #view {
 		}
 		
 		@placeholder #side-menu {
-			:tabs .side-menu {
+			:tabs .side-menu x-route='/-/-' {
 				@panels
 					> @placeholder;
 			

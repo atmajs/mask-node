@@ -116,15 +116,6 @@ function cfg_parseDelegate(cfg, callback) {
 				.routes(cfg.env.server.routes);
 		
 	
-			
-		////if (cfg.include.scripts)
-		////	include
-		////		.instance()
-		////		.js(cfg.include.scripts)
-		////		.done(cfg_completeDelegate(callback));
-		////
-		////return;
-	
 		
 		callback();
 	};

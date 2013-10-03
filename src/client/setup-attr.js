@@ -1,8 +1,13 @@
-var handler = custom_Attributes[meta.name];
-var element = trav_getElement(node);
+var handler = custom_Attributes[meta.name],
+	element = trav_getElement(node);
 	
 if (handler == null) {
-	console.log('Custom Attribute Handler was not defined', meta.name);
+	console.warn('Custom Attribute Handler was not defined', meta.name);
+	return;
+}
+
+if (element == null){
+	console.error('Browser has cut off nested tag for the comment', node);
 	return;
 }
 

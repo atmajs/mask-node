@@ -6,14 +6,21 @@
 
 
 
-Mask.registerAttrHandler = function(attrName, fn, mode){
+Mask.registerAttrHandler = function(attrName, mix, fn){
 	
-	if (mode == null) {
-		custom_Attributes[attrName] = fn;
+	if (fn == null) {
+		custom_Attributes[attrName] = mix;
 		return;
 	}
 	
-	custom_Attributes[attrName] = mock_AttrHandler.create(attrName, fn, mode);
+	// obsolete - change args in all callers
+	if (typeof fn === 'string') {
+		var swap = mix;
+		mix = fn;
+		fn = swap;
+	}
+	
+	custom_Attributes[attrName] = mock_AttrHandler.create(attrName, fn, mix);
 };
 
 Mask.registerUtility = function(name, fn, mode){

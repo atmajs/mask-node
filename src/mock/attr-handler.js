@@ -1,10 +1,8 @@
 var mock_AttrHandler = (function() {
 	
-	var __counter = 0;
-	
-	function Attr(attrName, attrValue) {
+	function Attr(attrName, attrValue, ID) {
 		this.meta = {
-			ID : ++__counter,
+			ID : ID,
 			name : attrName,
 			value : attrValue
 		};
@@ -28,7 +26,7 @@ var mock_AttrHandler = (function() {
 			return function(node, value, model, cntx, tag, controller, container){
 				
 				if (mode !== 'server') {
-					container.insertBefore(new Attr(attrName, value), tag);
+					container.insertBefore(new Attr(attrName, value, ++cntx._id), tag);
 				}
 				
 				if (mode !== 'client') {

@@ -11,8 +11,6 @@ include
 				tabsexamples: 'compo: #tabs-examples'
 			},
 			
-			modeModel: 'none',
-			
 			Override: {
 				onRenderStart: function(){
 					

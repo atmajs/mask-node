@@ -1,10 +1,10 @@
 var mock_UtilHandler = (function() {
 	
-	var __counter = 0;
+	
 
-	function Util(type, utilName, value, attrName) {
+	function Util(type, utilName, value, attrName, ID) {
 		this.meta = {
-			ID: ++__counter,
+			ID: ID,
 			utilType: type,
 			utilName: utilName,
 			
@@ -46,7 +46,7 @@ var mock_UtilHandler = (function() {
 				if (mode !== 'server') {
 					element
 						.parentNode
-						.insertBefore(new Util(type, utilName, value, attrName), element);
+						.insertBefore(new Util(type, utilName, value, attrName, ++cntx._id), element);
 				}
 
 				if (mode !== 'client') {

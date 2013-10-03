@@ -25,9 +25,13 @@ include
 		
 		process: function(req, res){
 			
-			if (this.onRenderStart) {
+			if (this.onRenderStart) 
 				this.onRenderStart(req, res);
-			}
+			
+			
+			this.query = ruta
+				.parse('/:page/:tab/:section', req.url)
+				.params;
 			
 			this.cntx = {
 				req: req,

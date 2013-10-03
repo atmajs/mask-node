@@ -126,6 +126,7 @@
 
 
 	mask.registerHandler(':pageActivity', Compo({
+		tagName: 'div',
 		constructor: function() {
 			this.compos = {
 				'spinner': 'compo: :spinner'
@@ -133,7 +134,7 @@
 		},
 		onRenderStart: function() {
 
-			jmask(this).tag('div').css({
+			jmask(this).css({
 				position: 'absolute',
 				top: '0px',
 				left: '0px',

@@ -61,7 +61,7 @@ var builder_build = (function() {
 	}());
 
 
-	function builder_html(node, model, cntx, container, controller) {
+	function builder_html(node, model, cntx, container, controller, childs) {
 
 		if (node == null) {
 			return container;
@@ -70,7 +70,6 @@ var builder_build = (function() {
 		var type = node.type,
 			element,
 			elements,
-			childs,
 			j, jmax, key, value;
 
 		if (type === 10 /*SET*/ || node instanceof Array) {
@@ -104,25 +103,29 @@ var builder_build = (function() {
 			container.appendChild(element);
 			container = element;
 			
-			var instance = element.compo;
+			var compo = element.compo;
 			
-			if (instance != null) {
+			if (compo != null) {
 				
-				if (instance.model) {
-					model = instance.model;
+				if (compo.model && controller.model !== compo.model) {
+					model = compo.model;
 					
-					if (mode_SERVER_ALL !== instance.mode
-						&& mode_model_NONE !== instance.modeModel) {
-						
-						element.modelID = cntx._model.append(model);
-					}
+					var modelID = cntx._model.tryAppend(compo);
+					if (modelID !== -1)
+						element.modelID = modelID;
+					
 				}
 				
-				if (instance.render) 
+				if (compo.async) 
 					return element;
 				
-				controller = instance;
-				node = instance;	
+				
+				if (compo.render) 
+					return element;
+				
+				controller = compo;
+				node = compo;
+				elements = [];
 			}
 		}
 
@@ -144,17 +147,23 @@ var builder_build = (function() {
 						childNode.attr['x-compo-id'] = element.ID;
 				}
 
-				builder_html(childNode, model, cntx, container, controller);
+				builder_html(childNode, model, cntx, container, controller, elements);
 			}
 
 		}
 		
 		if (container.nodeType === Dom.COMPONENT) {
 			
-			if (container.onRenderEndServer) {
-				container.onRenderEndServer();
+			if (controller.onRenderEndServer && controller.async !== true) {
+				controller.onRenderEndServer(elements, model, cntx, container, controller);
 			}
 			
+		}
+		
+		if (childs != null && elements && childs !== elements) {
+			for (var i = 0, imax = elements.length; i < imax; i++){
+				childs.push(elements[i]);
+			}
 		}
 
 
@@ -174,51 +183,42 @@ var builder_build = (function() {
 			cntx = {};
 		
 		
-		cntx._model = new ModelBuilder(model);
-		cntx._id = 0;
+		cntx._model = new ModelBuilder(model, Cache.modelID);
+		cntx._id = Cache.controllerID;
 		
 		var html;
 
-		//var profiler = require('profiler');
 		
-		//profiler.resume();
-		
-		console.time('-build-')
 		builder_html(template, model, cntx, container, controller);
-		console.log(console.timeEnd('-build-'));
-		
-		//profiler.pause();
-		
-		if (cntx.req && cntx.req.query.debug === 'tree') {
-			cntx.async = false;
-			return JSON.stringify(logger_dimissCircular(container));
-		}
-		
 		
 		
 		if (cntx.async === true) {
 			
-			console.time('-build-async-wait-');
 			cntx.done(function(){
-				console.log(console.timeEnd('-build-async-wait-'));
 				
-				console.time('-stringify-')
+				if (cntx.page && cntx.page.query.debug === 'tree') {
+					// cntx.req - is only present, when called by a page instance
+					// @TODO - expose render fn only for page-render purpose
+					
+					cntx.resolve(JSON.stringify(logger_dimissCircular(container)));
+					return;
+				}
+				
 				html = html_stringify(container, model, cntx, controller);
-				
-				console.log(console.timeEnd('-stringify-'));
-				
 				
 				cntx.resolve(html);
 			});
 			
 			return null;
 		}
+		
+		
+		if (cntx.page && cntx.page.query.debug === 'tree') 
+			return JSON.stringify(logger_dimissCircular(container));
+		
 
-		console.time('-stringify-')
+		
 		html = html_stringify(container, model, cntx, controller);
-		
-		console.log(console.timeEnd('-stringify-'));
-		
 		
 		return html;
 	};

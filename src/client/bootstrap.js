@@ -1,15 +1,28 @@
 
-function bootstrap(container) {
+
+var custom_Attributes = mask.getAttrHandler(),
+	custom_Tags = mask.getHandler(),
+	custom_Utils = mask.getUtility(),
+	Dom = mask.Dom;
+
+var __models,
+	__ID = 0;
+
+
+// import ../util/function.js
+// import ../util/array.js
+// import ../mock/Meta.js
+// import traverse.js
+// import setup.js
+
+function bootstrap(container, compo) {
 	
-	// import ../util/function.js
-	// import ../util/array.js
-	// import ../mock/Meta.js
-	// import traverse.js
-	// import setup.js
-	
-	if (container == null) {
+	if (container == null) 
 		container = document.body;
-	}
+		
+	if (compo == null) 
+		compo = {};
+	
 	
 	var metaNode = trav_getMeta(container.firstChild),
 		metaContent = metaNode && metaNode.textContent,
@@ -21,32 +34,17 @@ function bootstrap(container) {
 		return;
 	}
 	
-	var models = JSON.parse(meta.model),
-		model = models[0];
-
+	__models = JSON.parse(meta.model);
 	
-	var custom_Attributes = mask.getAttrHandler(),
-		custom_Tags = mask.getHandler(),
-		custom_Utils = mask.getUtility(),
-		Dom = mask.Dom;
-
-	var stop_NODE = null;
-	
-	
-	
-	var compo = {
-			components: []
-		};
-		
-	var el = metaNode.nextSibling;
+	var model = __models[0],
+		el = metaNode.nextSibling;
 	
 	
 	setup(el, model, {}, el.parentNode, compo);
 
+	mask.compoIndex(++__ID);
+
+	if (typeof Compo !== 'undefined') 
+		Compo.signal.emitIn(compo, 'domInsert');
 	
-
-	if (typeof Compo !== 'undefined') {
-		Compo.signal.emitIn(compo, 'DOMInsert');
-	}
-
 }

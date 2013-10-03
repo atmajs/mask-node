@@ -3,11 +3,11 @@ require('./lib/atma/lib.js');
 
 include
 	.cfg('autoreload', true)
-	.done(initialize);
+	.on(4, initialize);
 
 
 function initialize() {
-		
+	
 	global.app = atma
 		.Application({
 			configs: [

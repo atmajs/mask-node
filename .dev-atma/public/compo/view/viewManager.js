@@ -5,16 +5,9 @@
 			$current.removeClass('active');
 			$next.addClass('active');
 
-
-			var prfx = ruqq.info.cssprefix;
-			ruqq.animate($next, {
-				property: 'opacity',
-				valueFrom: '0',
-				valueTo: '1',
-				duration: 500,
-				timing: 'cubic-bezier(.58,1.54,.59,.75)',
-				callback: callback
-			});
+			
+			mask.animate($next.get(0), 'opacity | 0 > 1 | 2s cubic-bezier(.58,1.54,.59,.75)')
+			
 		}
 	},
 	currentCompo;
@@ -69,12 +62,14 @@
 			if (typeof window === 'undefined') 
 				return;
 			
-			
+			this.show = this.show.bind(this);
 		},
 		
 		renderStart: function(model, cntx) {
+			this.model = app.config.pages;
 			
 			if (cntx.page) {
+				// render
 				var that = this;
 				
 				Compo.pause(this, cntx);
@@ -91,63 +86,100 @@
 				});
 			}
 		},
-		renderEnd: function(){
-			window.viewManager = this;
+		onRenderEnd: function(){
+			var that = this,
+				pages = new ruta.Collection;
+			
+			for (var path in this.model) {
+				pages.add(path, this.model[path]);
+			}
+			
+			app.compos.viewManager = that;
+			
+			ruta.add('/?:page/?:tab/?:section', function(route){
+				var path = route.current.path,
+					page = pages.get(path);
+				
+				page = page && page.value;
+				
+				if (page == null) 
+					return;
+				
+				that.show(route.current.params, page);
+				
+			});
 		},
-		load: function(info) {
+		
+		onRenderEndServer: function(els, model, cntx){
+			return;
+			
+			var ctrl = cntx.page.data.controller,
+				compo = this.find(':view:' + ctrl),
+				current = ruta.parse('/:page/:tab/:section', cntx.req.url);
+				
+			compo.tab(current);
+		},
+		
+		load: function(current, page) {
 
-			var activity = Compo.find(window.app, ':pageActivity').show(),
-				name = info.view.replace('View', '');
+			var activity = window.app.find(':pageActivity').show();
 
-			window.Page.resolve(name, function(controller, template){
+			load_View(page, function(viewId, controller, template){
 
-				controller.prototype.attr = Object.extend(controller.prototype.attr, {
-					template: template,
-					id: name
-				});
+				var compoName = ':view:' + controller;
 
-				mask.registerHandler(name + 'View', controller);
-
-				this.append(name + 'View', {});
+				this.append(compoName +'#' + viewId , {});
+				
 				activity.hide();
 
 
-				var compo = Compo.find(this,  name + 'View');
+				var compo = this.find(compoName);
+				
 				if (compo == null) {
-					console.error('Cannt be loaded', name);
+					console.error('Cannt be loaded', compoName);
 					return;
 				}
 				
 
-				this.performShow(compo, info);
+				this.performShow(compo, current, page);
 			}.bind(this));
 
 		},
-		show: function(info) {
-
+		show: function(current, page) {
+			
 			var $menu = $(document.getElementsByTagName('menu'));
 
-			$menu.find('.selected').removeClass('selected');
-			$menu.find('[data-view="'+info.view+'"]').addClass('selected');
+			$menu
+				.find('.selected')
+				.removeClass('selected');
+			$menu
+				.find('[data-view="' + page.id + '"]')
+				.addClass('selected');
 
 
 
-			var compo = this.find(info.view + 'View');
+			var compo = this.find(':view:' + page.controller);
+			
 			if (compo == null) {
-				this.$.children('.active').removeClass('active');
-				this.load(info);
+				this
+					.$
+					.children('.active')
+					.removeClass('active');
+					
+				this.load(current, page);
 				return;
 			}
 
-			this.performShow(compo, info);
+			this.performShow(compo, current, page);
 		},
-		performShow: function(compo, info, callback) {
+		performShow: function(compo, current, page) {
+			
+			
+			compo.tab(current);
 
-			compo.section(info);
-
-			if (compo == currentCompo) {
+			if (compo === currentCompo) 
 				return;
-			}
+			
 			
 			if (currentCompo)
 				currentCompo.deactivate && currentCompo.deactivate();
@@ -155,19 +187,17 @@
 
 			currentCompo = compo;
 
-			if (this.$) {
-				callback && callback();
+			if (this.$) 
 				Helper.doSwitch(this.$.children('.active'), compo.$);
-			}
+			
 
-			compo.activate && compo.activate();
+			if (compo.activate)
+				compo.activate();
 
-			info = Page.getInfo(info.view);
-
-			if (info && info.title){
-				document.title = info.title;
-			}
-
+			
+			if (page.title)
+				document.title = page.title;
+			
 		}
 	});
 

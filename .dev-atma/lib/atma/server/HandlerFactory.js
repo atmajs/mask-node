@@ -9,14 +9,22 @@ include.exports = Class({
 	},
 	
 	registerPages: function(routes){
-		var value, key;
+		var page, key;
 		
 		for (key in routes) {
 			
-			value = routes[key];
-			value.path = key;
+			page = routes[key];
+			page.path = key;
+			page.id = key.substring(key.indexOf('/') + 1);
 			
-			this.pages.add(key, value);
+			if (page.view == null) 
+				page.view = page.id;
+			
+			if (page.controller == null) 
+				page.controller = 'default';
+			
+			
+			this.pages.add(key, page);
 		}
 		
 		return this;
