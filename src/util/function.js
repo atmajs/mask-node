@@ -1,6 +1,6 @@
 
 function fn_isFunction(fn) {
-	return fn instanceof Function;
+	return typeof fn === 'function';
 }
 
 function fn_empty() {

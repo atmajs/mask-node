@@ -11,57 +11,13 @@ var builder_build = (function() {
 	// import html-dom/lib.js
 	// import handler/document.js
 	
+	// import util/json.js
 	
+	// import ../../mask/src/build/type.node.js
+	// import ../../mask/src/build/type.textNode.js
 	
-	var logger_dimissCircular = (function() {
-		var cache;
 
-		function clone(mix) {
-			if (mix == null) {
-				return null;
-			}
-
-
-			var cloned;
-
-			if (mix instanceof Array) {
-				cloned = [];
-				for (var i = 0, imax = mix.length; i < imax; i++) {
-					cloned[i] = clone(mix[i]);
-				}
-				return cloned;
-			}
-
-			if (typeof mix === 'object') {
-
-				if (~cache.indexOf(mix)) {
-					return '[object Circular]';
-				}
-				cache.push(mix);
-
-				cloned = {};
-				for (var key in mix) {
-					cloned[key] = clone(mix[key]);
-				}
-				return cloned;
-			}
-
-			return mix;
-		}
-
-		return function(mix) {
-			if (typeof mix === 'object' && mix != null) {
-				cache = [];
-				mix = clone(mix);
-				cache = null;
-			}
-
-			return mix;
-		};
-	}());
-
-
-	function builder_html(node, model, cntx, container, controller, childs) {
+	function builder_html(node, model, ctx, container, controller, childs) {
 
 		if (node == null) {
 			return container;
@@ -74,7 +30,7 @@ var builder_build = (function() {
 
 		if (type === 10 /*SET*/ || node instanceof Array) {
 			for (j = 0, jmax = node.length; j < jmax; j++) {
-				builder_html(node[j], model, cntx, container, controller);
+				builder_html(node[j], model, ctx, container, controller);
 			}
 			return container;
 		}
@@ -89,17 +45,21 @@ var builder_build = (function() {
 		}
 
 		if (type === 1 /* Dom.NODE */) {
-			// import ../../mask/src/build/type.node.js
+			container = build_textNode(node, model, ctx, container, controller, childs);
+			childs = null;
+			
 		}
 
 		if (type === 2 /* Dom.TEXTNODE */) {
-			// import ../../mask/src/build/type.textNode.js
+			
+			build_textNode(node, model, ctx, container, controller);
+			
 			return container;
 		}
 
 		if (type === 4 /* Dom.COMPONENT */) {
 			
-			element = document.createComponent(node, model, cntx, container, controller);
+			element = document.createComponent(node, model, ctx, container, controller);
 			container.appendChild(element);
 			container = element;
 			
@@ -110,7 +70,7 @@ var builder_build = (function() {
 				if (compo.model && controller.model !== compo.model) {
 					model = compo.model;
 					
-					var modelID = cntx._model.tryAppend(compo);
+					var modelID = ctx._model.tryAppend(compo);
 					if (modelID !== -1)
 						element.modelID = modelID;
 					
@@ -147,7 +107,7 @@ var builder_build = (function() {
 						childNode.attr['x-compo-id'] = element.ID;
 				}
 
-				builder_html(childNode, model, cntx, container, controller, elements);
+				builder_html(childNode, model, ctx, container, controller, elements);
 			}
 
 		}
@@ -155,7 +115,7 @@ var builder_build = (function() {
 		if (container.nodeType === Dom.COMPONENT) {
 			
 			if (controller.onRenderEndServer && controller.async !== true) {
-				controller.onRenderEndServer(elements, model, cntx, container, controller);
+				controller.onRenderEndServer(elements, model, ctx, container, controller);
 			}
 			
 		}
@@ -171,7 +131,7 @@ var builder_build = (function() {
 	}
 
 
-	return function(template, model, cntx, container, controller) {
+	return function(template, model, ctx, container, controller) {
 		if (container == null) 
 			container = new html_DocumentFragment();
 		
@@ -179,46 +139,46 @@ var builder_build = (function() {
 			controller = new Component();
 		}
 			
-		if (cntx == null) 
-			cntx = {};
+		if (ctx == null) 
+			ctx = {};
 		
 		
-		cntx._model = new ModelBuilder(model, Cache.modelID);
-		cntx._id = Cache.controllerID;
+		ctx._model = new ModelBuilder(model, Cache.modelID);
+		ctx._id = Cache.controllerID;
 		
 		var html;
 
 		
-		builder_html(template, model, cntx, container, controller);
+		builder_html(template, model, ctx, container, controller);
 		
 		
-		if (cntx.async === true) {
+		if (ctx.async === true) {
 			
-			cntx.done(function(){
+			ctx.done(function(){
 				
-				if (cntx.page && cntx.page.query.debug === 'tree') {
-					// cntx.req - is only present, when called by a page instance
+				if (ctx.page && ctx.page.query.debug === 'tree') {
+					// ctx.req - is only present, when called by a page instance
 					// @TODO - expose render fn only for page-render purpose
 					
-					cntx.resolve(JSON.stringify(logger_dimissCircular(container)));
+					ctx.resolve(JSON.stringify(logger_dimissCircular(container)));
 					return;
 				}
 				
-				html = html_stringify(container, model, cntx, controller);
+				html = html_stringify(container, model, ctx, controller);
 				
-				cntx.resolve(html);
+				ctx.resolve(html);
 			});
 			
 			return null;
 		}
 		
 		
-		if (cntx.page && cntx.page.query.debug === 'tree') 
+		if (ctx.page && ctx.page.query.debug === 'tree') 
 			return JSON.stringify(logger_dimissCircular(container));
 		
 
 		
-		html = html_stringify(container, model, cntx, controller);
+		html = html_stringify(container, model, ctx, controller);
 		
 		return html;
 	};
