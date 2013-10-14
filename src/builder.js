@@ -19,9 +19,11 @@ var builder_build = (function() {
 
 	function builder_html(node, model, ctx, container, controller, childs) {
 
-		if (node == null) {
+		if (node == null) 
 			return container;
-		}
+		
+		if (ctx._redirect != null || ctx._rewrite != null) 
+			return container;
 
 		var type = node.type,
 			element,
@@ -34,7 +36,7 @@ var builder_build = (function() {
 			}
 			return container;
 		}
-
+		
 		if (type == null) {
 			// in case if node was added manually, but type was not set
 			if (node.tagName != null) {
