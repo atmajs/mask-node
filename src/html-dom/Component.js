@@ -6,7 +6,7 @@ function html_Component(node, model, ctx, container, controller) {
 		cacheInfo;
 	
 	var compoName = node.compoName || node.tagName,
-		Ctor = custom_Tags[compoName];
+		Ctor = custom_Tags[compoName] || node.controller;
 	
 	if (Ctor != null) 
 		cacheInfo = is_Function(Ctor)

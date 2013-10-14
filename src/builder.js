@@ -28,7 +28,7 @@ var builder_build = (function() {
 			elements,
 			j, jmax, key, value;
 
-		if (type === 10 /*SET*/ || node instanceof Array) {
+		if (type === 10 /*SET*/ || is_Array(node)) {
 			for (j = 0, jmax = node.length; j < jmax; j++) {
 				builder_html(node[j], model, ctx, container, controller);
 			}
@@ -45,7 +45,7 @@ var builder_build = (function() {
 		}
 
 		if (type === 1 /* Dom.NODE */) {
-			container = build_textNode(node, model, ctx, container, controller, childs);
+			container = build_node(node, model, ctx, container, controller, childs);
 			childs = null;
 			
 		}
@@ -92,14 +92,16 @@ var builder_build = (function() {
 		var nodes = node.nodes;
 		if (nodes != null) {
 
-			var isarray = nodes instanceof Array,
+			var isarray = is_Array(nodes),
 				length = isarray === true ? nodes.length : 1,
 				i = 0, childNode;
 
 
 			for (; i < length; i++) {
 
-				childNode = isarray === true ? nodes[i] : nodes;
+				childNode = isarray === true
+					? nodes[i]
+					: nodes;
 
 				if (type === 4 /* Dom.COMPONENT */ && childNode.type === 1 /* Dom.NODE */){
 					
