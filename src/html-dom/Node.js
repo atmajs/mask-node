@@ -143,6 +143,11 @@ function html_Node() {}
 
 				// set parentNode
 				var el = fragment.firstChild;
+				
+				if (el == null)
+					// empty
+					return fragment;
+				
 				while (el != null) {
 					el.parentNode = this;
 					el = el.nextSibling;

@@ -47,9 +47,18 @@ var builder_build = (function() {
 		}
 
 		if (type === 1 /* Dom.NODE */) {
-			container = build_node(node, model, ctx, container, controller, childs);
-			childs = null;
 			
+			if (node.tagName[0] === ':') {
+				
+				type = 4;
+				node.mode = mode_CLIENT;
+				node.controller = mock_TagHandler.create(node.tagName, null, mode_CLIENT);
+				
+			} else {
+			
+				container = build_node(node, model, ctx, container, controller, childs);
+				childs = null;
+			}
 		}
 
 		if (type === 2 /* Dom.TEXTNODE */) {
