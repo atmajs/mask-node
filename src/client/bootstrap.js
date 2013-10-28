@@ -1,9 +1,15 @@
-
+var atma = typeof atma === 'undefined'
+	? window
+	: atma
+	;
+	
+var mask = atma.mask,
+	Compo = mask.Compo
+	Dom = mask.Dom;
 
 var custom_Attributes = mask.getAttrHandler(),
 	custom_Tags = mask.getHandler(),
-	custom_Utils = mask.getUtility(),
-	Dom = mask.Dom;
+	custom_Utils = mask.getUtility();
 
 var __models,
 	__ID = 0;
@@ -12,6 +18,7 @@ var __models,
 // import ../util/function.js
 // import ../util/array.js
 // import ../mock/Meta.js
+// import mock.js
 // import traverse.js
 // import setup.js
 

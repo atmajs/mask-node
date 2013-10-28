@@ -20,9 +20,32 @@ if (meta.mask != null) {
 		controller: ctor
 	};
 	
-	var fragment = mask.render(_node, model, cntx, null, controller);
+	/* Dangerous:
+	 *
+	 * Hack with mocking `appendChild`
+	 * We have to pass origin container into renderer,
+	 * but we must not append template, but insert
+	 * rendered template before Comment Placeholder
+	 *
+	 * Careful:
+	 *
+	 * If a root node of the new template is some async component,
+	 * then containers `appendChild` would be our mocked function
+	 *
+	 * Info: Appending to detached fragment has also perf. boost,
+	 * so it is not so bad idea.
+	 */
 	
-	node.parentNode.insertBefore(fragment, node);
+	var fragment = document.createDocumentFragment(),
+		container = node.parentNode,
+		originalAppender = container.appendChild;
+	
+	container.appendChild = mock_appendChild(fragment);
+	
+	mask.render(_node, model, cntx, container, controller);
+	
+	container.insertBefore(fragment, node);
+	container.appendChild = originalAppender;
 } else {
 
 	var compo = typeof ctor === 'function'
