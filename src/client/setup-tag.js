@@ -67,6 +67,12 @@ if (meta.mask != null) {
 	controller
 		.components
 		.push(compo);
+		
+	if (compo.onRenderStartClient) {
+		compo.onRenderStartClient();
+		
+		model = compo.model;
+	}
 	
 	if (meta.single !== false) {
 		var elements = [],
