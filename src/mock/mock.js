@@ -4,7 +4,7 @@
 // import tag-handler.js
 // import util-handler.js
 
-
+var registerUtil = Mask.registerUtil;
 
 Mask.registerAttrHandler = function(attrName, mix, fn){
 	
@@ -23,15 +23,18 @@ Mask.registerAttrHandler = function(attrName, mix, fn){
 	custom_Attributes[attrName] = mock_AttrHandler.create(attrName, fn, mix);
 };
 
-Mask.registerUtil = function(name, fn, mode){
+
+
+Mask.registerUtil = function(name, mix, mode){
 	
-	if (mode == null) {
-		custom_Utils[name] = fn;
-		return;
-	}
+	if (mode == null && is_Object(mix)) 
+		mode = mix.mode;
 	
-	custom_Utils[name] = mock_UtilHandler.create(name, fn, mode);
-};
+	registerUtil(name, mode == null
+		? mix
+		: mock_UtilHandler.create(name, mix, mode)
+	);
+}
 
 // backward support
 Mask.registerUtility  = Mask.registerUtil;

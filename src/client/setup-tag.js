@@ -58,8 +58,8 @@ if (meta.mask != null) {
 	compo.parent = controller;
 	compo.ID = meta.ID;
 	
-	if (meta.modelID)
-		compo.model = model;
+	//if (meta.modelID)
+	compo.model = model;
 	
 	if (controller.components == null) 
 		controller.components = [];
@@ -69,8 +69,9 @@ if (meta.mask != null) {
 		.push(compo);
 		
 	if (compo.onRenderStartClient) {
-		compo.onRenderStartClient();
+		compo.onRenderStartClient(model, cntx, container, controller);
 		
+		//if (compo.model != null) 
 		model = compo.model;
 	}
 	

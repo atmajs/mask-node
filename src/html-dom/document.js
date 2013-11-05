@@ -1,5 +1,5 @@
 
-var document = {
+document = {
 	createDocumentFragment: function(){
 		return new html_DocumentFragment();
 	},

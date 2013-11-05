@@ -21,30 +21,28 @@
 	// import ../../mask/src/parse/parser.js
 	
 	
-	// import ../src/cache/cache.js
 	
-	/** NODEJS BUILDER **/
-	// import ../src/builder.js
-
-
+	
 	// import ../../mask/src/mask.js
+	// import ../../mask/src/libs/compo.js
+	// import ../../mask/src/libs/jmask.js
 	
+	// import ../src/cache/cache.js
+	// import ../src/builder.js
 	// import ../src/mock/mock.js
 	
-	// import ../../mask/src/formatter/stringify.lib.js
-
 	
-	/* Handlers */
-
+	// import ../../mask/src/formatter/stringify.lib.js
 	// import ../../mask/src/handlers/sys.js
 	// import ../../mask/src/handlers/utils.js
 
-	// import ../../mask/src/libs/compo.js
-	// import ../../mask/src/libs/jmask.js
 	// import ../../mask.binding/lib/binding.embed.node.js
 	
 
 
-	return Mask;
+	Mask.Compo = Compo;
+	Mask.jmask = jmask;
+
+	exports.mask = Mask;
 
 }));

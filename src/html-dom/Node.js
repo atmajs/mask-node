@@ -134,7 +134,7 @@ function html_Node() {}
 			}
 
 			if (prev == null)
-			// set tail
+				// set tail
 				return this.appendChild(child);
 
 
@@ -154,7 +154,7 @@ function html_Node() {}
 				}
 
 				// set to head
-				if (prev === this.firstChild) {
+				if (prev === anchor && prev === this.firstChild) {
 					this.firstChild = fragment.firstChild;
 
 					fragment.lastChild.nextSibling = prev;
@@ -171,7 +171,7 @@ function html_Node() {}
 
 			child.parentNode = this;
 
-			if (prev === this.firstChild) {
+			if (prev === anchor && prev === this.firstChild) {
 
 				// set head
 				this.firstChild = child;

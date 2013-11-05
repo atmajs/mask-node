@@ -37,20 +37,34 @@ var mock_UtilHandler = (function() {
 		}
 	};
 	
+	var util_FNS = {
+		node: 'nodeRenderStart',
+		attr: 'attrRenderStart'
+	};
 
 	return {
-		create: function(utilName, fn, mode) {
+		create: function(utilName, mix, mode) {
 
-			return function(value, model, cntx, element, controller, attrName, type) {
+			return function(value, model, ctx, element, controller, attrName, type) {
 
 				if (mode !== 'server') {
+					
 					element
 						.parentNode
-						.insertBefore(new Util(type, utilName, value, attrName, ++cntx._id), element);
+						.insertBefore(new Util(type, utilName, value, attrName, ++ctx._id), element);
+					
+					if (mode === 'partial') {
+						var fn = util_FNS[type];
+						
+						if (is_Function(mix[fn]))
+							return mix[fn](value, model, ctx, element, controller);
+					}
+					
+					
 				}
 
 				if (mode !== 'client') {
-					return fn(value, model, cntx, element, controller, attrName, type);
+					return mix(value, model, ctx, element, controller, attrName, type);
 				}
 
 
