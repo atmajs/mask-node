@@ -1,7 +1,7 @@
 
 
 
-function html_stringify(document, model, cntx, component) {
+function html_stringify(document, model, ctx, component) {
 
 	component = html_prepairControllers(component);
 
@@ -14,7 +14,8 @@ function html_stringify(document, model, cntx, component) {
 	var first = document.firstChild,
 		documentElement = trav_getDoc(first),
 		headerJson = {
-			model: cntx._model.stringify()
+			model: ctx._model.stringify(),
+			ID: ctx._id
 		},
 		headerInfo = {
 			type: 'm'

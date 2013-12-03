@@ -41,6 +41,9 @@ function bootstrap(container, compo) {
 		return;
 	}
 	
+	if (meta.ID != null) 
+		mask.compoIndex(__ID = meta.ID);
+	
 	__models = JSON.parse(meta.model);
 	
 	var model = __models[0],
