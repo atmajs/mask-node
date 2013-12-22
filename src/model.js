@@ -43,8 +43,7 @@ var ModelBuilder = (function(){
 		
 		stringify: function(){
 			
-			
-			return JSON.stringify(this._models);
+			return Class.stringify(this._models);
 		}
 	}
 	

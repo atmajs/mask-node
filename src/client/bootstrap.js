@@ -18,6 +18,8 @@ var __models,
 // import ../util/function.js
 // import ../util/array.js
 // import ../mock/Meta.js
+
+// import model.js
 // import mock.js
 // import traverse.js
 // import setup.js
@@ -44,7 +46,7 @@ function bootstrap(container, compo) {
 	if (meta.ID != null) 
 		mask.compoIndex(__ID = meta.ID);
 	
-	__models = JSON.parse(meta.model);
+	__models = model_parse(meta.model);
 	
 	var model = __models[0],
 		el = metaNode.nextSibling;
@@ -54,7 +56,5 @@ function bootstrap(container, compo) {
 
 	//-- mask.compoIndex(++__ID);
 
-	if (typeof Compo !== 'undefined') 
-		Compo.signal.emitIn(compo, 'domInsert');
-	
+	Compo.signal.emitIn(compo, 'domInsert');
 }
