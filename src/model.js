@@ -12,9 +12,11 @@ var ModelBuilder = (function(){
 			if (model === null) 
 				return -1;
 			
-			this._models[++this._id] = model;
+			var id = 'm' + (++this._id);
 			
-			return this._id;
+			this._models[id] = model;
+			
+			return id;
 		},
 		
 		tryAppend: function(controller){
@@ -35,10 +37,12 @@ var ModelBuilder = (function(){
 			if (model == null) {
 				model = controller.model;
 			}
-							
-			this._models[++this._id] = model;
 			
-			return this._id;
+			var id = 'm' + (++this._id);
+			
+			this._models[id] = model;
+			
+			return id;
 		},
 		
 		stringify: function(){
