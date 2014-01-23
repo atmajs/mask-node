@@ -44,7 +44,7 @@ function bootstrap(container, compo) {
 	}
 	
 	if (meta.ID != null) 
-		mask.compoIndex(__ID = meta.ID);
+		mask.setCompoIndex(__ID = meta.ID);
 	
 	__models = model_parse(meta.model);
 	
