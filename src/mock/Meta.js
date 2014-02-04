@@ -1,4 +1,4 @@
-var Meta = (function(){
+Meta = (function(){
 	
 	var seperator_CODE = 30,
 		seperator_CHAR = String.fromCharCode(seperator_CODE);

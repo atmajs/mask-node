@@ -1,6 +1,6 @@
 
 
-util_extend(Dom, {
+obj_extend(Dom, {
 	DOCTYPE: 11
 });
 

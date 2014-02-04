@@ -55,7 +55,7 @@ function html_Component(node, model, ctx, container, controller) {
 	
 		
 
-	attr = util_extend(compo.attr, node.attr);
+	attr = obj_extend(compo.attr, node.attr);
 	
 	if (attr['x-mode'] !== void 0) 
 		compo.mode = attr['x-mode'] ;

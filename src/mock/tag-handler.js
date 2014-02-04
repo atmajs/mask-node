@@ -1,4 +1,4 @@
-var mock_TagHandler = (function() {
+mock_TagHandler = (function() {
 	
 	function EmptyHandler(attrName, attrValue) {}
 	
