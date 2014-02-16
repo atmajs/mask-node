@@ -21,7 +21,7 @@
 	
 	// import ../../mask/src/expression/exports.js
 	// import ../../mask/src/custom.js
-	// import ../../mask/src/dom/dom.js
+	// import ../../mask/src/dom/exports.js
 	// import ../../mask/src/parse/parser.js
 	
 	

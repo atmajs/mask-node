@@ -30,7 +30,8 @@ var builder_build = (function() {
 			elements,
 			j, jmax, key, value;
 
-		if (type === 10 /*SET*/ || is_Array(node)) {
+		// Dom.SET
+		if (type === 10 || is_Array(node)) {
 			for (j = 0, jmax = node.length; j < jmax; j++) {
 				builder_html(node[j], model, ctx, container, controller);
 			}
@@ -45,8 +46,26 @@ var builder_build = (function() {
 				type = 2;
 			}
 		}
+		
+		// Dom.STATEMENT
+		if (type === 15) {
+			var Handler = custom_Statements[node.tagName];
+			if (is_Function(Handler)) {
+				
+				Handler(node, model, ctx, container, controller, childs);
+			}
+			
+			// if DEBUG
+			else 
+				console.error('<mask: statement is undefined', node.tagName);
+			// endif
+			
+			
+			return container;
+		}
 
-		if (type === 1 /* Dom.NODE */) {
+		// Dom.NODE
+		if (type === 1) {
 			
 			if (node.tagName[0] === ':') {
 				
@@ -61,14 +80,16 @@ var builder_build = (function() {
 			}
 		}
 
-		if (type === 2 /* Dom.TEXTNODE */) {
+		// Dom.TEXTNODE
+		if (type === 2) {
 			
 			build_textNode(node, model, ctx, container, controller);
 			
 			return container;
 		}
 
-		if (type === 4 /* Dom.COMPONENT */) {
+		// Dom.COMPONENT
+		if (type === 4) {
 			
 			element = document.createComponent(node, model, ctx, container, controller);
 			container.appendChild(element);
@@ -148,9 +169,9 @@ var builder_build = (function() {
 		if (container == null) 
 			container = new html_DocumentFragment();
 		
-		if (controller == null) {
-			controller = new Component();
-		}
+		if (controller == null) 
+			controller = new Dom.Component();
+		
 			
 		if (ctx == null) 
 			ctx = {};
