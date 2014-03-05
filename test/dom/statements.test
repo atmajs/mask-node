@@ -7,7 +7,7 @@ UTest({
 		'http.eval': function(done){
 			
 			include
-				.instance()
+				.instance(process.cwd() + '/')
 				.js('/lib/mask.node.js::Mask')
 				.done(function(resp){
 					Object.extend(mask, resp.Mask.mask);
