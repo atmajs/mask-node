@@ -1,14 +1,21 @@
-Mask HTML Builder
+MaskJS for the Node.JS
 ----
+[![Build Status](https://travis-ci.org/atmajs/mask-node.png?branch=master)](https://travis-ci.org/atmajs/mask-node)
 
-Build HTML from a mask template. It will also create all needed meta information for custom tags, attributes and utils,
-so that all components are proper initialized on the client. It will also embed all models. It is also possible to define render mode
-for all custom stuff - "server" / "client" (empty means "both"). Now also SEO Bots can crawl the application,
-and users with disabled javascript will see the content.
+[MaskJS](https://github.com/atmajs/MaskJS)
 
-To get the idea:
 
-```css
+
+- render Mask Template, Components and other things on the server
+- create all needed **meta information** for custom tags, attributes and utils, so that all components are proper initialized on the client. It will also embed all models. It is also possible to define render mode
+- **render modes** for components, attribute handlers and utils for all custom stuff - `server` / `client` or both (`server client`).
+- Front-end application performance - it receives rendered or semi-rendered html.
+- SEO Bots can crawl the application 
+
+Short overview, how the it works:
+
+_Some template_
+```sass
 h4 > '~[username]'
 :profile {
 	input type=text value='~[age]';
@@ -16,13 +23,12 @@ h4 > '~[username]'
 }
 ```
 
-Render this template on server-side:
+_Server-side rendering_
 ```javascript
 var html = mask.render(template, { username: 'John', age: 27 });
 ```
 
-Output:
-
+_Client output_
 ```markup
 <!--m model: {username: 'John', age: 27}-->
 	<h4>John</h4>
@@ -34,6 +40,9 @@ Output:
 <!--/m-->
 ```
 
-Now to initialize all components and its signals / methods etc. use ```mask.Compo.bootstrap()``` on the frontend.
+Some additional work should be accomplished to initialize `:profile` component:
+- include the component's source
+- run ```mask.Compo.bootstrap()```
+- That's all, now the component is fully functional, as if it was rendered on the client.
 
 
