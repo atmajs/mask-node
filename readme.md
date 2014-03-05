@@ -7,7 +7,8 @@ MaskJS for the Node.JS
 
 
 - render Mask Template, Components and other things on the server
-- create all needed **meta information** for custom tags, attributes and utils, so that all components are proper initialized on the client. It will also embed all models. It is also possible to define render mode
+- create all needed **meta information** for custom tags, attributes and utils, so that all components are proper initialized on the client
+- serialize and deserialize the models
 - **render modes** for components, attribute handlers and utils for all custom stuff - `server` / `client` or both (`server client`).
 - Front-end application performance - it receives rendered or semi-rendered html.
 - SEO Bots can crawl the application 
@@ -29,7 +30,7 @@ var html = mask.render(template, { username: 'John', age: 27 });
 ```
 
 _Client output_
-```markup
+```html
 <!--m model: {username: 'John', age: 27}-->
 	<h4>John</h4>
 	<!--c#1 compoName::profile -->
@@ -46,3 +47,5 @@ Some additional work should be accomplished to initialize `:profile` component:
 - That's all, now the component is fully functional, as if it was rendered on the client.
 
 
+----
+ (c) 2014 - MIT License
