@@ -30,42 +30,60 @@ var builder_build = (function() {
 			elements,
 			j, jmax, key, value;
 
+		if (type == null){
+			// in case if node was added manually, but type was not set
+			
+			if (is_Array(node)) {
+				type = 10
+			}
+			else if (node.tagName != null){
+				type = 1;
+			}
+			else if (node.content != null){
+				type = 2;
+			}
+		}
+		
+		if (type == 1 && custom_Tags[node.tagName] != null) {
+			// check if the tag name was overriden
+			type = 4;
+		}
+		
 		// Dom.SET
-		if (type === 10 || is_Array(node)) {
+		if (type === 10) {
 			for (j = 0, jmax = node.length; j < jmax; j++) {
 				builder_html(node[j], model, ctx, container, controller);
 			}
 			return container;
 		}
 		
-		if (type == null) {
-			// in case if node was added manually, but type was not set
-			if (node.tagName != null) {
-				type = 1;
-			} else if (node.content != null) {
-				type = 2;
-			}
-		}
-		
 		// Dom.STATEMENT
 		if (type === 15) {
 			var Handler = custom_Statements[node.tagName];
-			if (is_Function(Handler)) {
+			if (Handler == null) {
 				
-				Handler(node, model, ctx, container, controller, childs);
+				if (custom_Tags[node.tagName] != null) {
+					// Dom.COMPONENT
+					type = 4;
+				} else {
+					console.error('<mask: statement is undefined', node.tagName);
+					return container;
+				}
+				
 			}
 			
-			// if DEBUG
-			else 
-				console.error('<mask: statement is undefined', node.tagName);
-			// endif
-			
-			
-			return container;
+			if (type === 15) {
+				
+				Handler.render(node, model, ctx, container, controller, childs);
+				return container;
+			}
 		}
-
+		
 		// Dom.NODE
 		if (type === 1) {
+			
+			if (node.tagName === 'else') 
+				return container;
 			
 			if (node.tagName[0] === ':') {
 				
@@ -172,7 +190,6 @@ var builder_build = (function() {
 		if (controller == null) 
 			controller = new Dom.Component();
 		
-			
 		if (ctx == null) 
 			ctx = {};
 		

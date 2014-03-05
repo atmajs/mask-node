@@ -13,27 +13,31 @@
     // import ../../mask/src/util/object.js
 	
 	
-	// import ../src/util/is.js
-	// import ../src/util/object.js
-	// import ../src/util/function.js
 	
+	// import /src/util/is.js
+	// import /src/util/object.js
+	// import /src/util/function.js
+	// import /src/util/compo.js
 	
 	
 	// import ../../mask/src/expression/exports.js
-	// import ../../mask/src/custom.js
+	// import ../../mask/src/custom/exports.js
 	// import ../../mask/src/dom/exports.js
 	// import ../../mask/src/parse/parser.js
+	// import ../../mask/src/statements/exports.js
 	
 	
 	
 	
 	// import ../../mask/src/mask.js
+	// import /src/builder.js
+	// import /src/mock/mock.js
+	
+	
 	// import ../../mask/src/libs/compo.js
 	// import ../../mask/src/libs/jmask.js
 	
-	// import ../src/cache/cache.js
-	// import ../src/builder.js
-	// import ../src/mock/mock.js
+	// import /src/cache/cache.js
 	
 	
 	// import ../../mask/src/formatter/stringify.lib.js

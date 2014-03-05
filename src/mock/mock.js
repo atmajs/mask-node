@@ -49,7 +49,7 @@ var Meta,
 			obj_extend(compo.prototype, custom_Tags_defs[tagName]);
 		}
 		
-		if (compo.prototype.mode === 'client') {
+		if (compo_getRenderMode(compo) === compo_renderMode_CLIENT) {
 			custom_Tags[tagName] = mock_TagHandler.create(tagName, compo, 'client');
 			return;
 		}

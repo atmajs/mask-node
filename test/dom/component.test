@@ -1,0 +1,59 @@
+var path = '/test/dom/compos/foo.js';
+UTest({
+	$config: {
+		'http.eval': function(done){
+			logger.log('>> eval http');
+			include
+				.instance()
+				.js('/lib/mask.node.js::Mask')
+				.done(function(resp){
+					logger.log('>> extend http');
+					Object.extend(mask, resp.Mask.mask);
+					global.mask = mask;
+					done();
+				})
+		},
+		'http.include': [
+			path + '?' + Date.now()
+		]
+	},
+	
+	'compo - render': function(done){
+		$render('script src="/utest' + path + '"; :foo')
+			.done(function($dom, doc, win){
+				
+				$dom
+					.find('input')
+					.eq_('length', 1)
+					.eq_('val', 'foo')
+					;
+				
+				'> event'
+				$dom
+					.find('button')
+					.click()
+					.end()
+					.find('input')
+					.eq_('val', 'baz')
+					;
+				
+				'>signal'
+				$dom
+					.find('button')
+					.trigger('mousedown')
+					.end()
+					.find('input')
+					.eq_('val', 'qux')
+					;
+				
+				var foo = win.app.find(':foo');
+				notEq_(foo, null);
+				
+				eq_(foo.compos.test_jQuery.length, 1);
+				is_(foo.compos.test_querySelector, 'Object');
+				is_(foo.compos.test_querySelector.nodeType, 'Number');
+			})
+			.fail(assert.avoid())
+			.always(done);
+	}
+});

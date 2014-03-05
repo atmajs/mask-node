@@ -1,0 +1,28 @@
+{
+    "name": "-",
+    "description": "MaskJS for the Node.JS",
+    "version": "0.8.13",
+    "homepage": "http://atmajs.com/mask",
+    "contributors": [],
+    "author": "Alexander Kit <alex.kit@atmajs.com>",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/atmajs/mask-node.git"
+    },
+    "bugs": {
+        "url": "https://github.com/atmajs/mask-node/issues"
+    },
+    "licenses": [
+        "MIT"
+    ],
+    "devDependencies": {
+        "atma": "latest"
+    },
+    "scripts": {
+        "test": "node_modules/.bin/atma test"
+    },
+    "keywords": [],
+    "engines": {
+        "node": "~0.8.9"
+    }
+}
