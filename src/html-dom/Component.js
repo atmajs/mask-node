@@ -6,15 +6,15 @@ function html_Component(node, model, ctx, container, controller) {
 		cacheInfo;
 	
 	var compoName = node.compoName || node.tagName,
-		Ctor = custom_Tags[compoName] || node.controller;
+		Handler = custom_Tags[compoName] || node.controller;
 	
-	if (Ctor != null) 
-		cacheInfo = is_Function(Ctor)
-			? Ctor.prototype.cache
-			: Ctor.cache;
+	if (Handler != null) 
+		cacheInfo = is_Function(Handler)
+			? Handler.prototype.cache
+			: Handler.cache;
 	
 	if (cacheInfo != null) 
-		compo = Cache.getCompo(model, ctx, compoName, Ctor);
+		compo = Cache.getCompo(model, ctx, compoName, Handler);
 	
 	if (compo != null) {
 		this.compo = compo;
@@ -25,14 +25,20 @@ function html_Component(node, model, ctx, container, controller) {
 		return;
 	}
 	
-	compo = is_Function(Ctor)
-		? new Ctor(model)
-		: Ctor;
-		
+	if (is_Function(Handler))
+		compo = new Handler(model);
+	
+	if (compo == null && is_Function(Handler.__Ctor)) 
+		compo = new Handler.__Ctor(node, controller);
+	
+	if (compo == null)
+		compo = Handler;
+	
 	
 	if (compo == null) {
 		compo = {
 			model: node.model,
+			expression: node.expression,
 			modelRef: node.modelRef,
 			container: node.container,
 			mode: controller.mode,
@@ -102,7 +108,7 @@ function html_Component(node, model, ctx, container, controller) {
 	}
 
 	
-	if (compo.tagName != null && compo.tagName !== node.compoName) {
+	if (compo.tagName != null && compo.tagName !== node.tagName) {
 		compo.nodes = {
 			tagName: compo.tagName,
 			attr: compo.attr,
@@ -156,8 +162,8 @@ html_Component.prototype = obj_inherit(html_Component, html_Node, {
 				compoName: compoName,
 				attr: attr,
 				mask: mode === 'client'
-						? mask.stringify(nodes, 0)
-						: null
+					? mask.stringify(nodes, 0)
+					: null
 			},
 			info = {
 				single: this.firstChild == null,

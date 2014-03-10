@@ -45,6 +45,12 @@ var Meta,
 	
 	Mask.registerHandler = function(tagName, compo){
 		
+		if (compo != null && typeof compo === 'object') {
+			//> static
+			compo.__Ctor = wrapStatic(compo);
+		}	
+				
+		
 		if (custom_Tags_defs.hasOwnProperty(tagName)) {
 			obj_extend(compo.prototype, custom_Tags_defs[tagName]);
 		}
@@ -85,4 +91,22 @@ var Meta,
 		}
 	};	
 	
+	
+	function wrapStatic(proto, parent) {
+		function Ctor(node) {
+			this.tagName = node.tagName;
+			this.compoName = node.tagName;
+			
+			this.attr = node.attr;
+			this.expression = node.expression;
+			this.nodes = node.nodes;
+			this.nextSibling = node.nextSibling;
+			this.parent = parent;
+			this.components = null;
+		}
+		
+		Ctor.prototype = proto;
+		
+		return Ctor;
+	}
 }());

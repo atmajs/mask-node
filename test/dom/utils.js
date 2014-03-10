@@ -3,7 +3,29 @@ var $render = function(template, model, controller){
 	
 	var dfr = new Class.Deferred;
 	
-	template = '#container {' + template + '}';
+	var bootstrap = function(){
+		include.allDone(function(){
+			app = new(Compo({ compos: {} }));
+			mask.Compo.bootstrap(document.body, app);
+		});
+	};
+	
+	bootstrap = bootstrap
+		.toString()
+		.replace(/^[^{]+{/, '')
+		.replace(/}\s*$/, '')
+		;
+	
+	
+	template = jmask()
+		.add(jmask("script src='/utest/lib/mask.bootstrap.js';"))
+		
+		.add(
+			jmask('#container').append(template)
+		)
+		.add(jmask("script > :html > '''" + bootstrap + "'''"))
+		.mask()
+		;
 	
 	UTest
 		.server
