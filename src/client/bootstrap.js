@@ -48,7 +48,7 @@ function bootstrap(container, compo) {
 	
 	__models = model_parse(meta.model);
 	
-	var model = __models[0],
+	var model = compo.model = __models.m1,
 		el = metaNode.nextSibling;
 	
 	

@@ -51,6 +51,7 @@ function html_Component(node, model, ctx, container, controller) {
 	
 	
 	this.compo = compo;
+	this.node = node;
 	this.ID = this.compo.ID = ++ ctx._id;
 	
 	if (mode_SERVER_ALL === controller.mode) 
@@ -58,8 +59,6 @@ function html_Component(node, model, ctx, container, controller) {
 	
 	if (mode_SERVER_CHILDREN === controller.mode) 
 		compo.mode = mode_SERVER_ALL;
-	
-		
 
 	attr = obj_extend(compo.attr, node.attr);
 	
@@ -141,7 +140,8 @@ html_Component.prototype = obj_inherit(html_Component, html_Node, {
 			return compo.__cached;
 		}
 		
-		var mode = compo.mode,
+		var meta = compo_getMetaInfo(compo),
+			mode = meta.mode,
 			compoName,
 			attr,
 			nodes;
@@ -164,7 +164,10 @@ html_Component.prototype = obj_inherit(html_Component, html_Node, {
 				expression: compo.expression,
 				mask: mode === 'client'
 					? mask.stringify(nodes, 0)
-					: null
+					: null,
+				nodes: meta.serializeNodes !== true
+					? null
+					: (compo.serializeNodes || mask.stringify)(this.node)
 			},
 			info = {
 				single: this.firstChild == null,
