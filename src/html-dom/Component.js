@@ -161,6 +161,7 @@ html_Component.prototype = obj_inherit(html_Component, html_Node, {
 				
 				compoName: compoName,
 				attr: attr,
+				expression: compo.expression,
 				mask: mode === 'client'
 					? mask.stringify(nodes, 0)
 					: null

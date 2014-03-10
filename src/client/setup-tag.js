@@ -17,7 +17,8 @@ if (meta.mask != null) {
 		tagName: compoName,
 		attr: meta.attr,
 		nodes: meta.mask ? mask.parse(meta.mask) : null,
-		controller: ctor
+		controller: ctor,
+		expression: meta.expression
 	};
 	
 	/* Dangerous:
@@ -57,6 +58,7 @@ if (meta.mask != null) {
 	compo.attr = meta.attr;
 	compo.parent = controller;
 	compo.ID = meta.ID;
+	compo.expression = meta.expression;
 	
 	//if (meta.modelID)
 	compo.model = model;
