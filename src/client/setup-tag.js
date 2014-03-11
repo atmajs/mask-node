@@ -4,11 +4,11 @@ var compoName = meta.compoName,
 		? custom_Tags[meta.compoName]
 		: {};
 	
-var node;
+var maskNode;
 if (meta.nodes) {
-	node = mask.parse(meta.nodes);
-	if (node.type === mask.Dom.FRAGMENT)
-		node = node.nodes[0];
+	maskNode = mask.parse(meta.nodes);
+	if (maskNode.type === mask.Dom.FRAGMENT)
+		maskNode = maskNode.nodes[0];
 }
 
 if (Handler == null) {
@@ -59,7 +59,7 @@ if (meta.mask != null) {
 		compo = new Handler(model);
 	
 	if (compo == null && Handler.__Ctor) {
-		compo = new Handler.__Ctor(node, controller);
+		compo = new Handler.__Ctor(maskNode, controller);
 		isStatic = false;
 	}
 	
