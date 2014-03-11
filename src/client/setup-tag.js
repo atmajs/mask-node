@@ -1,13 +1,19 @@
 
 var compoName = meta.compoName,
-	ctor = compoName
+	Handler = compoName
 		? custom_Tags[meta.compoName]
 		: {};
-		
+	
+var node;
+if (meta.nodes) {
+	node = mask.parse(meta.nodes);
+	if (node.type === mask.Dom.FRAGMENT)
+		node = compo.nodes.nodes[0];
+}
 
-if (ctor == null) {
+if (Handler == null) {
 	console.error('Component is not loaded for client reder - ', compoName);
-	ctor = function() {};
+	Handler = function() {};
 }
 
 
@@ -17,7 +23,7 @@ if (meta.mask != null) {
 		tagName: compoName,
 		attr: meta.attr,
 		nodes: meta.mask ? mask.parse(meta.mask) : null,
-		controller: ctor,
+		controller: Handler,
 		expression: meta.expression
 	};
 	
@@ -48,32 +54,38 @@ if (meta.mask != null) {
 	container.insertBefore(fragment, node);
 	container.appendChild = originalAppender;
 } else {
-
-	var compo = typeof ctor === 'function'
-		? new ctor(model)
-		: ctor;
+	var compo, isStatic;
+	if (typeof Handler === 'function') 
+		compo = new Handler(model);
 	
+	if (compo == null && Handler.__Ctor) {
+		compo = new Handler.__Ctor(node, controller);
+		isStatic = false;
+	}
+	
+	if (compo == null) 
+		compo = Handler;
 	
 	compo.compoName = compoName;
 	compo.attr = meta.attr;
 	compo.parent = controller;
 	compo.ID = meta.ID;
 	compo.expression = meta.expression;
-	
-	//if (meta.modelID)
 	compo.model = model;
 	
 	if (controller.components == null) 
 		controller.components = [];
 		
-	controller
-		.components
-		.push(compo);
+	
+	if (isStatic !== true) {
+		controller
+			.components
+			.push(compo);
+	}
 		
 	if (compo.onRenderStartClient) {
 		compo.onRenderStartClient(model, cntx, container, controller);
 		
-		//if (compo.model != null) 
 		model = compo.model;
 	}
 	
@@ -106,9 +118,8 @@ if (meta.mask != null) {
 			
 			var endRef = setup(node, model, cntx, container, compo, elements);
 			
-			if (endRef == null) {
-				debugger;
-			}
+			if (endRef == null) 
+				throw new Error('Unexpected end of the reference');
 			
 			node = endRef.nextSibling;
 		}
@@ -118,7 +129,10 @@ if (meta.mask != null) {
 	
 	
 	if (fn_isFunction(compo.renderEnd)) {
-		compo.renderEnd(elements, model, cntx, container);
+		compo = compo.renderEnd(elements, model, cntx, container);
+		
+		if (isStatic && compo != null) 
+			controller.components.push(compo);
 	}
 	
 	if (childs != null && childs !== elements){
