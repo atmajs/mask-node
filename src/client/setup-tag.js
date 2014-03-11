@@ -12,8 +12,13 @@ if (meta.nodes) {
 }
 
 if (Handler == null) {
-	console.error('Component is not loaded for client reder - ', compoName);
-	Handler = function() {};
+	if (controller.getHandler)
+		Handler = controller.getHandler(compoName);
+	
+	if (Handler == null) {
+		console.error('Component is not loaded for client reder - ', compoName);
+		Handler = function() {};
+	}
 }
 
 
@@ -60,7 +65,7 @@ if (meta.mask != null) {
 	
 	if (compo == null && Handler.__Ctor) {
 		compo = new Handler.__Ctor(maskNode, controller);
-		isStatic = false;
+		isStatic = true;
 	}
 	
 	if (compo == null) 
@@ -129,7 +134,13 @@ if (meta.mask != null) {
 	
 	
 	if (fn_isFunction(compo.renderEnd)) {
-		compo = compo.renderEnd(elements, model, cntx, container);
+		
+		var _container = container;
+		if (isStatic) {
+			_container = new mock_Container(container, elements);
+		}
+		
+		compo = compo.renderEnd(elements, model, cntx, _container);
 		
 		if (isStatic && compo != null) 
 			controller.components.push(compo);
