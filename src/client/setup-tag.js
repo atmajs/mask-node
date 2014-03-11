@@ -141,7 +141,13 @@ if (meta.mask != null) {
 			_container = new mock_Container(container, elements);
 		}
 		
-		compo = compo.renderEnd(elements, model, cntx, _container);
+		compo = compo.renderEnd(
+			elements,
+			model,
+			cntx,
+			_container,
+			controller
+		);
 		
 		if (isStatic && compo != null) 
 			controller.components.push(compo);

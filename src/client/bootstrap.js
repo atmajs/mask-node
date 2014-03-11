@@ -53,8 +53,6 @@ function bootstrap(container, compo) {
 	
 	
 	setup(el, model, {}, el.parentNode, compo);
-
-	//-- mask.compoIndex(++__ID);
-
+	
 	Compo.signal.emitIn(compo, 'domInsert');
 }
