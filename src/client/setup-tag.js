@@ -2,7 +2,8 @@
 var compoName = meta.compoName,
 	Handler = compoName
 		? custom_Tags[meta.compoName]
-		: {};
+		: {}
+		;
 	
 var maskNode;
 if (meta.nodes) {

@@ -9,7 +9,7 @@ var ModelBuilder = (function(){
 	
 	ModelBuilder.prototype = {
 		append: function(model){
-			if (model === null) 
+			if (model == null) 
 				return -1;
 			
 			var id = 'm' + (++this._id);
