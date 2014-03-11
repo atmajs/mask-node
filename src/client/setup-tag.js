@@ -8,7 +8,7 @@ var node;
 if (meta.nodes) {
 	node = mask.parse(meta.nodes);
 	if (node.type === mask.Dom.FRAGMENT)
-		node = compo.nodes.nodes[0];
+		node = node.nodes[0];
 }
 
 if (Handler == null) {
