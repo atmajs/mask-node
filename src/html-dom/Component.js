@@ -25,15 +25,17 @@ function html_Component(node, model, ctx, container, controller) {
 		return;
 	}
 	
-	if (is_Function(Handler))
-		compo = new Handler(model);
+	if (Handler != null) {
 	
-	if (compo == null && is_Function(Handler.__Ctor)) 
-		compo = new Handler.__Ctor(node, controller);
-	
-	if (compo == null)
-		compo = Handler;
-	
+		if (is_Function(Handler))
+			compo = new Handler(model);
+		
+		if (compo == null && is_Function(Handler.__Ctor)) 
+			compo = new Handler.__Ctor(node, controller);
+		
+		if (compo == null)
+			compo = Handler;
+	}
 	
 	if (compo == null) {
 		compo = {

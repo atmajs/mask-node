@@ -1,8 +1,6 @@
 
 // import ../../mask/src/umd-head.js
 
-
-
 	// import ../../mask/src/scope-vars.js
 	// import ../../mask/src/util/util.js
 	// import ../../mask/src/util/template.js
