@@ -39,7 +39,7 @@ UTest({
 			},
 		], function(test, next){
 			
-			$render(test.template, test.model)
+			$render(test.template, test)
 				.done(assert.await(function($dom, doc, win){
 					
 					$dom.eq_('text', test.result);
@@ -100,7 +100,7 @@ UTest({
 			}, 
 		], function(test, next){
 			
-			$render(test.template, test.model)
+			$render(test.template, test)
 				.done(assert.await(function($dom, doc, win){
 					
 					$dom.eq_('text', test.result);
@@ -129,7 +129,7 @@ UTest({
 			}
 		], function(test, next){
 			
-			$render(test.template, test.model)
+			$render(test.template, test)
 				.done(assert.await(function($dom, doc, win){
 					$dom.eq_('text', test.result);
 				}))
@@ -161,7 +161,7 @@ UTest({
 			}
 		], function(test, next){
 			
-			$render(test.template, test.model, test.controller)
+			$render(test.template, test)
 				.done(assert.await(function($dom, doc, win){
 					$dom.eq_('text', test.result);
 				}))
@@ -192,7 +192,7 @@ UTest({
 			}
 		], function(test, next){
 			
-			$render(test.template, test.model, test.controller)
+			$render(test.template, test)
 				.done(assert.await(function($dom, doc, win){
 					$dom.eq_('text', test.result);
 				}))

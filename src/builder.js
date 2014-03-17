@@ -57,6 +57,9 @@ var builder_build = (function() {
 			return container;
 		}
 		
+		if (node.tagName === 'else')
+			return container;
+		
 		// Dom.STATEMENT
 		if (type === 15) {
 			var Handler = custom_Statements[node.tagName];
@@ -81,9 +84,6 @@ var builder_build = (function() {
 		
 		// Dom.NODE
 		if (type === 1) {
-			
-			if (node.tagName === 'else') 
-				return container;
 			
 			if (node.tagName[0] === ':') {
 				

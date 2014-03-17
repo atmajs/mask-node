@@ -1,35 +1,27 @@
 
-var $render = function(template, model, controller){
+var $render = function(template, params){
+	params = params || {};
 	
-	var dfr = new Class.Deferred;
-	
-	var bootstrap = function(){
-		include.allDone(function(){
-			app = new(Compo({ compos: {} }));
-			mask.Compo.bootstrap(document.body, app);
-		});
-	};
-	
-	bootstrap = bootstrap
-		.toString()
-		.replace(/^[^{]+{/, '')
-		.replace(/}\s*$/, '')
+	var dfr = new Class.Deferred,
+		model = params.model,
+		controller = params.controller,
+		include = params.include || []
 		;
 	
+	include.unshift('/lib/mask.bootstrap.js');
 	
-	template = jmask()
-		.add(jmask("script src='/utest/lib/mask.bootstrap.js';"))
-		
-		.add(
-			jmask('#container').append(template)
-		)
-		.add(jmask("script > :html > '''" + bootstrap + "'''"))
+	template = jmask('#container')
+		.append(template)
 		.mask()
 		;
 	
 	UTest
 		.server
-		.render(template, model, controller)
+		.render(template, {
+			model: model,
+			controller: controller,
+			include: include
+		})
 		.done(function(doc, win) {
 			
 			dfr.resolve($(doc).find('#container'), doc, win);

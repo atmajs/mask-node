@@ -18,7 +18,11 @@ UTest({
 	},
 	
 	'compo - render': function(done){
-		$render('script src="/utest' + path + '"; :foo')
+		$render(':foo', {
+			include: [
+				path
+			]
+		})
 			.done(function($dom, doc, win){
 				
 				$dom
