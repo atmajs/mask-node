@@ -138,7 +138,6 @@ html_Component.prototype = obj_inherit(html_Component, html_Node, {
 			compo = this.compo;
 			
 		if (compo.__cached !== void 0) {
-			console.log('from Cache size: ', compo.__cached.length);
 			return compo.__cached;
 		}
 		

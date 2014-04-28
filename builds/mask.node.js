@@ -42,7 +42,7 @@
 	// import ../../mask/src/handlers/sys.js
 	// import ../../mask/src/handlers/utils.js
 
-	// import ../../mask.binding/lib/binding.embed.node.js
+	// import ../../mask-binding/lib/binding.embed.node.js
 	
 
 
