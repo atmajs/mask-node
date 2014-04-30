@@ -9,7 +9,7 @@ var mask = atma.mask,
 
 var custom_Attributes = mask.getAttrHandler(),
 	custom_Tags = mask.getHandler(),
-	custom_Utils = mask.getUtility();
+	custom_Utils = mask.getUtil();
 
 var __models,
 	__ID = 0;
