@@ -21,7 +21,6 @@ function html_Element(name) {
 			return this.attributes[key];
 		},
 		
-			
 		get classList() {
 			return new ClassList(this);
 		},

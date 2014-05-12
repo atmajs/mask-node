@@ -22,21 +22,20 @@ function html_TextNode(text) {
 	var str_htmlEncode = (function() {
 		var map = {
 			'&': '&amp;',
-			"'": '&#39;',
-			'"': '&quot;',
 			'<': '&lt;',
-			'>': '&gt;'
+			'>': '&gt;',
+			'"': '&quot;',
+			"'": '&#x27;',
+			'/': '&#x2F;'
 		};
-
 		function replaceEntity(chr) {
 			return map[chr];
 		}
-
-		return function str_htmlEncode(html) {
-			return html.replace(/[&"'\<\>]/g, replaceEntity);
+		function str_htmlEncode(html) {
+			return html.replace(/[&"'\<\>\/]/g, replaceEntity);
 		}
+		
+		return str_htmlEncode;
 	}());
-
-
 
 }());
