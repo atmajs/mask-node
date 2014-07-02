@@ -1,0 +1,3 @@
+[submodule "ref-mask"]
+	path = ref-mask
+	url = https://github.com/atmajs/MaskJS
