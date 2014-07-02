@@ -13,7 +13,7 @@ MaskJS for the Node.JS
 - Front-end application performance - it receives rendered or semi-rendered html.
 - SEO Bots can crawl the application 
 
-Short overview, how the it works:
+Short overview, how this it works:
 
 _Some template_
 ```sass
@@ -35,14 +35,16 @@ _Client output_
 	<h4>John</h4>
 	<!--c#1 compoName::profile -->
 		<input type='text' value='27' x-compo-id='1' />;
-		<!--a attrName:x-signal attrValue:clicksendAge-->
+		<!--a attrName:x-signal attrValue:click: sendAge-->
 		<button x-compo-id='1'>Send</button>
 	<!--/c#1-->
 <!--/m-->
 ```
 
 Some additional work should be accomplished to initialize `:profile` component:
-- include the component's source
+- include sources:
+	- include the component's javascript source (_from example `:profile`_)
+	- include `mask.js` and `mask.bootstrap.js`
 - run ```mask.Compo.bootstrap()```
 - That's all, now the component is fully functional, as if it was rendered on the client.
 

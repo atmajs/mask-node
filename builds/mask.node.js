@@ -1,14 +1,16 @@
 
-// import ../../mask/src/umd-head.js
+// import /ref-mask/src/umd-head.js
 
-	// import ../../mask/src/scope-vars.js
-	// import ../../mask/src/util/util.js
-	// import ../../mask/src/util/template.js
+	// import /ref-mask/src/scope-vars.js
+	// import /ref-mask/src/util/util.js
+	// import /ref-mask/src/util/template.js
     
-    // import ../../mask/src/util/is.js
-    // import ../../mask/src/util/function.js
-	// import ../../mask/src/util/string.js
-    // import ../../mask/src/util/object.js
+    // import /ref-mask/src/util/is.js
+    // import /ref-mask/src/util/function.js
+	// import /ref-mask/src/util/string.js
+    // import /ref-mask/src/util/object.js
+	// import /ref-mask/src/util/listeners.js
+	// import /ref-mask/src/util/reporters.js
 	
 	
 	
@@ -18,31 +20,31 @@
 	// import /src/util/compo.js
 	
 	
-	// import ../../mask/src/expression/exports.js
-	// import ../../mask/src/custom/exports.js
-	// import ../../mask/src/dom/exports.js
-	// import ../../mask/src/parse/parser.js
-	// import ../../mask/src/statements/exports.js
+	// import /ref-mask/src/expression/exports.js
+	// import /ref-mask/src/custom/exports.js
+	// import /ref-mask/src/dom/exports.js
+	// import /ref-mask/src/parse/parser.js
+	// import /ref-mask/src/statements/exports.js
 	
 	// import /src/builder.js
 	
 	
-	// import ../../mask/src/mask.js
+	// import /ref-mask/src/mask.js
 	
 	// import /src/mock/mock.js
 	
 	
-	// import ../../mask/src/libs/compo.js
-	// import ../../mask/src/libs/jmask.js
+	// import /ref-mask-compo/lib/compo.embed.js
+	// import /ref-mask-j/lib/jmask.embed.js
 	
 	// import /src/cache/cache.js
 	
 	
-	// import ../../mask/src/formatter/stringify.lib.js
-	// import ../../mask/src/handlers/sys.js
-	// import ../../mask/src/handlers/utils.js
+	// import /ref-mask/src/formatter/stringify.lib.js
+	// import /ref-mask/src/handlers/sys.js
+	// import /ref-mask/src/handlers/utils.js
 
-	// import ../../mask-binding/lib/binding.embed.node.js
+	// import /ref-mask-binding/lib/binding.embed.node.js
 	
 
 
