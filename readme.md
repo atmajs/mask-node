@@ -5,15 +5,19 @@ MaskJS for the Node.JS
 [MaskJS](https://github.com/atmajs/MaskJS)
 
 
+#### Features overview
 
-- render Mask Template, Components and other things on the server
-- create all needed **meta information** for custom tags, attributes and utils, so that all components are proper initialized on the client
-- serialize and deserialize the models
+- render Mask Templates, Components and other things on the server
+- create all **meta information** for custom tags, attributes and utils, so that all components are proper initialized on the client
+- serialize and deserialize models
 - **render modes** for components, attribute handlers and utils for all custom stuff - `server` / `client` or both (`server client`).
-- Front-end application performance - it receives rendered or semi-rendered html.
-- SEO Bots can crawl the application 
 
-Short overview, how this it works:
+#### Benefits
+- hide sensitive application parts in server-side-only components
+- front-end application startup performance - client receives plain html.
+- SEO: Bots can crawl the application 
+
+Short overview, how it works:
 
 _Some template_
 ```sass

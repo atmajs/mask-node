@@ -4,7 +4,19 @@ function setup(node, model, cntx, container, controller, childs) {
 		if (childs != null) 
 			childs.push(node);
 		
-		if (node.firstChild) 
+		if (node.tagName === 'SCRIPT' &&
+			node.type === 'text/mask' &&
+			node.getAttribute('data-run') === 'true') {
+				mask.render(node.textContent
+					, model
+					, cntx
+					, new mock_ContainerByAnchor(node)
+					, controller
+					, childs
+				);
+			}
+		
+		else if (node.firstChild) 
 			setup(node.firstChild, model, cntx, node, controller);
 		
 		if (childs == null && node.nextSibling) 

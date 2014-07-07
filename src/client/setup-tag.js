@@ -50,15 +50,14 @@ if (meta.mask != null) {
 	 */
 	
 	var fragment = document.createDocumentFragment(),
-		container = node.parentNode,
-		originalAppender = container.appendChild;
+		container = node.parentNode;
 	
-	container.appendChild = mock_appendChild(fragment);
+	container.appendChild = mock_appendChildDelegate(fragment);
 	
 	mask.render(_node, model, cntx, container, controller);
 	
 	container.insertBefore(fragment, node);
-	container.appendChild = originalAppender;
+	container.appendChild = Node.prototype.appendChild;
 } else {
 	var compo, isStatic;
 	if (typeof Handler === 'function') 

@@ -39,7 +39,7 @@ function bootstrap(container, compo) {
 		
 		
 	if (meta == null || meta.type !== 'm') {
-		console.error('Meta Inforamtion not defined', container);
+		console.error('Mask.Bootstrap: meta information not found', container);
 		return;
 	}
 	
@@ -53,6 +53,19 @@ function bootstrap(container, compo) {
 	
 	
 	setup(el, model, {}, el.parentNode, compo);
+	
+	Compo.signal.emitIn(compo, 'domInsert');
+}
+
+function wrapDom(el, model, ctx, Mix) {
+	var compo = Mix || {};
+	if (typeof Mix === 'function') 
+		compo = new Mix();
+	
+	setup(el.firstChild, model, ctx, el, compo);
+	
+	if (compo.renderEnd) 
+		compo.renderEnd(el.children, model, ctx, el);
 	
 	Compo.signal.emitIn(compo, 'domInsert');
 }
