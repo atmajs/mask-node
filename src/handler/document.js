@@ -17,7 +17,7 @@
 			delete attr.doctype;
 			
 
-			fragment.appendChild(new html_DOCTYPE('<!DOCTYPE ' + doctype + '>'));
+			fragment.appendChild(new HtmlDom.DOCTYPE('<!DOCTYPE ' + doctype + '>'));
 
 			var html = {
 				tagName: 'html',

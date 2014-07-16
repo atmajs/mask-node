@@ -22,6 +22,12 @@ module.exports = {
 				}
 			},
 			tests: 'test/dom/**.test'
+		},
+		node: {
+			env: [
+				'/lib/mask.node.js::Mask'
+			],
+			tests: 'test/node/**.test'
 		}
 	}
 }

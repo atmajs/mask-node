@@ -1,7 +1,7 @@
 
-function html_DocumentFragment() {}
+HtmlDom.DocumentFragment = function() {};
 
-html_DocumentFragment.prototype = obj_inherit(html_DocumentFragment, html_Node, {
+obj_inherit(HtmlDom.DocumentFragment, HtmlDom.Node, {
 	nodeType: Dom.FRAGMENT,
 	
 	toString: function(){

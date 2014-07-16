@@ -4,7 +4,7 @@ function trav_getDoc(el, _deep) {
 	if (el == null)
 		return null;
 	
-	if (el instanceof html_Component === false)
+	if (el instanceof HtmlDom.Component === false)
 		return null;
 	
 	if (el.compoName === ':document') 

@@ -1,8 +1,8 @@
-function html_Node() {}
+HtmlDom.Node = function() {};
 
 (function() {
 	
-	html_Node.prototype = {
+	HtmlDom.Node.prototype = {
 		parentNode: null,
 		firstChild: null,
 		lastChild: null,

@@ -1,14 +1,13 @@
 
-function html_DOCTYPE(doctype){
+HtmlDom.DOCTYPE = function(doctype){
 	this.doctype = doctype;
 }
-html_DOCTYPE.prototype = {
-	constructor: html_DOCTYPE,
+HtmlDom.DOCTYPE.prototype = {
+	constructor: HtmlDom.DOCTYPE,
 	nodeType: Dom.DOCTYPE,
 
 	toString: function(buffer){
 		return this.doctype;
 	}
-
 };
 

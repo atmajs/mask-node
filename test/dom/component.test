@@ -17,7 +17,33 @@ UTest({
 		]
 	},
 	
-	'compo - render': function(done){
+	'compo - render': function(){
+		return $render('section > :bar;', {
+			include: [
+				path
+			]
+		})
+			.done(function($dom, doc, win){
+				
+				$dom
+					.children('section')
+					.eq_('length', 1)
+					.children('div')
+					.eq_('length', 3)
+					.eq(0)
+					.eq_('attr', 'name', 'a')
+					.end()
+					.eq(1)
+					.eq_('attr', 'name', 'b')
+					.end()
+					.eq(2)
+					.eq_('attr', 'name', 'c')
+					.end()
+					;
+			});
+	},
+	
+	'compo - actions': function(done){
 		$render(':foo', {
 			include: [
 				path

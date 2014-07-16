@@ -32,4 +32,13 @@ include
 				}
 			}
 		}));
+		
+		// simple
+		mask.registerHandler(':bar', mask.Compo({
+			template: "each(.) > div name='~[.]';",
+			onRenderStart: function(){
+				
+				this.model = ['a', 'b', 'c'];
+			}
+		}));
 	})

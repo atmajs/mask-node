@@ -46,6 +46,8 @@ var ModelBuilder = (function(){
 		},
 		
 		stringify: function(){
+			if (this._id === 0) 
+				return null;
 			
 			return Class.stringify(this._models);
 		}

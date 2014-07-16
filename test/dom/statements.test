@@ -110,7 +110,7 @@ UTest({
 		})
 	},
 	
-	'each': function(done){
+	'!each': function(done){
 		
 		$forEach([
 			{
@@ -126,12 +126,25 @@ UTest({
 					items: ['1', '2', '3']
 				},
 				result: '-1(0)-2(1)-3(2)'
+			},
+			{
+				template: 'if (foo) > div > span > each (arr) > "..~[.]"',
+				model: {
+					arr: ['a', 'b', 'c'],
+					foo: true
+				},
+				result: '<div><span>..a..b..c</span></div>'
+			},
+			{
+				template: 'div > span > each (.) > "..~[.]"',
+				model: ['a', 'b', 'c'],
+				result: '<div><span>..a..b..c</span></div>'
 			}
 		], function(test, next){
 			
 			$render(test.template, test)
 				.done(assert.await(function($dom, doc, win){
-					$dom.eq_('text', test.result);
+					$dom.eq_('html', test.result);
 				}))
 				.always(next || done)
 				;

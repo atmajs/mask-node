@@ -44,7 +44,7 @@ var Cache = (function(){
 		
 		getCompo: function(model, ctx, compoName, Ctor){
 			if (__cfg.allowCache === false) 
-				return;
+				return null;
 			
 			var cached = _cache[compoName];
 			if (cached == null)

@@ -3,10 +3,15 @@ var compo_renderMode_SERVER = 1,
 	compo_renderMode_BOTH = 3,
 	
 	compo_getMetaInfo,	
-	compo_getRenderMode
+	compo_getRenderMode,
+	compo_isServerMode
 	;
 	
 (function(){
+	
+	compo_isServerMode = function(compo){
+		return compo_getRenderMode(compo) === compo_renderMode_SERVER;
+	};
 	
 	compo_getMetaInfo = function(compo){
 		if (compo == null) 
@@ -33,16 +38,16 @@ var compo_renderMode_SERVER = 1,
 			: compo
 			;
 		
-		var meta = (proto.$meta && proto.$meta.mode) || proto.mode;
+		var mode = (proto.$meta && proto.$meta.mode) || proto.mode;
 		
-		if (typeof meta === 'number') 
-			return meta;
-		
-		if (meta == null || meta === 'both') 
+		if (mode == null || mode === 'both') 
 			return compo_renderMode_BOTH;
 		
-		var isServer = meta.indexOf('server') !== -1,
-			isClient = meta.indexOf('client') !== -1
+		if (typeof mode === 'number') 
+			return mode;
+		
+		var isServer = mode.indexOf('server') !== -1,
+			isClient = mode.indexOf('client') !== -1
 			;
 		
 		if (isServer && isClient) 

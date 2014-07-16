@@ -1,15 +1,15 @@
 
-function html_Element(name) {
+HtmlDom.Element = function(name) {
 	this.tagName = name.toUpperCase();
 	this.attributes = {};
-}
+};
 
 (function(){
 	
 	
 	// import jq/classList.js
 	
-	html_Element.prototype = obj_inherit(html_Element, html_Node, {
+	obj_inherit(HtmlDom.Element, HtmlDom.Node, {
 		
 		nodeType: Dom.NODE,
 		
@@ -46,7 +46,7 @@ function html_Element(name) {
 			
 			
 			
-			var isSingleTag = html_SingleTags[tagName] === 1,
+			var isSingleTag = SingleTags[tagName] === 1,
 				element = this.firstChild;
 				
 			if (element == null) {

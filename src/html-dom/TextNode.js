@@ -1,12 +1,11 @@
-function html_TextNode(text) {
+HtmlDom.TextNode = function(text) {
 	this.textContent = text;
-}
+};
 
 (function() {
 
-
-	html_TextNode.prototype = {
-		constructor: html_TextNode,
+	HtmlDom.TextNode.prototype = {
+		constructor: HtmlDom.TextNode,
 		nodeType: Dom.TEXTNODE,
 		nextSibling: null,
 
@@ -17,7 +16,6 @@ function html_TextNode(text) {
 			return str_htmlEncode(this.textContent);
 		}
 	};
-
 
 	var str_htmlEncode = (function() {
 		var map = {

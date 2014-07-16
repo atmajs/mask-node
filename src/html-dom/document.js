@@ -1,20 +1,20 @@
 
 document = {
 	createDocumentFragment: function(){
-		return new html_DocumentFragment();
+		return new HtmlDom.DocumentFragment();
 	},
 	createElement: function(name){
-		return new html_Element(name);
+		return new HtmlDom.Element(name);
 	},
 	createTextNode: function(text){
-		return new html_TextNode(text);
+		return new HtmlDom.TextNode(text);
 	},
 
 	createComment: function(text){
-		return new html_Comment(text);
+		return new HtmlDom.Comment(text);
 	},
 	
 	createComponent: function(compo, model, ctx, container, controller){
-		return new html_Component(compo, model, ctx, container, controller);
+		return new HtmlDom.Component(compo, model, ctx, container, controller);
 	}
 };

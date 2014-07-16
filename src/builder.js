@@ -1,20 +1,33 @@
-var builder_build = (function() {
-
-	var mode_SERVER = 'server',
-		mode_SERVER_ALL = 'server:all',
-		mode_SERVER_CHILDREN = 'server:children',
-		mode_CLIENT = 'client',
-		mode_model_NONE = 'none';
+var builder_build,
+	builder_componentID;
+(function() {
+	
+	builder_build = function(template, model, ctx, container, controller, childs){
+		if (container == null) 
+			container = new HtmlDom.DocumentFragment();
+		
+		if (controller == null) 
+			controller = new Dom.Component();
+		
+		if (ctx == null) 
+			ctx = { _model: null, _ctx: null };
+		
+		if (ctx._model == null) 
+			ctx._model = new ModelBuilder(model, Cache.modelID);
+		
+		if (ctx._id == null) 
+			ctx._id = Cache.controllerID;
+			
+		return builder_html(template, model, ctx, container, controller, childs);
+	};
+	
+	// ==== private
 
 	// import model.js
-	// import stringify.js
-	// import html-dom/lib.js
 	// import handler/document.js
 	
-	// import util/json.js
-	
-	// import ../../mask/src/build/type.node.js
-	// import ../../mask/src/build/type.textNode.js
+	// import /ref-mask/src/build/type.node.js
+	// import /ref-mask/src/build/type.textNode.js
 	
 
 	function builder_html(node, model, ctx, container, controller, childs) {
@@ -180,61 +193,5 @@ var builder_build = (function() {
 
 
 		return container;
-	}
-
-
-	return function(template, model, ctx, container, controller) {
-		if (container == null) 
-			container = new html_DocumentFragment();
-		
-		if (controller == null) 
-			controller = new Dom.Component();
-		
-		if (ctx == null) 
-			ctx = { _model: null, _ctx: null };
-		
-		if (ctx._model == null) 
-			ctx._model = new ModelBuilder(model, Cache.modelID);
-		
-		if (ctx._id == null) 
-			ctx._id = Cache.controllerID;
-		
-		var html;
-		builder_html(template, model, ctx, container, controller);
-		
-		
-		if (ctx.async === true) {
-			
-			ctx.done(function(){
-				
-				if (ctx.page && ctx.page.query.debug === 'tree') {
-					// ctx.req - is only present, when called by a page instance
-					// @TODO - expose render fn only for page-render purpose
-					
-					ctx.resolve(JSON.stringify(logger_dimissCircular(container)));
-					return;
-				}
-				
-				html = html_stringify(container, model, ctx, controller);
-				
-				ctx.resolve(html);
-			});
-			
-			return null;
-		}
-		
-		
-		if (ctx.page && ctx.page.query.debug === 'tree') 
-			return JSON.stringify(logger_dimissCircular(container));
-		
-
-		
-		html = html_stringify(container, model, ctx, controller);
-		
-		return html;
 	};
-
-	
-	
-	
 }());
