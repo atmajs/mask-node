@@ -1,5 +1,7 @@
 
 function trav_getDoc(el, _deep) {
+	if (el != null && el.nodeType === Dom.FRAGMENT) 
+		el = el.firstChild;
 	
 	if (el == null)
 		return null;
@@ -15,8 +17,6 @@ function trav_getDoc(el, _deep) {
 	if (_deep === 4) 
 		return null;
 	
-		
-
 	var doc;
 	doc = trav_getDoc(el.nextSibling, _deep);
 	

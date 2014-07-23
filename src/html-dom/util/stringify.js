@@ -6,7 +6,7 @@
 		if (compo.components == null || compo.components.length === 0) 
 			return document.toString();
 		
-		var documentElement = trav_getDoc(document.firstChild),
+		var documentElement = trav_getDoc(document),
 			headerJson = {
 				model: ctx._model.stringify(),
 				ID: ctx._id

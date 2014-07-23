@@ -110,7 +110,7 @@ UTest({
 		})
 	},
 	
-	'!each': function(done){
+	'each': function(done){
 		
 		$forEach([
 			{
