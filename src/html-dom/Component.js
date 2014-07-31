@@ -146,7 +146,8 @@
 				mode = meta.mode,
 				compoName,
 				attr,
-				nodes;
+				nodes,
+				scope;
 			
 			if (compo != null) {
 				compoName = compo.compoName;
@@ -154,6 +155,7 @@
 				mode = compo.mode;
 				
 				nodes = compo.nodes;
+				scope = compo.scope;
 			}
 		
 			
@@ -169,7 +171,9 @@
 						: null,
 					nodes: meta.serializeNodes !== true
 						? null
-						: (compo.serializeNodes || mask.stringify)(this.node)
+						: (compo.serializeNodes || mask.stringify)(this.node),
+						
+					scope: scope
 				},
 				info = {
 					single: this.firstChild == null,

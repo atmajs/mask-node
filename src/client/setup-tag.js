@@ -30,7 +30,8 @@ if (meta.mask != null) {
 		attr: meta.attr,
 		nodes: meta.mask ? mask.parse(meta.mask) : null,
 		controller: Handler,
-		expression: meta.expression
+		expression: meta.expression,
+		scope: meta.scope
 	};
 	
 	/* Dangerous:
@@ -76,7 +77,9 @@ if (meta.mask != null) {
 	compo.parent = controller;
 	compo.ID = meta.ID;
 	compo.expression = meta.expression;
+	compo.scope = meta.scope;
 	compo.model = model;
+	
 	
 	if (controller.components == null) 
 		controller.components = [];

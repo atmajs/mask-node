@@ -36,17 +36,17 @@ function setup(node, model, cntx, container, controller, childs) {
 	var metaContent = node.textContent;
 	
 	if (metaContent === '/m') {
-		return;
+		return null;
 	}
 	
 	if (metaContent === '~') {
 		setup(node.nextSibling, model, cntx, node.previousSibling, controller);
-		return;
+		return null;
 	}
 	
 	if (metaContent === '/~') {
 		setup(node.nextSibling, model, cntx, node.parentNode, controller);
-		return;
+		return null;
 	}
 	
 	var meta = Meta.parse(metaContent);
@@ -57,11 +57,17 @@ function setup(node, model, cntx, container, controller, childs) {
 	if ('a' === meta.type) {
 		
 		// import setup-attr.js
+		
+		if (childs != null) 
+			return node;
 	}
 	
 	if ('u' === meta.type) {
 		
 		// import setup-util.js
+		
+		if (childs != null) 
+			return node;
 	}
 	
 	if ('t' === meta.type) {

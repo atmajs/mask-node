@@ -139,8 +139,6 @@ Meta = (function(){
 			}
 			
 			json.type = string[parser_Index++];
-			
-			
 			parse_ID(json);
 			
 			while (parse_property(json));
@@ -148,9 +146,10 @@ Meta = (function(){
 			if (parser_Index === -1) 
 				return {};
 			
-			
 			if (string[parser_Length - 1] === '/') 
 				json.single = true;
+			if (json.scope !== void 0) 
+				json.scope = JSON.parse(json.scope);
 			
 			return json;
 		}
