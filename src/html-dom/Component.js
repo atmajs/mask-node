@@ -8,7 +8,7 @@
 			cacheInfo;
 		
 		var compoName = node.compoName || node.tagName,
-			Handler = custom_Tags[compoName] || node.controller;
+			Handler = node.controller || custom_Tags[compoName];
 		
 		if (Handler != null) 
 			cacheInfo = is_Function(Handler)
