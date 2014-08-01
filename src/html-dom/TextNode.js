@@ -1,5 +1,5 @@
 HtmlDom.TextNode = function(text) {
-	this.textContent = text;
+	this.textContent = String(text);
 };
 
 (function() {

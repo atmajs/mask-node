@@ -1,27 +1,48 @@
-var handler = custom_Utils[meta.utilName];
-var element = trav_getElement(node);
-
-if (handler == null) {
-	console.log('Custom Utility Handler was not defined', meta.name);
-	return;
-}
-
-if (typeof handler === 'function') {
-	
-	handler(meta.value, model, cntx, element, controller, meta.attrName, meta.utilType);
-	
-}else if (handler.process) {
-	//@TODO refactor )
-	
-	if (handler.mode === 'partial') {
-		var fnStart = meta.utilType + 'RenderStart';
-			fn = meta.utilType;
+if (meta.end !== true) {
 		
-		handler[fnStart](meta.value, model, cntx, element, controller);
-		handler.element = element;
-		handler[fn](meta.value, model, cntx, element, controller, meta.attrName);
-	} else{
+	var handler = custom_Utils[meta.utilName],
+		util,
+		el;
+	if (handler == null) {
+		console.error('Custom Utility Handler was not defined', meta.name);
+		return;
+	}
+	
+	util = handler.util;
+	el =  meta.utilType === 'attr'
+		? trav_getElement(node)
+		: node.nextSibling
+		;
+	
+	if (util === void 0 || util.mode !== 'partial') {
+		handler(
+			meta.value
+			, model
+			, cntx
+			, el
+			, controller
+			, meta.attrName
+			, meta.utilType
+		);
+	}
+	else {
 		
-		handler.process(meta.value, model, cntx, element, controller, meta.attrName, meta.utilType);
+		util.element = el;
+		util.current = meta.utilType === 'attr'
+			? meta.current
+			: el.textContent
+			;
+		util[meta.utilType](
+			meta.value
+			, model
+			, cntx
+			, el
+			, controller
+			, meta.attrName
+		);
+		
+		if (meta.utilType === 'node') {
+			node = el.nextSibling;
+		}
 	}
 }

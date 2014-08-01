@@ -3,7 +3,8 @@ var HtmlDom;
 	HtmlDom = {};	
 
 	obj_extend(Dom, {
-		DOCTYPE: 11
+		DOCTYPE: 11,
+		UTILNODE: 12
 	});
 	
 	var SingleTags = {
@@ -25,19 +26,20 @@ var HtmlDom;
 		'wbr': 1
 	};
 	
-	// import util/node.js
-	// import util/traverse.js
-	// import util/stringify.js
-	// import jq/util/selector.js
+	// import ./util/node.js
+	// import ./util/traverse.js
+	// import ./util/stringify.js
+	// import ./jq/util/selector.js
 	
-	// import Node.js
-	// import Doctype.js
-	// import DocumentFragment.js
-	// import Element.js
-	// import TextNode.js
-	// import Component.js
-	// import Comment.js
+	// import ./Node.js
+	// import ./Doctype.js
+	// import ./DocumentFragment.js
+	// import ./Element.js
+	// import ./TextNode.js
+	// import ./Component.js
+	// import ./Util.js
+	// import ./Comment.js
 	
-	// import document.js
+	// import ./document.js
 
 }());
