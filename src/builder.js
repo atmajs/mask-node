@@ -70,19 +70,20 @@ var builder_build,
 			return container;
 		}
 		
-		if (node.tagName === 'else')
+		var tagName = node.tagName;
+		if (tagName === 'else')
 			return container;
 		
 		// Dom.STATEMENT
 		if (type === 15) {
-			var Handler = custom_Statements[node.tagName];
+			var Handler = custom_Statements[tagName];
 			if (Handler == null) {
 				
-				if (custom_Tags[node.tagName] != null) {
+				if (custom_Tags[tagName] != null) {
 					// Dom.COMPONENT
 					type = 4;
 				} else {
-					console.error('<mask: statement is undefined', node.tagName);
+					log_error('<mask: statement is undefined', tagName);
 					return container;
 				}
 				
@@ -98,11 +99,11 @@ var builder_build,
 		// Dom.NODE
 		if (type === 1) {
 			
-			if (node.tagName.charCodeAt(0) === 58) {
+			if (tagName.charCodeAt(0) === 58) {
 				// :
 				type = 4;
 				node.mode = mode_CLIENT;
-				node.controller = mock_TagHandler.create(node.tagName, null, mode_CLIENT);
+				node.controller = mock_TagHandler.create(tagName, null, mode_CLIENT);
 				
 			} else {
 			
