@@ -1,7 +1,7 @@
 {
-    "name": "-",
-    "description": "MaskJS for the Node.JS",
-    "version": "0.8.13",
+    "name": "maskjs",
+    "description": "MaskJS for Node.JS",
+    "version": "0.8.14",
     "homepage": "http://atmajs.com/mask",
     "contributors": [],
     "author": "Alexander Kit <alex.kit@atmajs.com>",
@@ -15,6 +15,7 @@
     "licenses": [
         "MIT"
     ],
+    "main": "./lib/mask.node.js",
     "devDependencies": {
         "atma": "latest"
     },

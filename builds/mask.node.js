@@ -34,6 +34,7 @@
 	// import /src/builder.js
 	
 	// import /ref-mask/src/feature/run.js
+	// import /ref-mask/src/feature/merge.js
 	// import /ref-mask/src/mask.js
 	
 	// import /src/mock/mock.js
