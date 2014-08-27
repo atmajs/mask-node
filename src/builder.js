@@ -98,8 +98,8 @@ var builder_build,
 		// Dom.NODE
 		if (type === 1) {
 			
-			if (node.tagName[0] === ':') {
-				
+			if (node.tagName.charCodeAt(0) === 58) {
+				// :
 				type = 4;
 				node.mode = mode_CLIENT;
 				node.controller = mock_TagHandler.create(node.tagName, null, mode_CLIENT);
