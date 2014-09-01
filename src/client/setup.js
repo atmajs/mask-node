@@ -1,5 +1,5 @@
 function setup(node, model, cntx, container, controller, childs) {
-	
+	var nextSibling = node.nextSibling;
 	if (node.nodeType === Node.ELEMENT_NODE) {
 		if (childs != null) 
 			childs.push(node);
@@ -19,33 +19,32 @@ function setup(node, model, cntx, container, controller, childs) {
 		else if (node.firstChild) 
 			setup(node.firstChild, model, cntx, node, controller);
 		
-		if (childs == null && node.nextSibling) 
-			setup(node.nextSibling, model, cntx, container, controller);
+		if (childs == null && nextSibling != null) 
+			setup(nextSibling, model, cntx, container, controller);
 		
 		
 		return node;
 	}
 	
 	if (node.nodeType !== Node.COMMENT_NODE) {
-		if (childs == null && node.nextSibling) 
-			setup(node.nextSibling, model, cntx, container, controller);
+		if (childs == null && nextSibling != null) 
+			setup(nextSibling, model, cntx, container, controller);
 		
 		return node;
 	}
 	
 	var metaContent = node.textContent;
 	
-	if (metaContent === '/m') {
+	if (metaContent === '/m') 
+		return null;
+	
+	if (metaContent === '~' && nextSibling != null) {
+		setup(nextSibling, model, cntx, node.previousSibling, controller);
 		return null;
 	}
 	
-	if (metaContent === '~') {
-		setup(node.nextSibling, model, cntx, node.previousSibling, controller);
-		return null;
-	}
-	
-	if (metaContent === '/~') {
-		setup(node.nextSibling, model, cntx, node.parentNode, controller);
+	if (metaContent === '/~' && nextSibling != null) {
+		setup(nextSibling, model, cntx, node.parentNode, controller);
 		return null;
 	}
 	
@@ -75,13 +74,10 @@ function setup(node, model, cntx, container, controller, childs) {
 		if (__ID < meta.ID) 
 			__ID = meta.ID;
 		
-		
 		// import setup-tag.js
-		
 		
 		if (childs != null) 
 			return node;
-		
 	}
 	
 	
