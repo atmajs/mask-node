@@ -30,7 +30,7 @@ var builder_build,
 	// import /ref-mask/src/build/type.textNode.js
 	
 
-	function builder_html(node, model, ctx, container, controller, childs) {
+	function builder_html(node, model, ctx, container, ctr, childs) {
 
 		if (node == null) 
 			return container;
@@ -65,7 +65,7 @@ var builder_build,
 		// Dom.SET
 		if (type === 10) {
 			for (j = 0, jmax = node.length; j < jmax; j++) {
-				builder_html(node[j], model, ctx, container, controller);
+				builder_html(node[j], model, ctx, container, ctr);
 			}
 			return container;
 		}
@@ -91,7 +91,7 @@ var builder_build,
 			
 			if (type === 15) {
 				
-				Handler.render(node, model, ctx, container, controller, childs);
+				Handler.render(node, model, ctx, container, ctr, childs);
 				return container;
 			}
 		}
@@ -107,7 +107,7 @@ var builder_build,
 				
 			} else {
 			
-				container = build_node(node, model, ctx, container, controller, childs);
+				container = build_node(node, model, ctx, container, ctr, childs);
 				childs = null;
 			}
 		}
@@ -115,7 +115,7 @@ var builder_build,
 		// Dom.TEXTNODE
 		if (type === 2) {
 			
-			build_textNode(node, model, ctx, container, controller);
+			build_textNode(node, model, ctx, container, ctr);
 			
 			return container;
 		}
@@ -123,31 +123,30 @@ var builder_build,
 		// Dom.COMPONENT
 		if (type === 4) {
 			
-			element = document.createComponent(node, model, ctx, container, controller);
+			element = document.createComponent(node, model, ctx, container, ctr);
 			container.appendChild(element);
 			container = element;
 			
 			var compo = element.compo;
-			
 			if (compo != null) {
-				
-				if (compo.model && controller.model !== compo.model) {
+				var modelID = -1;
+				if (compo.model && ctr.model !== compo.model) {
 					model = compo.model;
-					
-					var modelID = ctx._model.tryAppend(compo);
-					if (modelID !== -1)
-						element.modelID = modelID;
-					
+					modelID = ctx._model.tryAppend(compo);
 				}
+				if (compo.modelRef !== void 0) 
+					modelID = ctx._model.tryAppend(compo);
+				
+				if (modelID !== -1)
+					element.modelID = modelID;
 				
 				if (compo.async) 
 					return element;
 				
-				
 				if (compo.render) 
 					return element;
 				
-				controller = compo;
+				ctr = compo;
 				node = compo;
 				elements = [];
 			}
@@ -169,25 +168,27 @@ var builder_build,
 
 				if (type === 4 /* Dom.COMPONENT */ && childNode.type === 1 /* Dom.NODE */){
 					
-					if (controller.mode !== 'server:all') 
+					if (ctr.mode !== 'server:all') 
 						childNode.attr['x-compo-id'] = element.ID;
 				}
 
-				builder_html(childNode, model, ctx, container, controller, elements);
+				builder_html(childNode, model, ctx, container, ctr, elements);
 			}
 
 		}
 		
 		if (container.nodeType === Dom.COMPONENT) {
-			
-			if (controller.onRenderEndServer && controller.async !== true) {
-				controller.onRenderEndServer(elements, model, ctx, container, controller);
+			var fn = ctr.onRenderEndServer;
+			if (fn != null && ctr.async !== true) {
+				fn.call(ctr, elements, model, ctx, container, ctr);
 			}
 			
 		}
 		
-		if (childs != null && elements && childs !== elements) {
-			for (var i = 0, imax = elements.length; i < imax; i++){
+		if (childs != null && elements != null && childs !== elements) {
+			var imax = elements.length,
+				i = -1;
+			while( ++i < imax ) {
 				childs.push(elements[i]);
 			}
 		}

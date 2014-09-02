@@ -30,7 +30,7 @@ HtmlDom.TextNode = function(text) {
 			return map[chr];
 		}
 		function str_htmlEncode(html) {
-			return html.replace(/[&"'\<\>\/]/g, replaceEntity);
+			return html.replace(/[&"'<>\/]/g, replaceEntity);
 		}
 		
 		return str_htmlEncode;

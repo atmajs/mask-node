@@ -51,7 +51,7 @@ function setup(node, model, cntx, container, controller, childs) {
 	var meta = Meta.parse(metaContent);
 	
 	if (meta.modelID) 
-		model = __models[meta.modelID];
+		model = model_get(__models, meta.modelID, model, controller);
 	
 	if ('a' === meta.type) {
 		

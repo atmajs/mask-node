@@ -19,29 +19,21 @@ var ModelBuilder = (function(){
 			return id;
 		},
 		
-		tryAppend: function(controller){
+		tryAppend: function(ctr){
 			
-			if (mode_SERVER_ALL === controller.mode)
+			if (mode_SERVER_ALL === ctr.mode)
 				return -1;
 			
-			if (mode_model_NONE === controller.modeModel)
+			if (mode_model_NONE === ctr.modeModel)
 				return -1;
 			
-			
-			var model;
-			
-			if (controller.modelRef !== void 0) 
-				model = { __ref: controller.modelRef };
-			
-				
-			if (model == null) {
-				model = controller.model;
-			}
+			var model = ctr.modelRef !== void 0
+				? '$ref:' + ctr.modelRef
+				: ctr.model
+				;
 			
 			var id = 'm' + (++this._id);
-			
 			this._models[id] = model;
-			
 			return id;
 		},
 		

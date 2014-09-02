@@ -78,15 +78,16 @@ var Meta,
 			tags[tagName] = mock_TagHandler.create(tagName, null, 'client');
 		}
 		
+		var doNothing = function(){};
 		for (var key in utils){
 			if (utils[key].mode === 'client'){
-				Mask.registerUtil(key, function(){}, 'client');
+				Mask.registerUtil(key, doNothing, 'client');
 			}
 		}
 		
 		for (var key in attributes){
 			if (attributes[key].mode === 'client') {
-				Mask.registerAttrHandler(key, function(){}, 'client');
+				Mask.registerAttrHandler(key, doNothing, 'client');
 			}
 		}
 	};	
