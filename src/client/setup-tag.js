@@ -79,7 +79,8 @@ if (meta.mask != null) {
 	compo.expression = meta.expression;
 	compo.scope = meta.scope;
 	compo.model = model;
-	
+	if (compo.nodes == null && maskNode != null)
+		compo.nodes = maskNode.nodes;
 	
 	if (controller.components == null) 
 		controller.components = [];
