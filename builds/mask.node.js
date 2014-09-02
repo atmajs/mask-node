@@ -50,6 +50,7 @@
 	// import /ref-mask/src/formatter/stringify.lib.js
 	// import /ref-mask/src/handlers/sys.js
 	// import /ref-mask/src/handlers/utils.js
+	// import /ref-mask/src/handlers/define.js
 	// import /ref-mask-binding/lib/binding.embed.node.js
 	
 
