@@ -57,7 +57,7 @@ var builder_build,
 			}
 		}
 		
-		if (type == 1 && custom_Tags[node.tagName] != null) {
+		if (type === 1 && custom_Tags[node.tagName] != null) {
 			// check if the tag name was overriden
 			type = 4;
 		}
