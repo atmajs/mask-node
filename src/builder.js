@@ -168,7 +168,7 @@ var builder_build,
 
 				if (type === 4 /* Dom.COMPONENT */ && childNode.type === 1 /* Dom.NODE */){
 					
-					if (ctr.mode !== 'server:all') 
+					if (compo_isServerMode(ctr)) 
 						childNode.attr['x-compo-id'] = element.ID;
 				}
 

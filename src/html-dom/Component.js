@@ -1,6 +1,6 @@
 (function(){
 	
-	HtmlDom.Component = function (node, model, ctx, container, controller) {
+	HtmlDom.Component = function (node, model, ctx, container, ctr) {
 		
 		var compo,
 			attr,
@@ -11,12 +11,11 @@
 			Handler = node.controller || custom_Tags[compoName];
 		
 		if (Handler != null) 
-			cacheInfo = is_Function(Handler)
-				? Handler.prototype.cache
-				: Handler.cache;
+			cacheInfo = compo_getMetaInfo(Handler).cache;
 		
 		if (cacheInfo != null) 
 			compo = Cache.getCompo(model, ctx, compoName, Handler);
+		
 		
 		if (compo != null) {
 			this.compo = compo;
@@ -24,7 +23,7 @@
 			if (compo.__cached) {
 				compo.render = fn_empty;
 			}
-			controller_addCompo(controller, compo);
+			controller_addCompo(ctr, compo);
 			return;
 		}
 		
@@ -34,7 +33,7 @@
 				compo = new Handler(model);
 			
 			if (compo == null && is_Function(Handler.__Ctor)) 
-				compo = new Handler.__Ctor(node, controller);
+				compo = new Handler.__Ctor(node, ctr);
 			
 			if (compo == null)
 				compo = Handler;
@@ -46,28 +45,27 @@
 				expression: node.expression,
 				modelRef: node.modelRef,
 				container: node.container,
-				mode: controller.mode,
-				modeModel: controller.modeModel
+				meta: compo_getMetaInfo(ctr)
 			};
 		}
 		
-		if (compo.cache) 
-			Cache.cacheCompo(model, ctx, compoName, compo);
+		var cache = compo_getMetaInfo(compo).cache;
+		if (cache != null) {
+			Cache.cacheCompo(model, ctx, compoName, compo, cache);
+		}
 		
 		
 		this.compo = compo;
 		this.node = node;
 		
-		if (mode_SERVER_ALL === controller.mode) 
-			compo.mode = mode_SERVER_ALL;
+		var mode = compo_getRenderMode(ctr);
+		if (mode_SERVER_ALL === mode || mode_SERVER_CHILDREN === mode) 
+			compo_setMode(compo, mode_SERVER_ALL);
 		
-		if (mode_SERVER_CHILDREN === controller.mode) 
-			compo.mode = mode_SERVER_ALL;
-	
 		attr = obj_extend(compo.attr, node.attr);
 		
 		if (attr['x-mode'] !== void 0) 
-			compo.mode = attr['x-mode'] ;
+			compo_setMode(compo, attr['x-mode']) ;
 		
 		if (attr['x-mode-model']  !== void 0) 
 			compo.modeModel = attr['x-mode-model'];
@@ -79,38 +77,30 @@
 		
 		this.compoName = compo.compoName = compoName;
 		compo.attr = attr;
-		compo.parent = controller;
-		
-		
+		compo.parent = ctr;
 		
 		if (ctx.debug && ctx.debug.breakOn === compo.compoName) {
 			debugger;
 		}
 	
-		
 		if (compo.nodes == null) 
 			compo.nodes = node.nodes;
 		
-	
 		for (key in attr) {
 			if (typeof attr[key] === 'function') {
-				attr[key] = attr[key]('attr', model, ctx, container, controller, key);
+				attr[key] = attr[key]('attr', model, ctx, container, ctr, key);
 			}
 		}
-	
 	
 		if (typeof compo.renderStart === 'function') {
 			compo.renderStart(model, ctx, container);
 		}
 		
-		controller_addCompo(controller, compo);
-		
-		
+		controller_addCompo(ctr, compo);
 		if (compo.async === true) {
 			compo.await(build_resumeDelegate(compo, model, ctx, this));
 			return;
 		}
-	
 		
 		if (compo.tagName != null && compo.tagName !== node.tagName) {
 			compo.nodes = {
@@ -133,31 +123,19 @@
 		instance: null,
 		components: null,
 		ID: null,
-		toString: function() {
-			
+		toString: function() {			
 			var element = this.firstChild,
 				compo = this.compo;
 				
-			if (compo.__cached !== void 0) {
+			if (compo.__cached !== void 0) 
 				return compo.__cached;
-			}
 			
 			var meta = compo_getMetaInfo(compo),
 				mode = meta.mode,
-				compoName,
-				attr,
-				nodes,
-				scope;
-			
-			if (compo != null) {
-				compoName = compo.compoName;
-				attr = compo.attr;
-				mode = compo.mode;
-				
-				nodes = compo.nodes;
+				compoName = compo.compoName,
+				attr = compo.attr,
+				nodes = compo.nodes,
 				scope = compo.scope;
-			}
-		
 			
 			var	json = {
 					ID: this.ID,
@@ -200,7 +178,7 @@
 				string += Meta.close(json, info);
 			
 			
-			if (compo.cache) {
+			if (compo_getMetaInfo(compo).cache) {
 				compo.__cached = string;
 			}
 			

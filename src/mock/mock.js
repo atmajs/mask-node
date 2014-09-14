@@ -49,11 +49,22 @@ var Meta,
 			//> static
 			compo.__Ctor = wrapStatic(compo);
 		}	
-				
 		
-		if (custom_Tags_defs.hasOwnProperty(tagName)) {
+		if (custom_Tags_defs.hasOwnProperty(tagName)) 
 			obj_extend(compo.prototype, custom_Tags_defs[tagName]);
-		}
+		
+		var proto = typeof compo === 'function'
+			? compo.prototype
+			: compo;
+		if (proto.meta == null) 
+			proto.meta = proto.$meta || {};
+		
+		/* obsolete meta copy */
+		if (proto.cache) 
+			proto.meta.cache = proto.cache;
+		if (proto.mode) 
+			proto.meta.mode = proto.mode;
+		
 		
 		if (compo_getRenderMode(compo) === compo_renderMode_CLIENT) {
 			custom_Tags[tagName] = mock_TagHandler.create(tagName, compo, 'client');

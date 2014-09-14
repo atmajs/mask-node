@@ -18,7 +18,7 @@ var Cache = (function(){
 			return _lastModelID;
 		},
 		
-		cacheCompo: function(model, ctx, compoName, compo){
+		cacheCompo: function(model, ctx, compoName, compo, cache){
 			
 			if (__cfg.allowCache === false) 
 				return;
@@ -26,7 +26,7 @@ var Cache = (function(){
 			
 			var cached = _cache[compoName];
 			if (cached == null) {
-				cached = _cache[compoName] = new CompoCacheCollection(compo);
+				cached = _cache[compoName] = new CompoCacheCollection(compo, cache);
 			}
 			
 			var cacheInfo = cached.__cacheInfo;

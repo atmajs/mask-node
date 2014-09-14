@@ -1,13 +1,16 @@
 UTest({
-	'cache': function(){
+	'cache (meta object)': function(){
 		var mask = Mask.mask;
 		
 		mask.registerHandler(':test', mask.Compo({
-			cache: true,
-			
-			mode: 'server',
+			meta:{
+				cache: true,
+				mode: 'server',
+			},
 			template: "h4 > 'Hello'",
-			onRenderStart: assert.avoid('`:test` should be rendered once', 1)
+			onRenderStart: assert.avoid('`:test` should be rendered once', 1, function(){
+				logger.log('render'.green)
+			})
 		}));
 		
 		mask.render(':test');
@@ -16,7 +19,7 @@ UTest({
 		has_(mask.render(':test'), '<h4>Hello</h4>');
 	},
 	
-	'cache by property': function(){
+	'cache by property (root object)': function(){
 		var mask = Mask.mask,
 			renderCount = 0;
 		
@@ -24,7 +27,6 @@ UTest({
 			cache: {
 				byProperty: 'ctx.page'
 			},
-			
 			mode: 'server',
 			template: "h4 > 'Hello'",
 			onRenderStart: () => ++renderCount
@@ -32,6 +34,7 @@ UTest({
 		
 		mask.render(':foo', null, { page: 'baz' });
 		eq_(renderCount, 1);
+		
 		mask.render(':foo', null, { page: 'baz' });
 		eq_(renderCount, 1);
 		
