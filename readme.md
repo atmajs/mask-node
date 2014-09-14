@@ -11,6 +11,7 @@ MaskJS for the Node.JS
 - renders **meta information** for the custom tags, attributes and utils, so that all components are proper initialized on the client
 - serialize and deserialize models
 - component **render mode** - `server` / `client` or `both` (_default_).
+- Caching: components could be cached after first render.
 
 #### Benefits
 - hide sensitive application parts in server-side-only components
