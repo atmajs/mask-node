@@ -1,15 +1,15 @@
 /*jshint -W032 */
 
 // import /ref-mask/src/umd-head.js
-
+	
+	// import /ref-utils/lib/utils.embed.js
+	
 	// import /src/const.js
 	// import /ref-mask/src/scope-vars.js
 	// import /ref-mask/src/util/util.js
 	// import /ref-mask/src/util/template.js
     
-    // import /ref-mask/src/util/is.js
-    // import /ref-mask/src/util/function.js
-	// import /ref-mask/src/util/string.js
+    // import /ref-mask/src/util/string.js
     // import /ref-mask/src/util/object.js
 	// import /ref-mask/src/util/array.js
 	// import /ref-mask/src/util/listeners.js

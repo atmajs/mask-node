@@ -50,7 +50,7 @@
 		}
 		
 		var cache = compo_getMetaInfo(compo).cache;
-		if (cache != null) {
+		if (cache != null && cache !== false) {
 			Cache.cacheCompo(model, ctx, compoName, compo, cache);
 		}
 		
