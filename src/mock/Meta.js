@@ -4,10 +4,19 @@ Meta = (function(){
 		seperator_CHAR = String.fromCharCode(seperator_CODE);
 	
 	function val_stringify(mix) {
-		if (typeof mix !== 'string') 
-			return val_stringify(JSON.stringify(mix));
+		if (mix == null) 
+			return 'null';
+		if (typeof mix !== 'object') {
+			// string | number
+			return mix;
+		}
 		
-		return mix;
+		if (is_Array(mix) === false) {
+			// JSON.stringify does not handle the prototype chain
+			mix = _obj_flatten(mix);
+		}
+		
+		return JSON.stringify(mix);
 	}
 	
 	var parser_Index,
@@ -63,6 +72,13 @@ Meta = (function(){
 		
 		parser_Index = end;
 		return true;
+	}
+	function _obj_flatten(obj) {
+		var result = Object.create(obj);
+		for(var key in result) {
+			result[key] = result[key];
+		}
+		return result;
 	}
 	
 	
