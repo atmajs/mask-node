@@ -77,7 +77,7 @@ if (meta.mask != null) {
 	compo.parent = controller;
 	compo.ID = meta.ID;
 	compo.expression = meta.expression;
-	compo.scope = meta.scope;
+	compo.scope = util_extendObj_(compo.scope, meta.scope);
 	compo.model = model;
 	if (compo.nodes == null && maskNode != null)
 		compo.nodes = maskNode.nodes;
@@ -86,12 +86,14 @@ if (meta.mask != null) {
 		controller.components = [];
 		
 	
-	if (isStatic !== true) {
-		controller
-			.components
-			.push(compo);
+	if (isStatic !== true) 
+		controller.components.push(compo);
+	
+	var handleAttr = compo.meta && compo.meta.handleAttributes;
+	if (handleAttr != null && handleAttr(compo, model) === false) {
+		// @TODO break on error
 	}
-		
+	
 	if (compo.onRenderStartClient) {
 		compo.onRenderStartClient(model, cntx, container, controller);
 		
@@ -125,7 +127,14 @@ if (meta.mask != null) {
 				}
 			}
 			
-			var endRef = setup(node, model, cntx, container, compo, elements);
+			var endRef = setup(
+				node
+				, model
+				, cntx
+				, container
+				, isStatic ? controller : compo
+				, elements
+			);
 			
 			if (endRef == null) 
 				throw new Error('Unexpected end of the reference');
@@ -152,7 +161,7 @@ if (meta.mask != null) {
 			controller
 		);
 		
-		if (isStatic && compo != null) 
+		if (compo != null) 
 			controller.components.push(compo);
 	}
 	

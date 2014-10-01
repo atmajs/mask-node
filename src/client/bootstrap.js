@@ -19,19 +19,27 @@ var __models,
 // import ../util/array.js
 // import ../mock/Meta.js
 
+// import utils.js
 // import model.js
 // import mock.js
 // import traverse.js
 // import setup.js
 
-function bootstrap(container, compo) {
-	
+function bootstrap(container, Mix) {
 	if (container == null) 
 		container = document.body;
-		
-	if (compo == null) 
-		compo = {};
 	
+	var compo, fragment;
+	if (Mix == null) {
+		fragment = compo = new mask.Compo();
+	}
+	else if (typeof Mix === 'function') {
+		fragment = compo = new Mix();
+	} else {
+		compo = Mix;
+		fragment = new mask.Compo();
+		fragment.parent = compo
+	}
 	
 	var metaNode = trav_getMeta(container.firstChild),
 		metaContent = metaNode && metaNode.textContent,
@@ -52,9 +60,11 @@ function bootstrap(container, compo) {
 		el = metaNode.nextSibling;
 	
 	
-	setup(el, model, {}, el.parentNode, compo);
+	setup(el, model, {}, el.parentNode, fragment);
 	
-	Compo.signal.emitIn(compo, 'domInsert');
+	Compo.signal.emitIn(fragment, 'domInsert');
+	util_extendComponents_(compo, fragment);
+	return fragment;
 }
 
 function wrapDom(el, model, ctx, Mix) {
