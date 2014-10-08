@@ -1,11 +1,13 @@
-if (meta.end !== true) {
-		
+function setup_util(meta, node, model, ctx, container, ctr) {
+	if (meta.end === true)
+		return node;
+
 	var handler = custom_Utils[meta.utilName],
 		util,
 		el;
 	if (handler == null) {
 		console.error('Custom Utility Handler was not defined', meta.name);
-		return;
+		return node;
 	}
 	
 	util = handler.util;
@@ -18,31 +20,33 @@ if (meta.end !== true) {
 		handler(
 			meta.value
 			, model
-			, cntx
+			, ctx
 			, el
-			, controller
+			, ctr
 			, meta.attrName
 			, meta.utilType
 		);
+		return node;
 	}
-	else {
+	
 		
-		util.element = el;
-		util.current = meta.utilType === 'attr'
-			? meta.current
-			: el.textContent
-			;
-		util[meta.utilType](
-			meta.value
-			, model
-			, cntx
-			, el
-			, controller
-			, meta.attrName
-		);
-		
-		if (meta.utilType === 'node') {
-			node = el.nextSibling;
-		}
+	util.element = el;
+	util.current = meta.utilType === 'attr'
+		? meta.current
+		: el.textContent
+		;
+	util[meta.utilType](
+		meta.value
+		, model
+		, ctx
+		, el
+		, ctr
+		, meta.attrName
+	);
+	
+	if (meta.utilType === 'node') {
+		node = el.nextSibling;
 	}
+	
+	return node;
 }

@@ -1,4 +1,3 @@
-
 HtmlDom.DocumentFragment = function() {};
 
 obj_inherit(HtmlDom.DocumentFragment, HtmlDom.Node, {
@@ -7,14 +6,11 @@ obj_inherit(HtmlDom.DocumentFragment, HtmlDom.Node, {
 	toString: function(){
 		var element = this.firstChild,
 			string = '';
-
+			
 		while (element != null) {
 			string += element.toString();
 			element = element.nextSibling;
 		}
-		
-		
 		return string;
 	}
 });
-

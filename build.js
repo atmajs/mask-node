@@ -55,10 +55,10 @@ module.exports = {
 	},
 
 
-	'handlers': {
+	'import.libs': {
 		action: 'copy',
 		files: {
-			'lib/mask.node.js': '../mask/lib/mask.node.js'
+			'../mask/lib/mask.js': '.import/mask.js'
 		}
 	},
 

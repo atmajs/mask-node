@@ -1,24 +1,16 @@
-var ModelBuilder = (function(){
+var ModelBuilder;
+(function(){
 	
-	function ModelBuilder(model, startIndex) {
+	ModelBuilder = function (model, startIndex) {
 		this._models = {};
 		this._id = startIndex || 0;
-		
 		this.append(model);
-	}
+	};
 	
 	ModelBuilder.prototype = {
 		append: function(model){
-			if (model == null) 
-				return -1;
-			
-			var id = 'm' + (++this._id);
-			
-			this._models[id] = model;
-			
-			return id;
+			return add(this, model);
 		},
-		
 		tryAppend: function(ctr){
 			
 			if (mode_SERVER_ALL === ctr.mode)
@@ -27,23 +19,26 @@ var ModelBuilder = (function(){
 			if (mode_model_NONE === ctr.modeModel)
 				return -1;
 			
-			var model = ctr.modelRef !== void 0
+			var model = ctr.modelRef != null
 				? '$ref:' + ctr.modelRef
 				: ctr.model
 				;
-			
-			var id = 'm' + (++this._id);
-			this._models[id] = model;
-			return id;
+			return add(this, model);
 		},
 		
 		stringify: function(){
 			return Class.stringify(this._models);
 		}
+	};
+	
+	// private
+	
+	function add(modelBuilder, model) {
+		if (model == null) 
+			return -1;
+		
+		var id = 'm' + (++modelBuilder._id);
+		modelBuilder._models[id] = model;
+		return id;
 	}
-	
-	
-	
-	return ModelBuilder;
-	
 }());

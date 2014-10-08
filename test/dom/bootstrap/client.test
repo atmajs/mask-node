@@ -1,0 +1,24 @@
+UTest({
+	'client component': {
+		$config: {
+			'http.eval' () {
+				mask.registerHandler(':clientCompo', Compo({
+					meta: {
+						mode: 'client'
+					}
+				}));
+			}
+		},
+		'test' (done) {
+			mask.registerHandler(':clientCompo', Compo({
+				template: '#bar > "Bar"'
+			}));
+			
+			$render('section > :clientCompo;')
+				.done($container => {
+					$container.eq_('text', 'Bar');
+					done();
+				})
+		}
+	}
+})

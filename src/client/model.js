@@ -1,4 +1,5 @@
 var model_parse,
+	model_deserializeKeys,
 	model_get;
 
 (function(){
@@ -20,6 +21,24 @@ var model_parse,
 			);
 	};
 	
+	model_deserializeKeys = function(obj, models, model, ctr){
+		if (obj == null) 
+			return null;
+		var key, val, expr;
+		for(key in obj){
+			val = obj[key]
+			if (isRef(val) === false) 
+				continue;
+			
+			expr = val.substring(5);
+			obj[key] = _eval(expr, model, null, ctr);
+			if (obj[key] == null) {
+				log_warn('Cannot deserialize the reference', expr, model);
+			}
+		}
+		return obj;
+	};
+	
 	function isRef(ref){
 		if (typeof ref !== 'string') 
 			return false;
@@ -33,7 +52,7 @@ var model_parse,
 	}
 	/* @TODO resolve from controller? */
 	function getRef(models, id, ref, model, ctr) {
-		var x = _getProperty(model, ref);
+		var x = _eval(ref, model);
 		if (x != null) 
 			return x;
 		
@@ -41,13 +60,14 @@ var model_parse,
 			x = models['m' + id];
 			
 			if (x != null && typeof x === 'object') {
-				x = mask.Utils.getProperty(x, ref);
+				x = _eval(ref, x);
 				if (x != null) 
 					return x;
 			}
 		}
+		console.error('Model Reference is undefined', ref);
 		return null;
 	}
 	
-	var _getProperty = mask.Utils.getProperty;
+	var _eval = mask.Utils.Expression.eval;
 }());

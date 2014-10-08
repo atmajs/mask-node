@@ -133,18 +133,18 @@ UTest({
 					arr: ['a', 'b', 'c'],
 					foo: true
 				},
-				result: '<div><span>..a..b..c</span></div>'
+				result: '..a..b..c'
 			},
 			{
 				template: 'div > span > each (.) > "..~[.]"',
 				model: ['a', 'b', 'c'],
-				result: '<div><span>..a..b..c</span></div>'
+				result: '..a..b..c'
 			}
 		], function(test, next){
 			
 			$render(test.template, test)
 				.done(assert.await(function($dom, doc, win){
-					$dom.eq_('html', test.result);
+					$dom.eq_('text', test.result);
 				}))
 				.always(next || done)
 				;

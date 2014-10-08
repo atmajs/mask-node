@@ -45,18 +45,16 @@
 			
 	}
 	
-	
-	function _prepairControllers(controller, output) {
-		if (output == null) {
+	function _prepairControllers(ctr, output) {
+		if (output == null) 
 			output = {};
-		}
+		
+		output.compoName = ctr.compoName;
+		output.ID = ctr.ID;
 	
-		output.compoName = controller.compoName;
-		output.ID = controller.ID;
-	
-		if (controller.components) {
+		if (ctr.components) {
 			var compos = [],
-				array = controller.components;
+				array = ctr.components;
 			for (var i = 0, x, length = array.length; i < length; i++) {
 				x = array[i];
 	

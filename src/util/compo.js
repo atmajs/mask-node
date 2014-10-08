@@ -3,10 +3,12 @@ var compo_renderMode_SERVER = 'server',
 	compo_renderMode_SERVER_CHILDREN = 'server:children',
 	compo_renderMode_CLIENT = 'client',
 	compo_renderMode_BOTH = 'both',
+	
 	compo_getMetaInfo,	
 	compo_getRenderMode,
 	compo_isServerMode,
-	compo_setMode
+	compo_setMode,
+	compo_wrapOnTagName
 	;
 	
 (function(){
@@ -15,8 +17,10 @@ var compo_renderMode_SERVER = 'server',
 		return compo_getRenderMode(compo) === compo_renderMode_SERVER;
 	};
 	compo_setMode = function(ctr, mode){
-		if (ctr.meta == null) 
-			ctr.meta = new CompoMeta;
+		ctr.meta = ctr.meta == null
+			? new CompoMeta
+			: obj_create(ctr.meta)
+			;
 		ctr.meta.mode = mode;
 	};
 	compo_getMetaInfo = function(compo){
@@ -52,7 +56,19 @@ var compo_renderMode_SERVER = 'server',
 		
 		return compo_renderMode_BOTH;
 	};
-	
+	compo_wrapOnTagName = function(compo, node){
+		if (compo.tagName == null
+			|| compo.tagName === node.tagName
+			|| compo.tagName === compo.compoName)
+				return;
+		
+		compo.nodes = {
+			tagName: compo.tagName,
+			attr: compo.attr,
+			nodes: compo.nodes,
+			type: 1
+		};
+	};
 	// Private
 	
 	function CompoMeta(ctr){

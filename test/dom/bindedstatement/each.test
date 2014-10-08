@@ -1,0 +1,32 @@
+UTest({	
+	
+	'+each' (done) {
+		var template = `
+				#container { 
+					+each (letters) > 
+						span > '~[.]'
+				}
+			`,
+		
+			model = {
+				letters: ['A', 'B']
+			};
+			
+		UTest
+			.server
+			.render(template, {
+				model: model,
+				scripts: [ '/lib/mask.bootstrap.js' ]
+			})
+			.done(function(doc, win){
+				var $div =  $(doc).find('#container');
+				$div.eq_('text', 'AB');
+				
+				win.app.model.letters.push('C');
+				win.app.model.letters.unshift('0');
+				$div.eq_('text', '0ABC');
+				done();
+			});
+	},
+	
+})

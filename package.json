@@ -36,7 +36,8 @@
         "settings": {
             "atma-loader-traceur": {
                 "extensions": [
-                    "test"
+                    "test",
+                    "es6"
                 ]
             }
         }

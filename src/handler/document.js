@@ -8,7 +8,7 @@
 	Document.prototype = {
 		isDocument: true,
 		mode: 'server',
-		render: function(model, cntx, fragment, controller) {
+		render: function(model, ctx, fragment, ctr) {
 
 			var attr = this.attr,
 				nodes = this.nodes,
@@ -16,7 +16,6 @@
 
 			delete attr.doctype;
 			
-
 			fragment.appendChild(new HtmlDom.DOCTYPE('<!DOCTYPE ' + doctype + '>'));
 
 			var html = {
@@ -54,15 +53,15 @@
 			body != null && html.nodes.push(body);
 
 			if (handleBody) {
-				for (var i = 0, x, length = nodes.length; i < length; i++) {
+				var imax = nodes.length,
+					i = 0, x;
+				for(; i < imax; i++) {
 					x = nodes[i];
-					if (x.tagName === 'head') {
+					if ('head' === x.tagName) 
 						continue;
-					}
-					if (x.tagName === 'body') {
+					if ('body' === x.tagName) 
 						continue;
-					}
-
+					
 					body.nodes.push(x);
 				}
 			}
@@ -71,7 +70,7 @@
 			var owner = this.parent;
 			owner.components = [];
 
-			builder_html(html, model, cntx, fragment, owner);
+			build(html, model, ctx, fragment, owner);
 
 			return fragment;
 		}

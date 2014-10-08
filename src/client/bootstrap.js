@@ -14,31 +14,26 @@ var custom_Attributes = mask.getAttrHandler(),
 var __models,
 	__ID = 0;
 
-
-// import ../util/function.js
-// import ../util/array.js
-// import ../mock/Meta.js
-
-// import utils.js
-// import model.js
-// import mock.js
-// import traverse.js
-// import setup.js
+// import ./utils.js
+// import ./model.js
+// import ./mock.js
+// import ./traverse.js
+// import ./setup.js
 
 function bootstrap(container, Mix) {
 	if (container == null) 
 		container = document.body;
 	
-	var compo, fragment;
+	var compo, fragmentCompo;
 	if (Mix == null) {
-		fragment = compo = new mask.Compo();
+		fragmentCompo = compo = new mask.Compo();
 	}
 	else if (typeof Mix === 'function') {
-		fragment = compo = new Mix();
+		fragmentCompo = compo = new Mix();
 	} else {
 		compo = Mix;
-		fragment = new mask.Compo();
-		fragment.parent = compo
+		fragmentCompo = new mask.Compo();
+		fragmentCompo.parent = compo
 	}
 	
 	var metaNode = trav_getMeta(container.firstChild),
@@ -60,22 +55,9 @@ function bootstrap(container, Mix) {
 		el = metaNode.nextSibling;
 	
 	
-	setup(el, model, {}, el.parentNode, fragment);
+	setup(el, model, {}, el.parentNode, fragmentCompo);
+	util_pushComponents_(compo, fragmentCompo);
 	
-	Compo.signal.emitIn(fragment, 'domInsert');
-	util_extendComponents_(compo, fragment);
-	return fragment;
-}
-
-function wrapDom(el, model, ctx, Mix) {
-	var compo = Mix || {};
-	if (typeof Mix === 'function') 
-		compo = new Mix();
-	
-	setup(el.firstChild, model, ctx, el, compo);
-	
-	if (compo.renderEnd) 
-		compo.renderEnd(el.children, model, ctx, el);
-	
-	Compo.signal.emitIn(compo, 'domInsert');
+	Compo.signal.emitIn(fragmentCompo, 'domInsert');
+	return fragmentCompo;
 }

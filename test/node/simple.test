@@ -1,0 +1,16 @@
+UTest({	
+	'template' () {
+		var template = `
+			ul {
+				li > '1'
+				li > '2'
+			}
+			section name='Foo' > "foo"
+		`;
+		var html = mask.render(template);
+		
+		has_(html, '<li>1</li>');
+		has_(html, '<li>2</li>');
+		has_(html, '<section name="Foo">foo</section>');
+	}
+})
