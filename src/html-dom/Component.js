@@ -25,7 +25,7 @@
 			}
 		}
 		
-		compo = controller_initialize(Handler, node, model, ctr);
+		compo = controller_initialize(Handler, node, model, ctx, container, ctr);
 		
 		var cache = compo_getMetaInfo(compo).cache;
 		if (cache /* unstrict */) {
@@ -47,14 +47,14 @@
 			compo_setMode(compo, mode) ;
 		}
 		
-		if (attr['x-mode-model']  !== void 0) 
+		if (attr['x-mode-model']  !== void 0) {
 			compo.modeModel = attr['x-mode-model'];
-		
+		}
 		if (compo_isServerMode(this.compo) === false) {
 			this.ID = this.compo.ID = ++ ctx._id;
 		}
 		if (mode === 'client') {
-			//compo.render = fn_doNothing;
+			compo.render = fn_doNothing;
 		}
 		
 		
@@ -62,8 +62,11 @@
 		compo.attr = attr;
 		compo.parent = ctr;
 		
+		if (compo.model == null) 
+			compo.model = model;
 		if (compo.nodes == null) 
 			compo.nodes = node.nodes;
+		
 		
 		for (key in attr) {
 			if (is_Function(attr[key])) 
@@ -168,14 +171,14 @@
 		
 		ctr.components.push(compo);
 	}
-	function controller_initialize(Handler, node, model, ctr) {
+	function controller_initialize(Handler, node, model, ctx, container, ctr) {
 		if (Handler != null) {
 		
 			if (is_Function(Handler))
-				return new Handler(model);
+				return new Handler(node, model, ctx, container, ctr);
 			
 			if (is_Function(Handler.__Ctor)) 
-				return new Handler.__Ctor(node, ctr);
+				return new Handler.__Ctor(node, model, ctx, container, ctr);
 			
 			return Handler;
 		}
