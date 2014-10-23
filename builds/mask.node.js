@@ -45,12 +45,12 @@
 	// import /src/cache/cache.js
 	
 	
-	
 	// import /ref-mask/src/formatter/stringify.lib.js
 	// import /ref-mask/src/handlers/sys.js
 	// import /ref-mask/src/handlers/html.js
 	// import /ref-mask/src/handlers/define.js
 	// import /ref-mask/src/handlers/template.js
+	// import /ref-mask/src/handlers/debug.js
 	// import /ref-mask-binding/lib/binding.embed.node.js
 
 	Mask.Compo = Compo;
