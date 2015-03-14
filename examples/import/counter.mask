@@ -1,0 +1,11 @@
+define :counter {
+	function onRenderStart () {
+		this.model = { counter: 0 };
+	}
+	slot increment () {
+		this.model.counter++;
+	}
+
+	button x-tap = increment > 'Increment'
+	i > ' (current) ~[bind: counter]'
+}

@@ -55,4 +55,5 @@ Some additional work should be accomplished to initialize `:profile` component:
 
 
 ----
- (c) 2014 - MIT License
+
+ :copyright: ` MIT; 2014-2015; The Atma.js Project `

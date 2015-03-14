@@ -2,72 +2,75 @@
 
 	HtmlDom.stringify = function(document, model, ctx, compo) {
 	
-		compo = _prepairControllers(compo);
-		if (compo.components == null || compo.components.length === 0) 
+		if (compo == null || compo.components == null || compo.components.length === 0) {
 			return document.toString();
+		}
 		
-		var documentElement = trav_getDoc(document),
-			headerJson = {
-				model: ctx._model.stringify(),
+		var meta    = comment_meta(ctx),
+			modules = comment_modules(ctx),
+			documentElement = trav_getDoc(document);
+		if (documentElement == null) {
+			return meta.header
+				+ modules
+				+ document
+				+ meta.footer
+				;
+		}
+		
+		var html = trav_getChild(documentElement, 'HTML');
+		if (html != null) {
+			var body = trav_getChild(html, 'BODY');
+			if (body != null){
+				el_prepend(body, modules);
+				el_prepend(body, meta.header);
+				el_append(body, meta.footer);
+			}else{
+				log_error('Body not found');
+			}
+		}
+		return document.toString();
+	};
+
+	function comment_meta(ctx) {
+		var headerJson = {
+				model: ctx._models.stringify(),
+				ctx: ctx_stringify(ctx),
 				ID: ctx._id
 			},
 			headerInfo = {
 				type: 'm'
-			},
-			string = '';
-	
+			};
 		
-		var meta = Meta.stringify(headerJson, headerInfo),
-			metaClose = Meta.close(headerJson, headerInfo);
-		
-		if (documentElement) {
-	
-			var html = trav_getChild(documentElement, 'HTML');
-			
-			if (html) {
-				var body = trav_getChild(html, 'BODY');
-				
-			
-				if (body){
-					body.insertBefore(new HtmlDom.Comment(meta), body.firstChild);
-					body.appendChild(new HtmlDom.Comment(metaClose));
-				}else{
-					console.warn('Body not found');
-				}
-			}
-	
-			return document.toString();
+		return {
+			header: new HtmlDom.Comment(Meta.stringify(headerJson, headerInfo)),
+			footer: new HtmlDom.Comment(Meta.close(headerJson, headerInfo))
+		};
+	}
+	function comment_modules(ctx) {
+		if (ctx._modules == null) {
+			return null;
+		}
+		var str = ctx._modules.stringify();
+		if (str == null || str === '') {
+			return null;
 		}
 		
-		return meta
-			+ document.toString()
-			+ metaClose;
-			
+		var comment = Meta.stringify({
+			mask: str
+		}, {
+			type  : 'r',
+			single: true
+		});
+		return new HtmlDom.Comment(comment);
 	}
 	
-	function _prepairControllers(ctr, output) {
-		if (output == null) 
-			output = {};
-		
-		output.compoName = ctr.compoName;
-		output.ID = ctr.ID;
-	
-		if (ctr.components) {
-			var compos = [],
-				array = ctr.components;
-			for (var i = 0, x, length = array.length; i < length; i++) {
-				x = array[i];
-	
-				compos.push(_prepairControllers(x));
-			}
-	
-			output.components = compos;
-		}
-	
-		return output;
-	
+	function el_append(el, x) {
+		if (x == null) return;
+		el.appendChild(x);
 	}
-	
-	
+	function el_prepend(el, x) {
+		if (x == null) return;
+		el.insertBefore(x, el.firstChild)
+	}
 }());
 

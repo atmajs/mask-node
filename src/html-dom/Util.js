@@ -1,19 +1,17 @@
-HtmlDom.UtilNode = function(type, name, value, attrName) {
-	this.meta = {
-		utilType: type,
-		utilName: name,
-		value: value,
-		attrName: attrName,
-		current: null
-	};
-};
-
 (function() {
-
-	HtmlDom.UtilNode.prototype = {
+	HtmlDom.UtilNode = class_create({
 		nodeType: Dom.UTILNODE,
 		nextSibling: null,
 		firstChild: null,
+		constructor: function(type, name, value, attrName) {
+			this.meta = {
+				utilType: type,
+				utilName: name,
+				value: value,
+				attrName: attrName,
+				current: null
+			};
+		},
 		appendChild: function(el){
 			this.firstChild = el;
 		},
@@ -34,6 +32,5 @@ HtmlDom.UtilNode = function(type, name, value, attrName) {
 				+ Meta.close(json, info)
 				;
 		}
-	};
-
+	});
 }());

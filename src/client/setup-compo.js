@@ -1,4 +1,5 @@
-var setup_compo;
+var setup_compo,
+	setup_renderClient;
 (function(){
 	
 	setup_compo = function(meta, node, model, ctx, container, ctr, children){
@@ -9,21 +10,32 @@ var setup_compo;
 		var maskNode;
 		if (meta.nodes) {
 			maskNode = mask.parse(meta.nodes);
-			if (maskNode.type === mask.Dom.FRAGMENT)
+			if (maskNode.type === mask.Dom.FRAGMENT) {
 				maskNode = maskNode.nodes[0];
+			}
+			if (meta.compoName !== maskNode.tagName && maskNode.tagName === 'imports') {
+				maskNode = maskNode.nodes[0];
+			}
+		}
+		if (maskNode == null) {
+			maskNode = new mask.Dom.Component(meta.compoName);
 		}
 		
 		if (meta.mask != null) {
-			setupClientTemplate(meta, Handler, node, model, ctx, ctr);
+			setupClientMask(meta, Handler, node, model, ctx, ctr);
+			return node;
+		}
+		if (meta.template != null) {
+			setupClientTemplate(meta.template, node, model, ctx, ctr);
 			return node;
 		}
 		
 		var compo;
 		if (is_Function(Handler)) 
-			compo = new Handler(model);
+			compo = new Handler(maskNode, model, ctx, container, ctr);
 		
 		if (compo == null && Handler.__Ctor) {
-			compo = new Handler.__Ctor(maskNode, ctr);
+			compo = new Handler.__Ctor(maskNode, model, ctx, container, ctr);
 		}
 		
 		if (compo == null) 
@@ -58,8 +70,9 @@ var setup_compo;
 			return node;
 		}
 		
-		if (is_Function(compo.onRenderStartClient)) {
-			compo.onRenderStartClient(model, ctx, container, ctr);
+		var renderStart = compo.renderStartClient || compo.onRenderStartClient /* deprecated */;
+		if (is_Function(renderStart)) {
+			renderStart.call(compo, model, ctx, container, ctr);
 			model = compo.model || model;
 		}
 		
@@ -78,9 +91,6 @@ var setup_compo;
 		}
 		
 		if (is_Function(compo.renderEnd)) {
-			////if (isStatic) {
-			////	container = new mock_Container(container, elements);
-			////}
 			compo = compo.renderEnd(
 				elements,
 				model,
@@ -95,8 +105,20 @@ var setup_compo;
 		arr_pushMany(children, elements);
 		return node;
 	};
+	
+	setup_renderClient = function (template, el, model, ctx, ctr, children) {
+		var fragment = document.createDocumentFragment(),
+			container = el.parentNode;
+		
+		container.appendChild = mock_appendChildDelegate(fragment);
+		
+		mask.render(template, model, ctx, container, ctr, children);
+		
+		container.insertBefore(fragment, el);
+		container.appendChild = Node.prototype.appendChild;
+	};
 
-	function setupClientTemplate(meta, Handler, el, model, ctx, ctr) {
+	function setupClientMask(meta, Handler, el, model, ctx, ctr) {
 		var node = {
 			type: Dom.COMPONENT,
 			tagName: meta.compoName,
@@ -131,6 +153,18 @@ var setup_compo;
 		container.appendChild = mock_appendChildDelegate(fragment);
 		
 		mask.render(node, model, ctx, container, ctr);
+		
+		container.insertBefore(fragment, el);
+		container.appendChild = Node.prototype.appendChild;
+	}
+	
+	function setupClientTemplate(template, el, model, ctx, ctr) {
+		var fragment = document.createDocumentFragment(),
+			container = el.parentNode;
+		
+		container.appendChild = mock_appendChildDelegate(fragment);
+		
+		mask.render(template, model, ctx, container, ctr);
 		
 		container.insertBefore(fragment, el);
 		container.appendChild = Node.prototype.appendChild;

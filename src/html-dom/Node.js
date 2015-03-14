@@ -1,8 +1,6 @@
-HtmlDom.Node = function() {};
-
 (function() {
 	
-	HtmlDom.Node.prototype = {
+	HtmlDom.Node = class_create({
 		parentNode: null,
 		firstChild: null,
 		lastChild: null,
@@ -156,6 +154,6 @@ HtmlDom.Node = function() {};
 
 			return child;
 		}
-	};
+	});
 
 }());

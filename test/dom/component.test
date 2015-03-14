@@ -1,4 +1,4 @@
-var path = '/test/dom/compos/foo.js';
+var path = '/test/tmpl/compos/foo.js';
 UTest({
 	$config: {
 		'http.eval': function(done){

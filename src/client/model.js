@@ -5,7 +5,7 @@ var model_parse,
 (function(){
 	
 	model_parse = function(str){
-		return Class.parse(str);
+		return (Class || JSON).parse(str);
 	};
 	
 	model_get = function(models, id, currentModel, ctr){

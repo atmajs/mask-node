@@ -39,19 +39,18 @@ UTest({
 				]
 			},
 			has: [
-				//JSON.stringify(model),
-				// `modelRef` (expression)
-				//'(letters).\\"0\\"',
-				//'(letters).\\"1\\"',
-				//'(letters).\\"2\\"',
-				//'(numbers).\\"0\\"',
-				//'(numbers).\\"1\\"',
+				JSON.stringify(model),
+				'(letters).\\"0\\"',
+				'(letters).\\"1\\"',
+				'(letters).\\"2\\"',
+				'(numbers).\\"0\\"',
+				'(numbers).\\"1\\"',
 				
-				//'>A<',
-				//'>B<',
-				//'>C<',
-				//'>1<',
-				//'>2<',
+				'>A<',
+				'>B<',
+				'>C<',
+				'>1<',
+				'>2<',
 			]
 		})
 	}

@@ -1,0 +1,23 @@
+import from './heading';
+import from 'counter';
+import :counter as :counterRenamed from 'counter';
+
+div name='counter-server' {
+	p > i > 'Server render'
+	:counter;
+}
+hr;
+div name='counter-client' {
+	p > i > 'Client render'
+	:counter x-mode='client';
+}
+hr;
+div name='counter-server' {
+	p > i > '(renamed) Server render'
+	:counterRenamed;
+}
+hr;
+div name='counter-server' {
+	p > i > '(renamed) Client render'
+	:counterRenamed x-mode='client';
+}

@@ -1,0 +1,48 @@
+define :counter {
+	function onRenderStart() {
+		this.model = { counter: 0 };
+	}
+	slot increment () {
+		this.model.counter++;
+	}
+	
+	h4 > 'Counter component'
+	hr;
+	button x-tap='increment' > tt > '++'
+	i > ' ~[bind: counter]'
+}
+
+define :fooos {
+	var name = 'foo';
+	h4 > 'Make Foooos'
+	div {
+		'Click to add foo: '
+		event click (e) {
+			e.target.textContent += this.scope.name;
+		}
+	}
+	input placeholder='Press any to add foo' {
+		event keydown (e) {
+			e.preventDefault();
+			var input = this.$.filter('input')[0];
+			input.value += this.scope.name;
+		}
+	}
+}
+
+define :base {
+	h4 > 'Inheritance'
+	i > @body;
+}
+define :inherited extends :base {
+	@body {
+		div > b > 'Italic and Bold with qux: @attr.qux'
+		div > @content;
+	}
+}
+
+ul {
+	li > :counter;
+	li > :fooos;
+	li > :inherited qux='Quux' > @content > tt > 'Italic and Teletype';
+}

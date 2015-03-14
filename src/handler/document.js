@@ -1,20 +1,20 @@
 (function() {
 
-
-	function Document() {}
-
-	custom_Tags[':document'] = Document;
-
-	Document.prototype = {
+	custom_Tags[':document'] = class_create({
 		isDocument: true,
 		mode: 'server',
 		render: function(model, ctx, fragment, ctr) {
 
 			var attr = this.attr,
 				nodes = this.nodes,
-				doctype = attr.doctype || 'html';
+				doctype = 'html',
+				
+				head, body, handleBody;
 
-			delete attr.doctype;
+			if (attr.doctype) {
+				doctype = attr.doctype;
+				attr.doctype = null;
+			}
 			
 			fragment.appendChild(new HtmlDom.DOCTYPE('<!DOCTYPE ' + doctype + '>'));
 
@@ -23,24 +23,26 @@
 				type: Dom.NODE,
 				attr: attr,
 				nodes: [],
-			}, head, body, handleBody;
-
-			for (var i = 0, x, length = nodes.length; i < length; i++) {
-				x = nodes[i];
-
-				if (x.tagName === 'head') {
-					head = x;
-					continue;
+			};
+			
+			if (nodes != null) {
+				var imax = nodes.length,
+					i = -1, x;
+				while (++i < imax) {
+					x = nodes[i];
+					
+					if (x.tagName === 'head') {
+						head = x;
+						continue;
+					}
+					if (x.tagName === 'body') {
+						body = x;
+						continue;
+					}
+					handleBody = true;
 				}
-
-				if (x.tagName === 'body') {
-					body = x;
-					continue;
-				}
-
-				handleBody = true;
 			}
-
+			
 			if (body == null) {
 				body = {
 					nodeType: Dom.NODE,
@@ -69,11 +71,8 @@
 
 			var owner = this.parent;
 			owner.components = [];
-
 			build(html, model, ctx, fragment, owner);
-
 			return fragment;
 		}
-	};
-
+	});
 }());

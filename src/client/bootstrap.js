@@ -4,8 +4,9 @@ var atma = typeof atma === 'undefined'
 	;
 	
 var mask = atma.mask,
-	Compo = mask.Compo
-	Dom = mask.Dom;
+	Compo = mask.Compo,
+	Dom = mask.Dom,
+	Class = atma.Class;
 
 var custom_Attributes = mask.getAttrHandler(),
 	custom_Tags = mask.getHandler(),
@@ -52,10 +53,15 @@ function bootstrap(container, Mix) {
 	__models = model_parse(meta.model);
 	
 	var model = compo.model = __models.m1,
-		el = metaNode.nextSibling;
+		el = metaNode.nextSibling,
+		ctx = meta.ctx;
+	if (ctx != null) {
+		ctx = JSON.parse(ctx);
+	} else {
+		ctx = {};
+	}
 	
-	
-	setup(el, model, {}, el.parentNode, fragmentCompo);
+	setup(el, model, ctx, el.parentNode, fragmentCompo);
 	util_pushComponents_(compo, fragmentCompo);
 	
 	Compo.signal.emitIn(fragmentCompo, 'domInsert');

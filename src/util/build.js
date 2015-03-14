@@ -6,7 +6,7 @@ var build_childNodes;
 		if (nodes == null) 
 			return;
 		
-		if (is_Array(nodes) === false) {
+		if (is_ArrayLike(nodes) === false) {
 			build(nodes, model, ctx, container, ctr, els);
 			return;
 		}

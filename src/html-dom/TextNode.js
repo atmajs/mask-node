@@ -1,39 +1,22 @@
-HtmlDom.TextNode = function(text) {
-	this.textContent = String(text);
-};
-
 (function() {
 
-	HtmlDom.TextNode.prototype = {
-		constructor: HtmlDom.TextNode,
+	HtmlDom.TextNode = class_create({
 		nodeType: Dom.TEXTNODE,
 		nextSibling: null,
-
-		toString: function() {
-			if (!this.textContent) 
-				return '';
-			
-			return str_htmlEncode(this.textContent);
-		}
-	};
-
-	var str_htmlEncode = (function() {
-		var map = {
-			'&': '&amp;',
-			'<': '&lt;',
-			'>': '&gt;',
-			'"': '&quot;',
-			"'": '&#x27;',
-			'/': '&#x2F;'
-		};
-		function replaceEntity(chr) {
-			return map[chr];
-		}
-		function str_htmlEncode(html) {
-			return html.replace(/[&"'<>\/]/g, replaceEntity);
-		}
 		
-		return str_htmlEncode;
-	}());
+		constructor: function TextNode(text){
+			this.textContent = String(text == null ? '' : text);
+		},
+		toString: function() {
+			return escape(this.textContent);
+		}
+	});
 
+	function escape(html) {
+		return html
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			;
+	}
 }());

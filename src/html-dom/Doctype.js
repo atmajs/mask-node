@@ -1,13 +1,10 @@
-
-HtmlDom.DOCTYPE = function(doctype){
-	this.doctype = doctype;
-}
-HtmlDom.DOCTYPE.prototype = {
-	constructor: HtmlDom.DOCTYPE,
+HtmlDom.DOCTYPE = class_create({
 	nodeType: Dom.DOCTYPE,
-
+	constructor: function(doctype){
+		this.doctype = doctype;
+	},
 	toString: function(buffer){
 		return this.doctype;
 	}
-};
+});
 

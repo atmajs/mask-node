@@ -1,61 +1,52 @@
 /*jshint -W032 */
+// import:base /src/
+// import:extension js
 
-// import /ref-mask/src/umd-head.js
+// import /ref-mask/src/umd-head
 	
 	// import /ref-utils/lib/utils.embed.js
 	
-	// import /src/const.js
-	// import /ref-mask/src/scope-vars.js
-	// import /ref-mask/src/util/util.js
-	// import /ref-mask/src/util/template.js
-    
-    // import /ref-mask/src/util/string.js
-    // import /ref-mask/src/util/object.js
-	// import /ref-mask/src/util/array.js
-	// import /ref-mask/src/util/listeners.js
-	// import /ref-mask/src/util/reporters.js
+	// import /ref-mask/src/scope-vars
+	//#import const
 	
+	// import /ref-mask/src/util/
+	//#import util/
 	
-	// import /src/util/object.js
-	// import /src/util/compo.js
-	// import /src/util/json.js
-	// import /src/util/node.js
-	// import /src/util/build.js
+	// import /ref-mask/src/custom/
+	// import /ref-mask/src/expression/
+	// import /ref-mask/src/dom/
+	// import /ref-mask/src/statements/
+	// import /ref-mask/src/parser/
+	// import /ref-mask/src/formatter/stringify
+
 	
-	// import /ref-mask/src/expression/exports.js
-	// import /ref-mask/src/custom/exports.js
-	// import /ref-mask/src/dom/exports.js
-	// import /ref-mask/src/parse/parser.js
-	// import /ref-mask/src/statements/exports.js
+	//#import html-dom/
+	//#import builder
+
+	/*** Features ***/	
+	// import /ref-mask/src/feature/run
+	// import /ref-mask/src/feature/merge
+	// import /ref-mask/src/feature/optimize
+	// import /ref-mask/src/feature/Module
+	// import /ref-mask/src/feature/Define
+	// import /ref-mask/src/feature/TreeWalker
 	
-	// import /src/html-dom/lib.js
+	// import /ref-mask/src/mask
+
 	
-	// import /src/builder.js
-	
-	// import /ref-mask/src/feature/run.js
-	// import /ref-mask/src/feature/merge.js
-	// import /ref-mask/src/mask.js
-	
-	// import /src/mock/mock.js
-	// import /src/mask.js
-	
+	//#import mock/mock
+	//#import cache/
+	//#import mask
+
+	/*** Libraries ***/	
 	// import /ref-mask-compo/lib/compo.embed.js
 	// import /ref-mask-j/lib/jmask.embed.js
-	
-	// import /src/cache/cache.js
-	
-	
-	// import /ref-mask/src/formatter/stringify.lib.js
-	// import /ref-mask/src/handlers/sys.js
-	// import /ref-mask/src/handlers/html.js
-	// import /ref-mask/src/handlers/define.js
-	// import /ref-mask/src/handlers/template.js
-	// import /ref-mask/src/handlers/debug.js
 	// import /ref-mask-binding/lib/binding.embed.node.js
+	
+	
+	// import /ref-mask/src/handlers/html
+	// import /ref-mask/src/handlers/template
+	// import /ref-mask/src/handlers/debug
 
-	Mask.Compo = Compo;
-	Mask.jmask = jmask;
 
-	exports.mask = Mask;
-
-}));
+// import /ref-mask/src/umd-footer

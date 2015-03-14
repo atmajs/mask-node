@@ -1,88 +1,5 @@
-Meta = (function(){
-	
-	var seperator_CODE = 30,
-		seperator_CHAR = String.fromCharCode(seperator_CODE);
-	
-	function val_stringify(mix) {
-		if (mix == null) 
-			return 'null';
-		if (typeof mix !== 'object') {
-			// string | number
-			return mix;
-		}
-		
-		if (is_Array(mix) === false) {
-			// JSON.stringify does not handle the prototype chain
-			mix = _obj_flatten(mix);
-		}
-		
-		return JSON.stringify(mix);
-	}
-	
-	var parser_Index,
-		parser_Length,
-		parser_String;
-		
-	var tag_OPEN = '<!--',
-		tag_CLOSE = '-->';
-			
-		
-	function parse_ID(json){
-		
-		if (parser_String[parser_Index] !== '#') {
-			return;
-		}
-		parser_Index++;
-		
-		var end = parser_String.indexOf(seperator_CHAR);
-		
-		if (end === -1) {
-			end = parser_String.length;
-		}
-		
-		json.ID = parseInt(parser_String.substring(parser_Index, end), 10);
-		parser_Index = end;
-	}
-	
-	function parse_property(json) {
-		if (parser_Index > parser_Length - 5) 
-			return false;
-		
-		
-		if (parser_String[parser_Index++] !== seperator_CHAR || parser_String[parser_Index++] !== ' '){
-			parser_Index = -1;
-			return false;
-		}
-		
-		var index = parser_Index,
-			str = parser_String;
-		
-		var colon = str.indexOf(':', index),
-			key = str.substring(index, colon);
-			
-		var end = str.indexOf(seperator_CHAR + ' ', colon),
-			value = str.substring(colon + 1, end);
-			
-		
-		if (key === 'attr') {
-			value = JSON.parse(value);
-		}
-		
-		json[key] = value;
-		
-		parser_Index = end;
-		return true;
-	}
-	function _obj_flatten(obj) {
-		var result = Object.create(obj);
-		for(var key in result) {
-			result[key] = result[key];
-		}
-		return result;
-	}
-	
-	
-	return {
+(function(){
+	Meta = {
 		stringify: function(json, info){
 			
 			switch (info.mode) {
@@ -170,4 +87,86 @@ Meta = (function(){
 			return json;
 		}
 	};
+	
+	var seperator_CODE = 30,
+		seperator_CHAR = String.fromCharCode(seperator_CODE);
+	
+	function val_stringify(mix) {
+		if (mix == null) 
+			return 'null';
+		if (typeof mix !== 'object') {
+			// string | number
+			return mix;
+		}
+		
+		if (is_Array(mix) === false) {
+			// JSON.stringify does not handle the prototype chain
+			mix = _obj_flatten(mix);
+		}
+		
+		return JSON.stringify(mix);
+	}
+	
+	var parser_Index,
+		parser_Length,
+		parser_String;
+		
+	var tag_OPEN = '<!--',
+		tag_CLOSE = '-->';
+			
+		
+	function parse_ID(json){
+		
+		if (parser_String[parser_Index] !== '#') {
+			return;
+		}
+		parser_Index++;
+		
+		var end = parser_String.indexOf(seperator_CHAR);
+		
+		if (end === -1) {
+			end = parser_String.length;
+		}
+		
+		json.ID = parseInt(parser_String.substring(parser_Index, end), 10);
+		parser_Index = end;
+	}
+	
+	function parse_property(json) {
+		if (parser_Index > parser_Length - 5) 
+			return false;
+		
+		
+		if (parser_String[parser_Index++] !== seperator_CHAR || parser_String[parser_Index++] !== ' '){
+			parser_Index = -1;
+			return false;
+		}
+		
+		var index = parser_Index,
+			str = parser_String;
+		
+		var colon = str.indexOf(':', index),
+			key = str.substring(index, colon);
+			
+		var end = str.indexOf(seperator_CHAR + ' ', colon),
+			value = str.substring(colon + 1, end);
+			
+		
+		if (key === 'attr') {
+			value = JSON.parse(value);
+		}
+		
+		json[key] = value;
+		
+		parser_Index = end;
+		return true;
+	}
+	function _obj_flatten(obj) {
+		var result = Object.create(obj);
+		for(var key in result) {
+			result[key] = result[key];
+		}
+		return result;
+	}
+	
 }());

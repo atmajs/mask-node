@@ -1,45 +1,42 @@
 (function(){
-	
-	Mask.render = function (template, model, ctx, container, controller) {
-	
-		// if DEBUG
-		if (container != null && typeof container.appendChild !== 'function'){
-			console.error('.render(template[, model, ctx, container, controller]', 'Container should implement .appendChild method');
-			console.warn('Args:', arguments);
-		}
-		// endif
-	
-		if (typeof template === 'string') {
-			if (_Object_hasOwnProp.call(cache, template)){
-				/* if Object doesnt contains property that check is faster
-				then "!=null" http://jsperf.com/not-in-vs-null/2 */
-				template = cache[template];
-			}else{
-				template = cache[template] = parser_parse(template);
-			}
-		}
+	var mask_render = Mask.render;
 		
-		if (controller == null) 
-			controller = new Dom.Component();
-		
-		if (ctx == null) 
-			ctx = { _model: null, _ctx: null };
-		
-		var dom = builder_build(template, model, ctx, container, controller);
-		if (ctx.async === true) {
+	obj_extend(Mask, {
+		toHtml: function(dom, model, ctx, ctr){
+			return HtmlDom.stringify(dom, model, ctx, ctr);
+		},
+		render: function(tmpl, model, ctx, el, ctr){
+			var _ctr = ensureCtr(ctr),
+				_ctx = ensureCtx(ctx),
+				dom = mask_render(tmpl, model, _ctx, el, _ctr);
 				
-			ctx.done(function(){
-				ctx.resolve(toHtml(
-					dom, model, ctx, controller
-				));
-			});
-			return null;
+			return HtmlDom.stringify(dom, model, _ctx, _ctr);
+		},
+		renderAsync: function(tmpl, model, ctx, el, ctr){
+			var _ctr = ensureCtr(ctr),
+				_ctx = ensureCtx(ctx),
+				dfr = new class_Dfr,
+				dom = mask_render(tmpl, model, _ctx, el, _ctr);
+			
+			if (_ctx.async === true) {
+				_ctx.done(function(){
+					dfr.resolve(HtmlDom.stringify(dom, model, _ctx, _ctr))
+				});
+			} else {
+				dfr.resolve(HtmlDom.stringify(dom, model, _ctx, _ctr));
+			}
+			return dfr;
 		}
-		return toHtml(dom, model, ctx, controller);
-	};
+	});
 	
-	function toHtml(dom, model, ctx, controller){
-		
-		return HtmlDom.stringify(dom, model, ctx, controller);
+	function ensureCtr(ctr) {
+		return ctr == null
+			? new Dom.Component
+			: ctr;
+	}
+	function ensureCtx(ctx) {
+		return ctx == null || ctx.constructor !== builder_Ctx
+			? new builder_Ctx(ctx)
+			: ctx;
 	}
 }());

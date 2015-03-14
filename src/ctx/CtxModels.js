@@ -1,13 +1,11 @@
-var ModelBuilder;
-(function(){
-	
-	ModelBuilder = function (model, startIndex) {
-		this._models = {};
-		this._id = startIndex || 0;
-		this.append(model);
-	};
-	
-	ModelBuilder.prototype = {
+var CtxModels;
+(function(){	
+	CtxModels = class_create({
+		constructor: function (model, startIndex) {
+			this._models = {};
+			this._id = startIndex || 0;
+			this.append(model);
+		},
 		append: function(model){
 			return add(this, model);
 		},
@@ -27,9 +25,9 @@ var ModelBuilder;
 		},
 		
 		stringify: function(){
-			return Class.stringify(this._models);
+			return stringify(this._models);
 		}
-	};
+	});
 	
 	// private
 	
@@ -41,4 +39,14 @@ var ModelBuilder;
 		modelBuilder._models[id] = model;
 		return id;
 	}
+	var stringify;
+	(function(){
+		stringify = function (models) {
+			stringify = typeof Class !== 'undefined' && is_Function(Class.stringify)
+				? Class.stringify
+				: JSON.stringify
+				;
+			return stringify(models);
+		};
+	}())
 }());

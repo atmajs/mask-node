@@ -35,28 +35,38 @@ var setup;
 		if (meta.modelID) 
 			model = model_get(__models, meta.modelID, model, ctr);
 		
-		if ('a' === meta.type) {
-			setup_attr(meta, node, model, ctx, container, ctr)
-			if (children != null) 
-				return node;
-		}
-		
-		if ('u' === meta.type) {
-			node = setup_util(meta, node, model, ctx, container, ctr)
-			if (children != null) 
-				return node;
-		}
-		
-		if ('t' === meta.type) {
-			if (__ID < meta.ID) 
-				__ID = meta.ID;
+		switch (meta.type) {
+			case 'r':
+				// render client
+				setup_renderClient(meta.mask, node, model, ctx, ctr, children);
+				if (children != null) 
+					return node;
+				break;
+			case 'a':
+				// bootstrap attribute
+				setup_attr(meta, node, model, ctx, container, ctr)
+				if (children != null) 
+					return node;
+				break;
+			case 'u':
+				// bootstrap util
+				node = setup_util(meta, node, model, ctx, container, ctr)
+				if (children != null) 
+					return node;
+				break;
+			case 't':
+				// bootstrap component
+				if (__ID < meta.ID) 
+					__ID = meta.ID;
+				
+				node = setup_compo(meta, node, model, ctx, container, ctr, children);
+				if (children != null) 
+					return node;
+				break;
 			
-			node = setup_compo(meta, node, model, ctx, container, ctr, children);
-			if (children != null) 
-				return node;
 		}
 		
-		if (node && node.nextSibling) 
+		if (node != null && node.nextSibling != null) 
 			setup(node.nextSibling, model, ctx, container, ctr);
 		
 		return node;

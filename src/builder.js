@@ -1,30 +1,37 @@
 var builder_build,
 	builder_componentID,
+	builder_Ctx,
 	build;
 	
 (function() {
 	
-	// import ./model.js
-	// import ./handler/document.js
-	// import /ref-mask/src/build/type.node.js
-	// import /ref-mask/src/build/type.textNode.js
+	// import ctx/CtxModels
+	// import ctx/CtxModules
+	// import handler/document
+	
+	// import /ref-mask/src/builder/ctx
+	// import /ref-mask/src/builder/type.node.js
+	// import /ref-mask/src/builder/type.textNode.js
 	
 	builder_build = function(template, model, ctx, container, ctr, children){
-		if (container == null) 
+		if (container == null) {
 			container = new HtmlDom.DocumentFragment();
-		
-		if (ctr == null) 
+		}
+		if (ctr == null) {
 			ctr = new Dom.Component();
-		
-		if (ctx == null) 
-			ctx = { _model: null, _ctx: null };
-		
-		if (ctx._model == null) 
-			ctx._model = new ModelBuilder(model, Cache.modelID);
-		
-		if (ctx._id == null) 
+		}
+		if (ctx == null) {
+			ctx = new builder_Ctx;
+		}
+		if (ctx._models == null) {
+			ctx._models = new CtxModels(model, Cache.modelID);
+		}
+		if (ctx._modules == null) {
+			ctx._modules = new CtxModules();
+		}
+		if (ctx._id == null) {
 			ctx._id = Cache.controllerID;
-			
+		}
 		return build(template, model, ctx, container, ctr, children);
 	};
 	
@@ -106,10 +113,10 @@ var builder_build,
 				var modelID = -1;
 				if (compo.model && ctr.model !== compo.model) {
 					model = compo.model;
-					modelID = ctx._model.tryAppend(compo);
+					modelID = ctx._models.tryAppend(compo);
 				}
 				if (compo.modelRef != null) 
-					modelID = ctx._model.tryAppend(compo);
+					modelID = ctx._models.tryAppend(compo);
 				
 				if (modelID !== -1)
 					element.modelID = modelID;

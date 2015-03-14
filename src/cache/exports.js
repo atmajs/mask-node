@@ -1,15 +1,14 @@
-var Cache = (function(){
+var Cache;
+(function(){
 	
 	var _lastCtrlID = 0,
-		_lastModelID = 0;
+		_lastModelID = 0,
+		_cache = {};
 	
+	// import ./utils.js
+	// import ./CompoCacheCollection.js
 	
-	var _cache = {};
-	
-	// import utils.js
-	// import CompoCacheCollection.js
-	
-	return {
+	Cache = {
 		get controllerID (){
 			return _lastCtrlID;
 		},
@@ -23,7 +22,6 @@ var Cache = (function(){
 			if (__cfg.allowCache === false) 
 				return;
 			
-			
 			var cached = _cache[compoName];
 			if (cached == null) {
 				cached = _cache[compoName] = new CompoCacheCollection(compo, cache);
@@ -34,11 +32,10 @@ var Cache = (function(){
 			if (cacheInfo == null) 
 				return;
 			
-			
 			cached[cacheInfo.getKey(model, ctx)] = compo;
 			
 			_lastCtrlID = ctx._id;
-			_lastModelID = ctx._model._id;
+			_lastModelID = ctx._models._id;
 		},
 		
 		
