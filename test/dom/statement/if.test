@@ -1,0 +1,74 @@
+UTest({
+	'simple if' () {
+		return $render('if (1) > "foo"').pipe(el => {
+			eq_(el.textContent, 'foo');
+		});
+	},
+	'simple if..else' () {
+		var template = `
+				if (0) > 'foo'
+				else > 'bar'
+		`;
+		return $render(template).pipe(el => {
+			eq_(el.textContent, 'bar');
+		});
+	},
+	'simple if..elseif' () {
+		var template = `
+				if (0) > 'foo'
+				else if (1) > 'bar'
+				else > 'quux'
+		`;
+		return $render(template).pipe(el => {
+			eq_(el.textContent, 'bar');
+		});
+	},
+	'if (condition)' () {
+		var template = `
+			if (i === 2) > "foo"
+			else > "bar"
+		`;
+		var model = { i: 2 };
+		return $render(template, { model: model }).pipe(el => {
+			eq_(el.textContent, 'foo');
+		});
+	},
+	'if (expression)' () {
+		var template = `
+			if (i/2 == 1) > "foo"
+			else > "bar"
+		`;
+		var model = { i: 2};
+		return $render(template, { model: model }).pipe(el => {
+			eq_(el.textContent, 'foo');
+		});
+	},
+	'nodes in else' () {
+		var template = `
+			div;
+			// some comment
+			if (i/2 == 1) > "foo"
+			else {
+				span > 'b'
+				span > 'a'
+				span > 'r'
+			}
+		`;
+		var model = { i: 1};
+		return $render(template, { model: model }).pipe(el => {
+			eq_(el.textContent, 'bar');
+		});
+	},
+	'multiple ifs' () {
+		var template = `
+			if (i/2 == 1) > '1'
+			else > '2'
+			if (i == 3) > '3'
+			else > '4'
+		`;
+		var model = { i: 3};
+		return $render(template, { model: model }).pipe(el => {
+			eq_(el.textContent, '23');
+		});
+	}
+});

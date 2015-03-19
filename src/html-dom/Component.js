@@ -11,6 +11,7 @@
 			instance: null,
 			components: null,
 			ID: null,
+			modelID: null,
 			
 			constructor: function (node, model, ctx, container, ctr) {
 				var compo,
@@ -48,19 +49,19 @@
 				this.compo = compo;
 				this.node = node;
 				
-				var mode = compo_getRenderMode(ctr);
+				var mode = compo_getMetaVal(ctr, 'mode');
 				if (mode_SERVER_ALL === mode || mode_SERVER_CHILDREN === mode) 
-					compo_setMode(compo, mode_SERVER_ALL);
+					compo_setMetaVal(compo, 'mode', mode_SERVER_ALL);
 				
 				attr = obj_extend(compo.attr, node.attr);
 				
 				if (attr['x-mode'] !== void 0) {
 					mode = attr['x-mode'];
-					compo_setMode(compo, mode) ;
+					compo_setMetaVal(compo, 'mode', mode);
 				}
 				
 				if (attr['x-mode-model']  !== void 0) {
-					compo.modeModel = attr['x-mode-model'];
+					compo_setMetaVal(compo, 'mode', attr['x-mode-model']);
 				}
 				if (compo_isServerMode(this.compo) === false) {
 					this.ID = this.compo.ID = ++ ctx._id;
@@ -110,6 +111,30 @@
 		
 				if (is_Function(compo.render)) 
 					compo.render(model, ctx, this, compo);
+				
+				this.initModelID(ctx, model);
+			},
+			initModelID: function(ctx, parentsModel){
+				var compo = this.compo;
+				if (compo_isServerMode(compo)) 
+					return;
+				
+				if (compo.modelRef) {
+					var id = ctx._models.tryAppend(compo);
+					if (id !== -1){
+						this.modelID = id;
+					}
+					return;
+				}
+				
+				if (compo.model == null || compo.model === parentsModel) {
+					return;
+				}
+				
+				var id = ctx._models.tryAppend(compo);
+				if (id !== -1) {
+					this.modelID = id;
+				}
 			},
 			toString: function() {			
 				var element = this.firstChild,

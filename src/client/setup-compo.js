@@ -211,15 +211,19 @@ var setup_compo,
 		return nextSibling;
 	}
 	
-	function getHandler_(compoName, parentCtr) {
+	function getHandler_(compoName, ctr) {
 		var Handler = custom_Tags[compoName];
 		if (Handler != null) 
 			return Handler;
 		
-		if (parentCtr.getHandler) {
-			Handler = parentCtr.getHandler(compoName);
-			if (Handler != null) 
-				return Handler;
+		while(ctr != null) {
+			if (ctr.getHandler) {
+				Handler = ctr.getHandler(compoName);
+				if (Handler != null) {
+					return Handler;
+				}
+			}
+			ctr = ctr.parent;
 		}
 		
 		console.error('Client bootstrap. Component is not loaded', compoName);

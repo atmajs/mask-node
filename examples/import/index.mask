@@ -1,6 +1,8 @@
 import from './heading';
 import from 'counter';
 import :counter as :counterRenamed from 'counter';
+import foo from 'subcounter';
+import :doubleCounter from 'doubleCounter';
 
 div name='counter-server' {
 	p > i > 'Server render'
@@ -20,4 +22,22 @@ hr;
 div name='counter-server' {
 	p > i > '(renamed) Client render'
 	:counterRenamed x-mode='client';
+}
+
+hr;
+div name='nested-counter-server' {
+	p > i > '(nested) Server render'
+	foo;
+}
+
+hr;
+div name='nested-counter-server' {
+	p > i > '(nested) Client render'
+	foo x-mode='client';
+}
+
+hr;
+div name='nested-double-counter-server' {
+	p > i > '(inheritance) Server. Double Counter'
+	:doubleCounter;
 }

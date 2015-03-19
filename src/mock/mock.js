@@ -66,7 +66,7 @@ var Meta,
 			proto.meta.mode = proto.mode;
 		
 		
-		if (compo_getRenderMode(compo) === compo_renderMode_CLIENT) {
+		if (compo_getMetaVal(compo, 'mode') === mode_CLIENT) {
 			custom_Tags[tagName] = mock_TagHandler.create(tagName, compo, 'client');
 			return;
 		}

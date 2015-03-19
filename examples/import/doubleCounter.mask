@@ -1,0 +1,8 @@
+import :counter from 'counter';
+
+define :doubleCounter extends :counter {
+	// extend slot
+	slot increment () {
+		this.model.counter += 2;
+	}
+}

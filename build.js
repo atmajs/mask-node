@@ -1,7 +1,9 @@
 /**
- *	IncludeJSBuild
+ *	Build
  *
- *	``` $ includejs build.js ```
+ *	$ git submodule update --recursive
+ *	$ npm install
+ *	$ npm build
  **/
 
 /**
@@ -58,7 +60,8 @@ module.exports = {
 	'import.libs': {
 		action: 'copy',
 		files: {
-			'../mask/lib/mask.js': '.import/mask.js'
+			'../mask/lib/mask.js': 'node_modules/maskjs/lib/mask.js',
+			'../include/lib/include.js': 'node_modules/includejs/lib/include.js'
 		}
 	},
 

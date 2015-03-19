@@ -7,10 +7,10 @@ MaskJS for the Node.JS
 
 #### Features overview
 
-- NodeJS html renderer: mask templates, components, custom attributes, etc.
+- NodeJS HTML Renderer: mask templates, components, custom attributes, etc.
 - renders **meta information** for the custom tags, attributes and utils, so that all components are proper initialized on the client
 - serialize and deserialize models
-- component **render mode** - `server` / `client` or `both` (_default_).
+- components **render mode** - `server` / `client` or `both` (_default_).
 - Caching: components could be cached after first render.
 
 #### Benefits

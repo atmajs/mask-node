@@ -27,7 +27,7 @@
 	// import /ref-mask/src/feature/run
 	// import /ref-mask/src/feature/merge
 	// import /ref-mask/src/feature/optimize
-	// import /ref-mask/src/feature/Module
+	// import /ref-mask/src/feature/modules/
 	// import /ref-mask/src/feature/Define
 	// import /ref-mask/src/feature/TreeWalker
 	

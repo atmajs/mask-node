@@ -110,22 +110,15 @@ var builder_build,
 			
 			var compo = element.compo;
 			if (compo != null) {
-				var modelID = -1;
-				if (compo.model && ctr.model !== compo.model) {
-					model = compo.model;
-					modelID = ctx._models.tryAppend(compo);
+				if (compo.async) {
+					return element;
 				}
-				if (compo.modelRef != null) 
-					modelID = ctx._models.tryAppend(compo);
-				
-				if (modelID !== -1)
-					element.modelID = modelID;
-				
-				if (compo.async) 
+				if (compo.render) {
 					return element;
-				
-				if (compo.render) 
-					return element;
+				}
+				if (compo.model && compo.model !== model) {
+					model = compo.model;
+				}
 				
 				ctr = compo;
 				node = compo;

@@ -2,21 +2,37 @@ var CtxModules;
 (function(){	
 	CtxModules = class_create({
 		constructor: function () {
-			this._modules = {};
+			this._modules = [];
 		},
-		add: function(module){
+		add: function(module, owner){
 			if (module == null) 
 				return;
 			
-			this._modules[module.path] = module;
+			var arr = this._modules;
+			var i = arr.indexOf(module);
+			if (i !== -1) {
+				
+				if (owner != null) {
+					var i_owner = arr.indexOf(owner);
+					if (i > i_owner) {
+						// move close to parent
+						arr.splice(i, 1);
+						arr.splice(i_owner, 0, module);
+					}
+				}
+				return;
+			}
+			arr.unshift(module);
 		},
 		
 		stringify: function(opts){
 			var modules = this._modules,
-				arr = [], key, x
+				arr = [],
+				imax = modules.length,
+				i = -1, x
 				;
-			for(key in modules) {
-				x = modules[key];
+			while( ++i < imax) {
+				x = modules[i];
 				if (x.type === 'mask') {
 					arr.push(createModuleNode(x));
 				}

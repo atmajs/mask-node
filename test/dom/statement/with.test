@@ -1,0 +1,24 @@
+UTest({
+	'simple' () {
+		var template = 'with (foo) > "~[bar]"';
+		var model = {
+			foo: { bar: 'bar' }
+		};
+		
+		return $render(template, { model }).pipe(el => {
+			eq_(el.textContent, 'bar');
+		});
+	},
+	'model from scope' () {
+		var template = 'with (foo) > "~[bar]"';
+		var controller = {
+			scope: {
+				foo: { bar: 'bar' }
+			}
+		};
+		
+		return $render(template, { controller }).pipe(el => {
+			eq_(el.textContent, 'bar');
+		});
+	}
+});

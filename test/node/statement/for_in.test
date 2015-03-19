@@ -23,7 +23,7 @@ UTest({
 			]
 		});
 	},
-	'!nested' () {
+	'nested' () {
 		var model;
 		RunTest({
 			template: `

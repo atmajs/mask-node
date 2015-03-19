@@ -3,13 +3,20 @@ module.exports = {
 		
 		dom: {
 			env: [
-				'.import/mask.js',
-				'test/dom/utils.js'
+				'node_modules/maskjs/lib/mask.js',
+				'test/dom/utils.es6'
 			],
 			$config: {
 				$before: function(done){
 					UTest.configurate({
-						'http.include': [ '/test/dom/node.libraries.js' ]
+						'http.eval': function(done){
+							include
+								.js('/lib/mask.node.js::Mask')
+								.done(function(resp){
+									global.mask = resp.Mask;
+									done();
+								})
+						}
 					}, done)
 				}
 			},
@@ -21,20 +28,27 @@ module.exports = {
 			],
 			$config: {
 				$before: function(done){
-					var base = io.env.currentDir.toString();
 					include
-						.instance(base)
-						.setBase(base)
 						.js('/lib/mask.node.js::Mask')
 						.done(function(resp){
-							var mask = resp.Mask.mask;
-							Object.extend(global.mask.getHandler(), mask.getHandler());
-							Object.extend(global.mask, mask);
+							global.mask = resp.Mask;
 							done();
 						});
 				}
 			},
 			tests: 'test/node/**.test'
+		},
+		examples: {
+			exec: 'dom',
+			$config: {
+				$before: function(){
+					console.log('before');
+				},
+				$after: function(){
+					console.log('after');
+				}
+			},
+			tests: 'test/examples/**.test'
 		}
 	}
 }

@@ -1,88 +1,55 @@
-var path = '/test/tmpl/compos/foo.js';
+var pathFoo = '/test/tmpl/compos/foo.es6';
+var pathBar = '/test/tmpl/compos/bar.es6';
 UTest({
 	$config: {
-		'http.eval': function(done){
-			
-			include
-				.instance(process.cwd() + '/')
-				.js('/lib/mask.node.js::Mask')
-				.done(function(resp){
-					Object.extend(mask, resp.Mask.mask);
-					global.mask = mask;
-					done();
-				})
-		},
 		'http.include': [
-			path
+			pathFoo,
+			pathBar
 		]
 	},
 	
-	'compo - render': function(){
-		return $render('section > :bar;', {
-			include: [
-				path
-			]
-		})
-			.done(function($dom, doc, win){
-				
-				$dom
-					.children('section')
-					.eq_('length', 1)
-					.children('div')
-					.eq_('length', 3)
-					.eq(0)
-					.eq_('attr', 'name', 'a')
-					.end()
-					.eq(1)
-					.eq_('attr', 'name', 'b')
-					.end()
-					.eq(2)
-					.eq_('attr', 'name', 'c')
-					.end()
-					;
+	'render simple component' () {
+		return $render(':bar;', {
+				scripts: [
+					pathBar
+				]
+			})
+			.pipe((doc, win) => {
+				return UTest.domtest(doc.body, `
+					find ('.container > div') {
+						length 3;
+						eq (0) > attr name a;
+						eq (1) > attr name b;
+						eq (2) > attr name c;
+					}
+				`)
 			});
 	},
 	
-	'compo - actions': function(done){
-		$render(':foo', {
-			include: [
-				path
-			]
-		})
-			.done(function($dom, doc, win){
-				
-				$dom
-					.find('input')
-					.eq_('length', 1)
-					.eq_('val', 'foo')
-					;
-				
-				'> event'
-				$dom
-					.find('button')
-					.click()
-					.end()
-					.find('input')
-					.eq_('val', 'baz')
-					;
-				
-				'>signal'
-				$dom
-					.find('button')
-					.trigger('mousedown')
-					.end()
-					.find('input')
-					.eq_('val', 'qux')
-					;
+	'bootstrap component`s events': function(){
+		return $render(':foo', {
+				scripts: [
+					pathFoo
+				]
+			})
+			.pipe((doc, win) => {
 				
 				var foo = win.app.find(':foo');
 				notEq_(foo, null);
 				
-				eq_(foo.compos.test_jQuery.length, 1);
-				is_(foo.compos.test_querySelector, 'Object');
-				is_(foo.compos.test_querySelector.nodeType, 'Number');
-			})
-			.fail(assert.avoid())
-			.always(done);
+				var compos = foo.compos;
+				eq_(compos.test_jQuery.length, 1);
+				is_(compos.test_querySelector, 'Object');
+				is_(compos.test_querySelector.nodeType, 'Number');
+				
+				return UTest.domtest(doc.body, `
+					find ('input')  > val foo;
+					find ('button') > do click;
+					find ('input')  > val baz;
+					
+					find ('button') > do mousedown;
+					find ('input')  > val qux;
+				`)
+			});
 	}
 });

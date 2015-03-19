@@ -1,0 +1,18 @@
+UTest({
+	$config: {
+		'http.process': {
+			command: 'atma custom examples/index',
+			matchReady: '/Listen /'
+		}
+	},
+	
+	'import' () {
+		return UTest
+			.server
+			.request('http://localhost:5771/import')
+			.done(function(doc, win){
+				
+				debugger;
+			});
+	}
+})

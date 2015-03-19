@@ -1,24 +1,21 @@
+var pathClientCompo = '/test/tmpl/compos/clientCompo.es6';
+
 UTest({
-	'client component': {
-		$config: {
-			'http.eval' () {
-				mask.registerHandler(':clientCompo', Compo({
-					meta: {
-						mode: 'client'
-					}
-				}));
-			}
-		},
-		'test' (done) {
-			mask.registerHandler(':clientCompo', Compo({
-				template: '#bar > "Bar"'
-			}));
-			
-			$render('section > :clientCompo;')
-				.done($container => {
-					$container.eq_('text', 'Bar');
-					done();
-				})
-		}
+	$config: {
+		'http.include': [
+			pathClientCompo
+		]
+	},	
+	'clientCompo' () {
+		return $render(':clientCompo;', {
+			scripts: [
+				pathClientCompo
+			]
+		}).pipe(el => {
+			debugger
+			$(el)
+				.has_('#foo')
+				.eq_ ('text', 'FooTitle');
+		});
 	}
 })
