@@ -5,8 +5,9 @@
 		process: function () {
 			
 			app.config.server.handlers = {
+				'^/index' : Handler,
 				'^/define': Handler,
-				'^/import': Handler
+				'^/import': Handler,
 			};
 			
 			app

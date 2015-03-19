@@ -24,7 +24,8 @@
   },
   "scripts": {
     "test": "atma test",
-    "build": "atma"
+    "build": "atma",
+    "examples": "atma custom examples/index"
   },
   "keywords": [],
   "engines": {

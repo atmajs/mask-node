@@ -53,7 +53,32 @@ Some additional work should be accomplished to initialize `:profile` component:
 - run ```mask.Compo.bootstrap()```
 - That's all, now the component is fully functional, as if it was rendered on the client.
 
+### Examples
 
+- [define](examples/define/index.mask)
+- [import](examples/import/index.mask)
+
+> And only 2 commands to view them im browser:
+
+```bash
+$ npm install
+$ npm examples
+
+# navigate to: http://localhost:5771/index
+```
+
+### Build
+```bash
+git submodule update --recursive
+npm install
+npm build
+```
+
+### Run all tests
+```
+npm install
+npm test
+```
 ----
 
  :copyright: ` MIT; 2014-2015; The Atma.js Project `

@@ -8,24 +8,32 @@ define :counter {
 	
 	h4 > 'Counter component'
 	hr;
-	button x-tap='increment' > tt > '++'
-	i > ' ~[bind: counter]'
+	button x-tap='increment' > tt > 'Increment '
+	i > '~[bind: counter]'
 }
 
 define :fooos {
 	var name = 'foo';
 	h4 > 'Make Foooos'
-	div {
-		'Click to add foo: '
-		event click (e) {
-			e.target.textContent += this.scope.name;
+	section name='clickable' {
+		h6 > 'Clickable: click to add `foo`';
+		.container;
+		event click (event) {
+			event
+				.currentTarget
+				.querySelector('.container')
+				.textContent += this.scope.name;
 		}
 	}
-	input placeholder='Press any to add foo' {
-		event keydown (e) {
-			e.preventDefault();
-			var input = this.$.filter('input')[0];
-			input.value += this.scope.name;
+	section name='pressable' {
+		h6 > 'Pressable: press any key to add `foo`'
+		input {
+			event keydown (e) {
+				e.preventDefault();
+				// demo, find input via the component (not from the event)
+				var input = this.$.find('input')[0];
+				input.value += this.scope.name;
+			}
 		}
 	}
 }
@@ -42,7 +50,7 @@ define :inherited extends :base {
 }
 
 ul {
-	li > :counter;
-	li > :fooos;
+	li name='counter' > :counter;
+	li name='foos' > :fooos;
 	li > :inherited qux='Quux' > @content > tt > 'Italic and Teletype';
 }

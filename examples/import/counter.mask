@@ -7,5 +7,8 @@ define :counter {
 	}
 
 	button x-tap = increment > 'Increment'
-	i > ' (current) ~[bind: counter]'
+	tt {
+		span > ' (current) '
+		i.current > '~[bind: counter]'
+	}
 }

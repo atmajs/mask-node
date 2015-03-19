@@ -14,12 +14,12 @@ div name='counter-client' {
 	:counter x-mode='client';
 }
 hr;
-div name='counter-server' {
+div name='counter-renamed-server' {
 	p > i > '(renamed) Server render'
 	:counterRenamed;
 }
 hr;
-div name='counter-server' {
+div name='counter-renamed-client' {
 	p > i > '(renamed) Client render'
 	:counterRenamed x-mode='client';
 }
@@ -31,7 +31,7 @@ div name='nested-counter-server' {
 }
 
 hr;
-div name='nested-counter-server' {
+div name='nested-counter-client' {
 	p > i > '(nested) Client render'
 	foo x-mode='client';
 }
@@ -40,4 +40,10 @@ hr;
 div name='nested-double-counter-server' {
 	p > i > '(inheritance) Server. Double Counter'
 	:doubleCounter;
+}
+
+hr;
+div name='nested-double-counter-client' {
+	p > i > '(inheritance) Client. Double Counter'
+	:doubleCounter x-mode='client';
 }
