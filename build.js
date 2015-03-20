@@ -21,26 +21,6 @@
  *	Mask with HTML Builder
  **/
 
-/**
- *	plugin.reload
- *
- *	```/lib/plugin.reload.js```
- *	Reload plugin to use in includejs environment.
- *	Each component will be reinitialized on file-change
- **/
-
-/**
- *	formatter
- *
- *	```/lib/formatter.js```
- *	[[Formatter]] for Mask to
- *
- * + convert HTML to Mask
- * + stringify [[MaskDOM]]
- * + beautify Mask Markup
- **/
-
-
 
 module.exports = {
 	

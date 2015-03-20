@@ -14,8 +14,8 @@ UTest({
 					pathBar
 				]
 			})
-			.pipe((doc, win) => {
-				return UTest.domtest(doc.body, `
+			.pipe((el) => {
+				return UTest.domtest(el, `
 					find ('.container > div') {
 						length 3;
 						eq (0) > attr name a;
@@ -32,7 +32,7 @@ UTest({
 					pathFoo
 				]
 			})
-			.pipe((doc, win) => {
+			.pipe((el, doc, win) => {
 				
 				var foo = win.app.find(':foo');
 				notEq_(foo, null);
@@ -42,7 +42,7 @@ UTest({
 				is_(compos.test_querySelector, 'Object');
 				is_(compos.test_querySelector.nodeType, 'Number');
 				
-				return UTest.domtest(doc.body, `
+				return UTest.domtest(el, `
 					find ('input')  > val foo;
 					find ('button') > do click;
 					find ('input')  > val baz;

@@ -40,14 +40,6 @@ module.exports = {
 		},
 		examples: {
 			exec: 'dom',
-			$config: {
-				$before: function(){
-					console.log('before');
-				},
-				$after: function(){
-					console.log('after');
-				}
-			},
 			tests: 'test/examples/**.test'
 		}
 	}
