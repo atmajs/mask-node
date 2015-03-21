@@ -15,7 +15,7 @@
 			getAttribute: function(key) {
 				return this.attributes[key];
 			},
-			get classList() {
+			get classList () {
 				return new ClassList(this);
 			},
 	
@@ -61,31 +61,51 @@
 			},
 	
 			// generic properties
-			get value() {
+			get value () {
 				return this.attributes.value;
 			},
-			set value(value) {
+			set value (value) {
 				this.attributes.value = value;
 			},
-			get selected() {
+			get selected () {
 				return this.attributes.selected
 			},
-			set selected(value) {
+			set selected (value) {
 				if (!value) {
 					delete this.attributes.selected;
 					return;
 				}
 				this.attributes.selected = 'selected';
 			},
-			get checked() {
+			get checked () {
 				return this.attributes.checked;
 			},
-			set checked(value) {
+			set checked (value) {
 				if (!value) {
 					delete this.attributes.checked;
 					return;
 				}
 				this.attributes.checked = 'checked';
+			},
+			
+			get textContent () {
+				var child = this.firstChild;
+				var txt = '';
+				while (child != null) {
+					if (child.nodeType === Node.TEXTNODE) {
+						txt += child.textContent;
+						continue;
+					}
+					
+					txt += child.textContent || '';
+					child = child.nextSibling;
+				}
+				return txt;
+			},
+			
+			set textContent (str) {
+				node_empty(this);
+				this.appendChild(document.createTextNode(str));
 			}
 		}
 	);

@@ -153,6 +153,34 @@
 			child.nextSibling = anchor;
 
 			return child;
+		},
+		
+		removeChild: function (node) {
+			if (node == null) {
+				return;
+			}
+			var child = this.firstChild,
+				prev = null;
+			while (child != null && child !== node) {
+				prev = child;
+				child = child.nextSibling;
+			}
+			if (child == null) {
+				return;
+			}
+			
+			if (prev == null) {
+				// is first child;
+				this.firstChild = child.nextSibling;
+			} else {
+				prev.nextSibling = child.nextSibling;
+			}
+			if (this.lastChild === child) {
+				this.lastChild = prev;
+			}
+			
+			node.nextSibling = null;
+			node.parentNode = null;
 		}
 	});
 

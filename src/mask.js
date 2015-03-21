@@ -19,11 +19,16 @@
 				dom = mask_render(tmpl, model, _ctx, el, _ctr);
 			
 			if (_ctx.async === true) {
-				_ctx.done(function(){
-					dfr.resolve(HtmlDom.stringify(dom, model, _ctx, _ctr))
-				});
+				_ctx.done(resolve);
 			} else {
-				dfr.resolve(HtmlDom.stringify(dom, model, _ctx, _ctr));
+				resolve();
+			}
+			
+			function resolve() {
+				var html = _ctx._rewrite == null && _ctx._redirect == null
+					? HtmlDom.stringify(dom, model, _ctx, _ctr)
+					: null;
+				dfr.resolve(html);
 			}
 			return dfr;
 		}

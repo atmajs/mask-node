@@ -3,7 +3,7 @@
 	HtmlDom.TextNode = class_create({
 		nodeType: Dom.TEXTNODE,
 		nextSibling: null,
-		
+		textContent: '',
 		constructor: function TextNode(text){
 			this.textContent = String(text == null ? '' : text);
 		},
