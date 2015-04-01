@@ -18,8 +18,13 @@
 	__cfg.getScript = function (path) {
 		var dfr = new class_Dfr;
 		var filename = path_toLocalFile(resolvePath(path));
-		var x  = require(filename);
-		dfr.resolve(x);
+		
+		try {
+			var x  = require(filename);
+			dfr.resolve(x);
+		} catch (error) {
+			dfr.reject(error);
+		}
 		return dfr;
 	};
 	
