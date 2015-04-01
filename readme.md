@@ -62,16 +62,16 @@ Some additional work should be accomplished to initialize `:profile` component:
 
 ```bash
 $ npm install
-$ npm examples
+$ npm run examples
 
 # navigate to: http://localhost:5771/index
 ```
 
 ### Build
 ```bash
-git submodule update --recursive
+git submodule init && git submodule update
 npm install
-npm build
+npm run build
 ```
 
 ### Run all tests

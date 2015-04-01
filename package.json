@@ -1,5 +1,5 @@
 {
-  "name": "maskjs-node",
+  "name": "-",
   "description": "MaskJS for Node.JS",
   "version": "0.8.14",
   "homepage": "http://atmajs.com/mask",
@@ -19,8 +19,8 @@
   "devDependencies": {
     "atma": "latest",
     "atma-loader-traceur": ">=1.0.19",
-    "includejs": "^0.9.10",
-    "maskjs": "^0.12.8"
+    "includejs": "^0.9.11",
+    "maskjs": "^0.12.14"
   },
   "scripts": {
     "test": "atma test",
