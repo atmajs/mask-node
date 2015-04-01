@@ -5,7 +5,8 @@ UTest({
 		'http.include': [
 			pathFoo,
 			pathBar
-		]
+		],
+		timeout: 3000
 	},
 	
 	'render simple component' () {
