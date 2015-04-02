@@ -1,6 +1,6 @@
 (function(){
 	// import /ref-mask/src/builder/util.js
-	// import /ref-mask/src/builder/util.controller.js
+	
 	
 	HtmlDom.Component = class_createEx(
 		HtmlDom.Node,
@@ -8,111 +8,132 @@
 			nodeType: Dom.COMPONENT,
 		
 			compoName: null,
+			compo: null,
+			node : null,
 			instance: null,
 			components: null,
 			ID: null,
 			modelID: null,
 			
 			constructor: function (node, model, ctx, container, ctr) {
-				var compo,
-					attr,
-					key,
-					cacheInfo;
-				
-				var compoName = node.compoName || node.tagName,
-					Handler = node.controller || custom_Tags[compoName] || obj_create(node);
-				
-				if (Handler != null) 
-					cacheInfo = compo_getMetaInfo(Handler).cache;
-				
-				if (cacheInfo != null) {
-					compo = Cache.getCompo(model, ctx, compoName, Handler);
-					if (compo != null) {
-						this.compo = compo;
-						
-						if (compo.__cached) {
-							compo.render = fn_doNothing;
-						}
-						controller_pushCompo(ctr, compo);
-						return;
-					}
-				}
-				
-				compo = controller_initialize(Handler, node, model, ctx, container, ctr);
-				
-				var cache = compo_getMetaInfo(compo).cache;
-				if (cache /* unstrict */) {
-					Cache.cacheCompo(model, ctx, compoName, compo, cache);
-				}
-				
-				
-				this.compo = compo;
 				this.node = node;
-				
-				var mode = compo_getMetaVal(ctr, 'mode');
-				if (mode_SERVER_ALL === mode || mode_SERVER_CHILDREN === mode) 
-					compo_setMetaVal(compo, 'mode', mode_SERVER_ALL);
-				
-				attr = obj_extend(compo.attr, node.attr);
-				
-				if (attr['x-mode'] !== void 0) {
-					mode = attr['x-mode'];
-					compo_setMetaVal(compo, 'mode', mode);
-				}
-				
-				if (attr['x-mode-model']  !== void 0) {
-					compo_setMetaVal(compo, 'mode', attr['x-mode-model']);
-				}
-				if (compo_isServerMode(this.compo) === false) {
-					this.ID = this.compo.ID = ++ ctx._id;
-				}
-				if (mode === 'client') {
-					compo.render = fn_doNothing;
-				}
-				
-				compo.attr = attr;
-				compo.parent = ctr;
-				
-				if (compo.compoName == null) 
-					compo.compoName = compoName;
-					
-				if (compo.model == null) 
-					compo.model = model;
-					
-				if (compo.nodes == null) 
-					compo.nodes = node.nodes;
-				
-				this.compoName = compo.compoName;
-				
-				for (key in attr) {
-					if (is_Function(attr[key])) 
-						attr[key] = attr[key]('attr', model, ctx, container, ctr, key);
-				}
+				this.compoName = node.compoName || node.tagName;
+				return;
 			
-				if (is_Function(compo.renderStart)) {
-					compo.renderStart(model, ctx, container);
-				}
+				////var compoName = node.compoName || node.tagName,
+				////	Handler   = node.controller || custom_Tags[compoName] || obj_create(node),
+				////	cache     = compo_getMetaInfo(Handler).cache || false;
+				////
+				////if (cache /* unstrict */) {
+				////	var compo = Cache.getCompo(model, ctx, compoName, Handler);
+				////	if (compo != null) {
+				////		this.compo = compo;
+				////		
+				////		if (compo.__cached) {
+				////			compo.render = fn_doNothing;
+				////		}
+				////		builder_pushCompo(ctr, compo);
+				////		return;
+				////	}
+				////}
+				////
+				////var compo = _initController(Handler, node, model, ctx, container, ctr),
+				////	cache = compo_getMetaInfo(compo).cache;
+				////if (cache /* unstrict */) {
+				////	Cache.cacheCompo(model, ctx, compoName, compo, cache);
+				////}
+				////if (compo.compoName == null) {
+				////	compo.compoName = compoName;
+				////}
+				////if (compo.model == null) {
+				////	compo.model = model;
+				////}
+				////if (compo.nodes == null) {
+				////	compo.nodes = node.nodes;
+				////}
+				////this.compoName = compo.compoName;
+				////this.compo = compo;
+				////this.node  = node;
+				////
+				////var attr = obj_extend(compo.attr, node.attr),
+				////	mode = compo_getMetaVal(ctr, 'mode');
+				////if (mode_SERVER_ALL === mode || mode_SERVER_CHILDREN === mode) {
+				////	compo_setMetaVal(compo, 'mode', mode_SERVER_ALL);
+				////}
+				////if (attr['x-mode'] !== void 0) {
+				////	mode = attr['x-mode'];
+				////	compo_setMetaVal(compo, 'mode', mode);
+				////}
+				////if (attr['x-mode-model']  !== void 0) {
+				////	compo_setMetaVal(compo, 'modeModel', attr['x-mode-model']);
+				////}
+				////if (compo_isServerMode(this.compo) === false) {
+				////	this.ID = this.compo.ID = ++ ctx._id;
+				////}
+				////if (mode === mode_CLIENT) {
+				////	compo.render = fn_doNothing;
+				////}
+				////
+				////compo.attr = attr;
+				////compo.parent = ctr;
+				////
+				////for (var key in attr) {
+				////	if (is_Function(attr[key])) {
+				////		attr[key] = attr[key]('attr', model, ctx, container, ctr, key);
+				////	}
+				////}
+				////
+				////if (is_Function(compo.renderStart)) {
+				////	compo.renderStart(model, ctx, container);
+				////}
+				////
+				////builder_pushCompo(ctr, compo);
+				////if (compo.async === true) {
+				////	var resume = builder_resumeDelegate(
+				////		compo
+				////		, model
+				////		, ctx
+				////		, this
+				////		, null
+				////		, compo.onRenderEndServer
+				////	);
+				////	compo.await(resume);
+				////	return;
+				////}
+				////
+				////compo_wrapOnTagName(compo, node);
+				////
+				////if (is_Function(compo.render)) 
+				////	compo.render(model, ctx, this, compo);
+				////
+				////this.initModelID(ctx, model);
+			},
+			
+			setComponent: function (compo, model, ctx) {
+				this.ID    = compo.ID;
+				this.compo = compo;
+				this.setModelId_(compo, model, ctx);
+			},
+			setModelId_: function(compo, model, ctx){
+				if (compo_isServerMode(compo)) 
+					return;
 				
-				controller_pushCompo(ctr, compo);
-				if (compo.async === true) {
-					var resume = build_resumeDelegate(
-						compo
-						, model
-						, ctx
-						, this
-						, null
-						, compo.onRenderEndServer
-					);
-					compo.await(resume);
+				if (compo.modelRef) {
+					var id = ctx._models.tryAppend(compo);
+					if (id !== -1){
+						this.modelID = id;
+					}
 					return;
 				}
-		
-				compo_wrapOnTagName(compo, node);
-		
-				if (is_Function(compo.render)) 
-					compo.render(model, ctx, this, compo);
 				
-				this.initModelID(ctx, model);
+				if (compo.model == null || compo.model === model) {
+					return;
+				}
+				
+				var id = ctx._models.tryAppend(compo);
+				if (id !== -1) {
+					this.modelID = id;
+				}
 			},
 			initModelID: function(ctx, parentsModel){
 				var compo = this.compo;
@@ -137,55 +158,35 @@
 				}
 			},
 			toString: function() {			
-				var element = this.firstChild,
-					compo = this.compo;
-				
-				if (compo.__cached !== void 0) 
+				var compo = this.compo;
+				if (compo.__cached != null) {
 					return compo.__cached;
+				}
 				
-				var compoName = compo.compoName,
-					meta = compo_getMetaInfo(compo),
-					attr = compo.attr,
-					nodes = compo.nodes,
-					scope = compo.scope;
-				
-				if (meta.mode === 'client') {
+				var meta = compo_getMetaInfo(compo);
+				if (meta.mode === mode_CLIENT) {
 					var json = {
-						mask: mask_stringify(this.node)
-					};
-					var info = {
-						type: 'r',
-						single: true,
-					};
-					var string = Meta.stringify(json, info);
-					if (meta.cache) 
+							mask: mask_stringify(this.node, 0)
+						},
+						info = {
+							type: 'r',
+							single: true,
+						},
+						string = Meta.stringify(json, info);
+					if (meta.cache /* unstrict */) {
 						compo.__cached = string;
-					
+					}
 					return string;
 				}
 				
-				if (scope != null && meta.serializeScope) {
-					var parent = compo.parent,
-						model = compo.model;
-					while(model == null && parent != null){
-						model = parent.model;
-						parent = parent.parent;
-					}
-					scope = compo.serializeScope(scope, model);
-				}
 				var	json = {
 						ID: this.ID,
-						modelID: this.modelID,
-						
-						compoName: compoName,
-						attr: attr,
+						modelID: this.modelID,						
+						compoName: compo.compoName,
+						attr: compo.attr,
 						expression: compo.expression,
-						mask: meta.mode === 'client'
-							? mask_stringify(nodes, 0)
-							: null,
 						nodes: _serializeNodes(meta, this),
-							
-						scope: scope
+						scope: _serializeScope(meta, compo)
 					},
 					info = {
 						single: this.firstChild == null,
@@ -198,43 +199,37 @@
 				if (compo.toHtml != null) {
 					string += compo.toHtml();
 				} else {
-					var el = this.firstChild;
-					while (el != null) {
-						string += el.toString();
-						el = el.nextSibling;
-					}
+					string += _stringifyChildren(this);
 				}
 				
-				if (meta.mode !== 'client') 
+				if (meta.mode !== mode_CLIENT) {
 					string += Meta.close(json, info);
-				
-				if (meta.cache) 
+				}
+				if (meta.cache) {
 					compo.__cached = string;
-				
+				}
 				return string;
 			}
 		});
 	
-	function controller_initialize(Handler, node, model, ctx, container, ctr) {
-		if (Handler != null) {
-		
-			if (is_Function(Handler))
-				return new Handler(node, model, ctx, container, ctr);
-			
-			if (is_Function(Handler.__Ctor)) 
-				return new Handler.__Ctor(node, model, ctx, container, ctr);
-			
-			return Handler;
+	function _stringifyChildren(compoEl) {
+		var el  = compoEl.firstChild,
+			str = '';
+		while (el != null) {
+			str += el.toString();
+			el = el.nextSibling;
 		}
-		
-		return {
-			model: node.model,
-			expression: node.expression,
-			modelRef: node.modelRef,
-			container: node.container,
-			meta: compo_getMetaInfo(ctr),
-			attr: null,
-		};
+		return str;
+	}
+	
+	function _initController(Mix, node, model, ctx, el, ctr) {
+		if (is_Function(Mix)) {
+			return new Mix(node, model, ctx, el, ctr);
+		}
+		if (is_Function(Mix.__Ctor)) {
+			return new Mix.__Ctor(node, model, ctx, el, ctr);
+		}
+		return Mix;
 	}
 	
 	function _serializeNodes(meta, compoEl) {
@@ -254,5 +249,23 @@
 		}
 		
 		return fn.call(compoEl.compo, compoEl.node);
+	}
+	function _serializeScope(meta, compo) {
+		if (meta.serializeScope == null) {
+			return null;
+		}
+		
+		var scope = compo.scope;
+		if (scope == null) {
+			return null;
+		}
+		
+		var parent = compo.parent,
+			model = compo.model;
+		while(model == null && parent != null){
+			model = parent.model;
+			parent = parent.parent;
+		}
+		return compo.serializeScope(scope, model);
 	}
 }());

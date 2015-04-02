@@ -1,9 +1,3 @@
-//var compo_renderMode_SERVER = 'server',
-//	compo_renderMode_SERVER_ALL = 'server:all',
-//	compo_renderMode_SERVER_CHILDREN = 'server:children',
-//	compo_renderMode_CLIENT = 'client',
-//	compo_renderMode_BOTH = 'both';
-	
 var	compo_getMetaInfo,	
 	compo_getRenderMode,
 	compo_getModelRenderMode,
@@ -135,22 +129,23 @@ var	compo_getMetaInfo,
 			return proto.$meta[prop];
 		}
 		if (proto[prop] != null) {
-			log_error('@deprecate next: Component has meta value direct in the prototypes. Use `meta` hash');
+			log_error('@deprecate next: Component has meta value direct in the prototypes. Use `meta` object property');
 			return proto[prop];
 		}
 		return null;
 	}
 	
 	function CompoMeta(ctr){
-		if (ctr == null) 
+		if (ctr == null) {
 			return;
-		
+		}
 		var meta = ctr.meta || ctr.$meta;
-		if (meta != null) 
+		if (meta != null) {
 			return meta;
-		
-		if (ctr.mode /* obsolete */) 
+		}
+		if (ctr.mode /* obsolete */) {
 			this.mode = ctr.mode;
+		}
 	}
 	
 	var MetaDefault = CompoMeta.prototype = {
@@ -158,5 +153,5 @@ var	compo_getMetaInfo,
 		modeModel: mode_BOTH,
 		attributes: null,
 		cache: false
-	}
+	};
 }());

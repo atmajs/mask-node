@@ -1,21 +1,7 @@
-var builder_build,
-	builder_componentID,
-	builder_Ctx,
-	build;
-	
-(function() {
-	
-	// import ctx/CtxModels
-	// import ctx/CtxModules
-	// import handler/document
-	
-	// import /ref-mask/src/builder/ctx
-	// import /ref-mask/src/builder/type.node.js
-	// import /ref-mask/src/builder/type.textNode.js
-	
+(function(){	
 	builder_build = function(template, model, ctx, container, ctr, children){
 		if (container == null) {
-			container = new HtmlDom.DocumentFragment();
+			container = document.createDocumentFragment();
 		}
 		if (ctr == null) {
 			ctr = new Dom.Component();
@@ -24,10 +10,10 @@ var builder_build,
 			ctx = new builder_Ctx;
 		}
 		if (ctx._models == null) {
-			ctx._models = new CtxModels(model, Cache.modelID);
+			ctx._models = new builder_CtxModels(model, Cache.modelID);
 		}
 		if (ctx._modules == null) {
-			ctx._modules = new CtxModules();
+			ctx._modules = new builder_CtxModules();
 		}
 		if (ctx._id == null) {
 			ctx._id = Cache.controllerID;
@@ -35,15 +21,13 @@ var builder_build,
 		return build(template, model, ctx, container, ctr, children);
 	};
 	
-
-	build = function(node, model, ctx, container, ctr, children) {
-
-		if (node == null) 
+	function build (node, model, ctx, container, ctr, children) {
+		if (node == null) {
 			return container;
-		
-		if (ctx._redirect != null || ctx._rewrite != null) 
+		}
+		if (ctx._redirect != null || ctx._rewrite != null) {
 			return container;
-
+		}
 		var type = node_getType(node),
 			element,
 			elements,
@@ -108,8 +92,10 @@ var builder_build,
 			container.appendChild(element);
 			container = element;
 			
-			var compo = element.compo;
+			var compo = build_component(node, model, ctx, element, ctr);
 			if (compo != null) {
+				element.setComponent(compo, model, ctx);
+
 				if (compo.async) {
 					return element;
 				}
@@ -127,17 +113,33 @@ var builder_build,
 			}
 		}
 
-		build_childNodes(node, model, ctx, container, ctr, elements);
+		buildChildNodes(node, model, ctx, container, ctr, elements);
 		
 		if (container.nodeType === Dom.COMPONENT) {
 			var fn = ctr.onRenderEndServer;
 			if (fn != null && ctr.async !== true) {
 				fn.call(ctr, elements, model, ctx, container, ctr);
 			}
-			
 		}
 		
 		arr_pushMany(children, elements);
 		return container;
 	};
+	
+	function buildChildNodes (node, model, ctx, container, ctr, els) {
+		var nodes = node.nodes;
+		if (nodes == null) 
+			return;
+		
+		if (is_ArrayLike(nodes) === false) {
+			build(nodes, model, ctx, container, ctr, els);
+			return;
+		}
+		
+		var imax = nodes.length,
+			i;
+		for(i = 0; i< imax; i++){
+			build(nodes[i], model, ctx, container, ctr, els);
+		}
+	};	
 }());

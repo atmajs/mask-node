@@ -1,13 +1,13 @@
 /*jshint -W032 */
 // import:base /src/
 // import:extension js
-
 // import /ref-mask/src/umd-head
 	
 	// import /ref-utils/lib/utils.embed.js
 	
+	// import const
 	// import /ref-mask/src/scope-vars
-	//#import const
+	
 	
 	// import /ref-mask/src/util/
 	//#import util/
@@ -21,15 +21,10 @@
 
 	
 	//#import html-dom/
-	//#import builder
+	//#import builder/
 
 	/*** Features ***/	
-	// import /ref-mask/src/feature/run
-	// import /ref-mask/src/feature/merge
-	// import /ref-mask/src/feature/optimize
-	// import /ref-mask/src/feature/modules/
-	// import /ref-mask/src/feature/Define
-	// import /ref-mask/src/feature/TreeWalker
+	// import /ref-mask/src/feature/
 	
 	// import /ref-mask/src/mask
 
@@ -44,9 +39,8 @@
 	// import /ref-mask-binding/lib/binding.embed.node.js
 	
 	
-	// import /ref-mask/src/handlers/html
-	// import /ref-mask/src/handlers/template
-	// import /ref-mask/src/handlers/debug
+	// import /ref-mask/src/handlers/
+	// import handlers/document
 
 
 // import /ref-mask/src/umd-footer

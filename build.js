@@ -24,16 +24,28 @@
 
 module.exports = {
 	
-	'import': {
+	'build_mask': {
+		action: 'import',
 		files: 'builds/**',
-		output: 'lib/'
+		output: 'lib/',
+		defines: {
+			DEBUG: true,
+			SAFE: false,
+			BROWSER: false,
+			NODE: true,
+		}
 	},
 	'jshint': {
 		files: ['lib/mask.node.js'],
 		jshint: JSHint()
 	},
 	'uglify': {
-		files: 'lib/mask.node.js'
+		files: 'lib/mask.node.js',
+		defines: {
+			DEBUG: false,
+			SAFE: false,
+			NODE: true,
+		}
 	},
 
 
@@ -47,10 +59,10 @@ module.exports = {
 
 	'watch': {
 		files: 'src/**',
-		config: '#[import]'
+		config: '#[build_mask]'
 	},
 
-	'defaults': ['import', 'jshint']
+	'defaults': ['build_mask', 'jshint']
 };
 
 

@@ -1,6 +1,5 @@
-var CtxModules;
 (function(){	
-	CtxModules = class_create({
+	builder_CtxModules = class_create({
 		constructor: function () {
 			this._modules = [];
 		},

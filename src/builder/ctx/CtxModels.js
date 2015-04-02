@@ -1,6 +1,5 @@
-var CtxModels;
 (function(){	
-	CtxModels = class_create({
+	builder_CtxModels = class_create({
 		constructor: function (model, startIndex) {
 			this._models = {};
 			this._id = startIndex || 0;
