@@ -12,7 +12,7 @@ UTest({
 				pathClientCompo
 			]
 		}).pipe(el => {
-			debugger
+			debugger;
 			$(el)
 				.has_('#foo')
 				.eq_ ('text', 'FooTitle');

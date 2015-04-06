@@ -1,7 +1,7 @@
 {
   "name": "-",
   "description": "MaskJS for Node.JS",
-  "version": "0.8.14",
+  "version": "0.12.17",
   "homepage": "http://atmajs.com/mask",
   "contributors": [],
   "author": "Alexander Kit <alex.kit@atmajs.com>",
@@ -19,8 +19,8 @@
   "devDependencies": {
     "atma": "latest",
     "atma-loader-traceur": ">=1.0.19",
-    "includejs": "^0.9.11",
-    "maskjs": "^0.12.14"
+    "includejs": "latest",
+    "maskjs": "latest"
   },
   "scripts": {
     "test": "atma test",

@@ -30,10 +30,14 @@ module.exports = {
 		output: 'lib/',
 		defines: {
 			DEBUG: true,
-			SAFE: false,
+			SAFE: true,
 			BROWSER: false,
 			NODE: true,
 		}
+	},
+	'square_version': {
+		action: 'bump',
+		fromPackage: '/ref-mask/package.json'
 	},
 	'jshint': {
 		files: ['lib/mask.node.js'],
@@ -43,16 +47,15 @@ module.exports = {
 		files: 'lib/mask.node.js',
 		defines: {
 			DEBUG: false,
-			SAFE: false,
+			SAFE: true,
 			NODE: true,
 		}
 	},
 
-
-	'import.libs': {
+	'import_libs': {
 		action: 'copy',
 		files: {
-			'../mask/lib/mask.js': 'node_modules/maskjs/lib/mask.js',
+			'../mask/lib/mask.js'      : 'node_modules/maskjs/lib/mask.js',
 			'../include/lib/include.js': 'node_modules/includejs/lib/include.js'
 		}
 	},
@@ -62,7 +65,11 @@ module.exports = {
 		config: '#[build_mask]'
 	},
 
-	'defaults': ['build_mask', 'jshint']
+	'defaults': [
+		'square_version',
+		'build_mask',
+		'jshint'
+	]
 };
 
 

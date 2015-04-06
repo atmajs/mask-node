@@ -49,7 +49,7 @@
 		node.attr = {
 			path: path
 		};
-		node.nodes = module.nodes;
+		node.nodes = module.source;
 		return node;
 	}
 }());
