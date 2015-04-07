@@ -17,7 +17,7 @@
 	// import /ref-mask/src/dom/
 	// import /ref-mask/src/statements/
 	// import /ref-mask/src/parser/
-	// import /ref-mask/src/formatter/stringify
+	// import /ref-mask/src/formatter/stringify_stream
 
 	
 	//#import html-dom/
