@@ -3,24 +3,6 @@ var setup_compo,
 (function(){
 	
 	setup_compo = function(meta, node, model, ctx, container, ctr, children){
-			
-		var compoName = meta.compoName,
-			Handler = getHandler_(compoName, ctr);
-			
-		var maskNode;
-		if (meta.nodes) {
-			maskNode = mask.parse(meta.nodes);
-			if (maskNode.type === mask.Dom.FRAGMENT) {
-				maskNode = maskNode.nodes[0];
-			}
-			if (meta.compoName !== maskNode.tagName && maskNode.tagName === 'imports') {
-				maskNode = maskNode.nodes[0];
-			}
-		}
-		if (maskNode == null) {
-			maskNode = new mask.Dom.Component(meta.compoName);
-		}
-		
 		if (meta.mask != null) {
 			setupClientMask(meta, Handler, node, model, ctx, ctr);
 			return node;
@@ -30,39 +12,27 @@ var setup_compo,
 			return node;
 		}
 		
-		var compo;
-		if (is_Function(Handler)) 
-			compo = new Handler(maskNode, model, ctx, container, ctr);
+		var compoName = meta.compoName,
+			Handler   = getHandler_(compoName, ctr),
+			maskNode = getMaskNode_(meta),
+			isStatic  = is_Function(Handler) === false,
+			compo = getCompo_(Handler, maskNode, model, ctx, container, ctr);
 		
-		if (compo == null && Handler.__Ctor) {
-			compo = new Handler.__Ctor(maskNode, model, ctx, container, ctr);
-		}
+		resolveScope_(meta, compo, model, ctr);
 		
-		if (compo == null) 
-			compo = Handler;
-		
-		var scope = meta.scope;
-		if (scope != null) {
-			scope = model_deserializeKeys(meta.scope, __models, model, ctr);
-			if (compo.scope != null) 
-				scope = util_extendObj_(compo.scope, scope);
-			
-			compo.scope = scope;
-		}
-		
-		compo.compoName = compoName;
-		compo.attr = meta.attr;
-		compo.parent = ctr;
 		compo.ID = meta.ID;
-		compo.expression = meta.expression;
+		compo.attr = meta.attr;
 		compo.model = model;
+		compo.parent = ctr;
+		compo.compoName = compoName;
+		compo.expression = meta.expression;
 		
-		if (compo.nodes == null && maskNode != null)
+		if (compo.nodes == null) {
 			compo.nodes = maskNode.nodes;
-		
-		if (ctr.components == null) 
+		}
+		if (ctr.components == null) {
 			ctr.components = [];
-		
+		}
 		ctr.components.push(compo);
 		
 		var handleAttr = compo.meta && compo.meta.handleAttributes;
@@ -91,15 +61,21 @@ var setup_compo,
 		}
 		
 		if (is_Function(compo.renderEnd)) {
-			compo = compo.renderEnd(
+			// save reference to the last element in a container relative to the current component
+			compo.placeholder = node;
+			
+			var overridenCompo = compo.renderEnd(
 				elements,
 				model,
 				ctx,
 				container,
 				ctr
 			);
-			if (compo != null) 
-				ctr.components.push(compo);
+			if (isStatic === true && overridenCompo != null) {
+				var compos = ctr.components,
+					i = compos.indexOf(compo);
+				compos[i] = overridenCompo;
+			}
 		}
 		
 		arr_pushMany(children, elements);
@@ -229,5 +205,47 @@ var setup_compo,
 		console.error('Client bootstrap. Component is not loaded', compoName);
 		return function() {};
 	}
+	function getMaskNode_(meta) {
+		var node;
+		if (meta.nodes) {
+			node = mask.parse(meta.nodes);
+			
+			if (node.type === mask.Dom.FRAGMENT) {
+				node = node.nodes[0];
+			}
+			if (meta.compoName !== node.tagName && node.tagName === 'imports') {
+				node = node.nodes[0];
+			}
+		}
+		return node != null
+			? node
+			: new mask.Dom.Component(meta.compoName);
+	}
+	function getCompo_(Handler, node, model, ctx, container, ctr) {
+		var Ctor;
+		if (is_Function(Handler)) {
+			Ctor = Handler;
+		}
+		if (Handler.__Ctor) {
+			Ctor = Handler.__Ctor;
+		}
+		if (Ctor != null) {
+			return new Ctor(node, model, ctx, container, ctr)
+		}
+		
+		return obj_create(Handler);
+	}
 	
+	function resolveScope_(meta, compo, model, ctr) {
+		var scope = meta.scope;
+		if (scope == null) {
+			return;
+		}
+		scope = model_deserializeKeys(scope, __models, model, ctr);
+		if (compo.scope != null) {
+			util_extendObj_(compo.scope, scope);
+			return;
+		}
+		compo.scope = scope;
+	}
 }());

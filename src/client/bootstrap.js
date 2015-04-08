@@ -62,7 +62,10 @@ function bootstrap(container, Mix) {
 	}
 	
 	setup(el, model, ctx, el.parentNode, fragmentCompo);
-	util_pushComponents_(compo, fragmentCompo);
+	
+	if (fragmentCompo !== compo) {
+		util_pushComponents_(compo, fragmentCompo);
+	}
 	
 	Compo.signal.emitIn(fragmentCompo, 'domInsert');
 	return fragmentCompo;
