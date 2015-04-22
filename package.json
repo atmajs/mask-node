@@ -25,6 +25,7 @@
   "scripts": {
     "test": "atma test",
     "build": "atma",
+    "server": "atma server",
     "examples": "atma custom examples/index"
   },
   "keywords": [],

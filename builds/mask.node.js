@@ -36,7 +36,7 @@
 	/*** Libraries ***/	
 	// import /ref-mask-compo/lib/compo.embed.js
 	// import /ref-mask-j/lib/jmask.embed.js
-	// import /ref-mask-binding/lib/binding.embed.node.js
+	// import /ref-mask-binding/lib/binding_embed_node
 	
 	
 	// import /ref-mask/src/handlers/

@@ -31,9 +31,9 @@ module.exports = {
 	'import_libs': {
 		action: 'copy',
 		files: {
-			'../mask/lib/html_entities.js': '/lib/',
-			'../mask/lib/mask.js'         : 'node_modules/maskjs/lib/',
-			'../include/lib/include.js'   : 'node_modules/includejs/lib/'
+			'ref-mask/lib/html_entities.js': '/lib/',
+			'ref-mask/lib/mask.js'         : 'node_modules/maskjs/lib/',
+			'ref-include/lib/include.js'   : 'node_modules/includejs/lib/'
 		}
 	},
 
