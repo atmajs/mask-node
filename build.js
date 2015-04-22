@@ -1,27 +1,3 @@
-/**
- *	Build
- *
- *	$ git submodule update --recursive
- *	$ npm install
- *	$ npm build
- **/
-
-/**
- *	mask
- *
- *	```/lib/mask.js```
- *	Mask with DOM Based Builder
- **/
-
-
-/**
- *	mask.node
- *
- *	```/lib/mask.node.js```
- *	Mask with HTML Builder
- **/
-
-
 module.exports = {
 	
 	'build_mask': {
@@ -55,8 +31,9 @@ module.exports = {
 	'import_libs': {
 		action: 'copy',
 		files: {
-			'../mask/lib/mask.js'      : 'node_modules/maskjs/lib/mask.js',
-			'../include/lib/include.js': 'node_modules/includejs/lib/include.js'
+			'../mask/lib/html_entities.js': '/lib/',
+			'../mask/lib/mask.js'         : 'node_modules/maskjs/lib/',
+			'../include/lib/include.js'   : 'node_modules/includejs/lib/'
 		}
 	},
 

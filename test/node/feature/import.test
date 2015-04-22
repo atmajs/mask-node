@@ -6,8 +6,8 @@ UTest({
 		
 		return mask
 			.renderAsync(tmpl)
-			.done(assert.await(function(html){
+			.done(html => {
 				has_(html, '>a</h4>');
-			}))
+			});
 	}
 })
