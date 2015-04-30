@@ -5,7 +5,7 @@ function $render(template, params = { }){
 	var dfr = new Class.Deferred;
 	
 	scripts.unshift(
-		'node_modules/maskjs/lib/mask.js',
+		'ref-mask/lib/mask.js',
 		'node_modules/includejs/lib/include.js',
 		'/lib/mask.bootstrap.js'
 	);

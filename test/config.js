@@ -3,7 +3,7 @@ module.exports = {
 		
 		dom: {
 			env: [
-				'node_modules/maskjs/lib/mask.js',
+				'ref-mask/lib/mask.js',
 				'test/dom/utils.es6'
 			],
 			$config: {
