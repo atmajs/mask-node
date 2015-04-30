@@ -19,8 +19,7 @@
   "devDependencies": {
     "atma": "latest",
     "atma-loader-traceur": ">=1.0.19",
-    "includejs": "latest",
-    "maskjs": "latest"
+    "includejs": "latest"
   },
   "scripts": {
     "test": "atma test",

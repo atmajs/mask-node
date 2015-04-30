@@ -4,9 +4,20 @@
 			this._modules = [];
 		},
 		add: function(module, owner){
-			if (module == null) 
+			if (module == null || module.error != null) {
 				return;
+			}
+			this.push(module, owner);
 			
+			var imports = module.imports,
+				imax = imports.length,
+				i = -1;
+			while ( ++i < imax ) {
+				this.add(imports[i].module, module);
+			}
+		},
+		
+		push: function(module, owner) {
 			var arr = this._modules;
 			var i = arr.indexOf(module);
 			if (i !== -1) {

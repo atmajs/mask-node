@@ -46,7 +46,7 @@
 			var template = io.File.read(path);
 			var view = ':document { \
 				head {\
-					script src="/node_modules/maskjs/lib/mask.js";\
+					script src="/ref-mask/lib/mask.js";\
 					script src="/lib/mask.bootstrap.js";\
 				}\
 				body {\
