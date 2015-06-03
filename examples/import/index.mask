@@ -6,7 +6,10 @@ import :doubleCounter from 'doubleCounter';
 
 div name='counter-server' {
 	p > i > 'Server render'
-	:counter;
+	Counter {
+		div;
+	}
+	Counter;
 }
 hr;
 div name='counter-client' {
