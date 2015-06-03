@@ -15,10 +15,10 @@ UTest({
 				UTest
 					.domtest(doc.body, `
 						find ('[name=counter-server]') {
-							find ('.current') > text 0;
+							find ('.current') > text 00;
 							find ('button')   > do click;
 							find ('button')   > do click;
-							find ('.current') > text 2;
+							find ('.current') > text 22;
 						}
 						find ('[name=counter-client]') {
 							find ('.current') > text 0;
