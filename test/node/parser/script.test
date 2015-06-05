@@ -5,5 +5,11 @@ UTest({
 		
 		has_(html, 'text/mask');
 		has_(html, '>div<');
+	},
+	'do not interpolate' () {
+		var tmpl = `script type='text/mask'>' div > "~[foo]" '`
+		var html = mask.render(tmpl);
+		
+		has_(html, ' div > "~[foo]" ');
 	}
 })
