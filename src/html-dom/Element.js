@@ -21,21 +21,14 @@
 	
 			toString: function() {
 				var tagName = this.tagName.toLowerCase(),
-					attr = this.attributes,
 					value, element;
 	
-				var string = '<' + tagName;
-	
-				for (var key in attr) {
-					value = attr[key];
-	
-					string += ' '
-						+ key
-						+ '="'
-						+ (typeof value === 'string' ? value.replace(/"/g, '&quot;') : value)
-						+ '"';
+				var string = '<' + tagName,
+					attrStr = html_serializeAttributes(this);
+				if (attrStr !== '') {
+					string += attrStr;
 				}
-
+				
 				var isSingleTag = SingleTags[tagName] === 1,
 					element = this.firstChild;
 	

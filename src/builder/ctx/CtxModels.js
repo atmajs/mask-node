@@ -1,7 +1,7 @@
 (function(){	
 	builder_CtxModels = class_create({
 		constructor: function (model, startIndex) {
-			this._models = {};
+			this._models = null;
 			this._id = startIndex || 0;
 			this.append(model);
 		},
@@ -33,6 +33,9 @@
 	function add(modelBuilder, model) {
 		if (model == null) 
 			return -1;
+		if (modelBuilder._models == null) {
+			modelBuilder._models = {};
+		}
 		
 		var id = 'm' + (++modelBuilder._id);
 		modelBuilder._models[id] = model;
@@ -41,6 +44,9 @@
 	var stringify;
 	(function(){
 		stringify = function (models) {
+			if (models == null) {
+				return null;
+			}
 			stringify = typeof Class !== 'undefined' && is_Function(Class.stringify)
 				? Class.stringify
 				: JSON.stringify

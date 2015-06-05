@@ -26,6 +26,7 @@ var HtmlDom;
 		'wbr': 1
 	};
 	
+	// import ./util/html.es6
 	// import ./util/node.js
 	// import ./util/traverse.js
 	// import ./util/stringify.js
@@ -39,6 +40,7 @@ var HtmlDom;
 	// import ./Component.js
 	// import ./Util.js
 	// import ./Comment.js
+	// import ./ScriptElement.es6
 	
 	// import ./document.js
 

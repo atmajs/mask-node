@@ -1,8 +1,9 @@
 UTest({
 	'attributes' () {
-		var tmpl = `script type='text/mask'>'div'`
+		var tmpl = `script type='text/mask'>'>div<'`
 		var html = mask.render(tmpl);
-		console.log(html);
+		
 		has_(html, 'text/mask');
+		has_(html, '>div<');
 	}
 })

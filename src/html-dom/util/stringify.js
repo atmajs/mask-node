@@ -10,10 +10,10 @@
 			modules = comment_modules(ctx),
 			documentElement = trav_getDoc(document);
 		if (documentElement == null) {
-			return meta.header
-				+ modules
-				+ document
-				+ meta.footer
+			return (meta.header || '')
+				+ (modules  || '')
+				+ (document || '')
+				+ (meta.footer || '')
 				;
 		}
 		
@@ -27,15 +27,26 @@
 			}else{
 				log_error('Body not found');
 			}
-		}
+		}		
 		return document.toString();
 	};
 
 	function comment_meta(ctx) {
+		var model_ = ctx._models.stringify(),
+			ctx_ = ctx_stringify(ctx),
+			id_ = ctx._id;
+		
+		if (model_ == null && ctx_ == null) {
+			return {
+				header: null,
+				footer: null
+			};
+		}
+		
 		var headerJson = {
-				model: ctx._models.stringify(),
-				ctx: ctx_stringify(ctx),
-				ID: ctx._id
+				model: model_,
+				ctx: ctx_,
+				ID: id_
 			},
 			headerInfo = {
 				type: 'm'
