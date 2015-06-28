@@ -4,9 +4,12 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   - sleep 4
   - cd ref-mask
-  - git submodule init && git submodule update
-  - npm install
+  - git submodule init &
+  - git submodule update &
+  - npm install &
+  - npm run build &
   - cd ../
+  - sleep 2
   - npm run build &
   - npm run server &
   - sleep 4
