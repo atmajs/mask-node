@@ -12,10 +12,10 @@ UTest({
 		
 		has_(html, ' div > "~[foo]" ');
 	},
-	'!interpolate' () {
+	'interpolate' () {
 		var tmpl = `script > :html > '(~[foo])'`
 		var html = mask.render(tmpl, { foo: '_foo_' });
 		
-		has_(html, '(_foo_)');
+		has_(html, '<script>(_foo_)</script>');
 	}
 })

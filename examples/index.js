@@ -26,6 +26,7 @@
 		process: function(req, res){
 			remCache();
 			var mask = require('../lib/mask.node.js');
+			mask.cfg('modules', 'default');
 			var path = null;
 			([
 				req.url,
@@ -42,7 +43,7 @@
 				res.end();
 				return;
 			}
-
+			
 			var template = io.File.read(path);
 			var view = ':document { \
 				head {\
