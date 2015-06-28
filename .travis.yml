@@ -7,10 +7,10 @@ before_script:
   - git submodule init && git submodule update
   - npm install
   - cd ../
-  - npm run build
-  - npm run server
+  - npm run build &
+  - npm run server &
   - sleep 4
-  - firefox http://localhost:5777/utest/
+  - firefox http://localhost:5777/utest/ &
   - sleep 4
  
 script:
