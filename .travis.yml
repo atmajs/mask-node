@@ -5,9 +5,9 @@ before_script:
   - sleep 4
   - cd ref-mask
   - npm install
-  - git submodule init &
-  - git submodule update &
-  - npm run build &
+  - git submodule init
+  - git submodule update
+  - npm run build
   - cd ../
   - sleep 4
   - npm run build &
