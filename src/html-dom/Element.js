@@ -18,41 +18,40 @@
 			get classList () {
 				return new ClassList(this);
 			},
-	
 			toString: function() {
 				var tagName = this.tagName.toLowerCase(),
 					value, element;
-	
+
 				var string = '<' + tagName,
 					attrStr = html_serializeAttributes(this);
 				if (attrStr !== '') {
 					string += attrStr;
 				}
-				
+
 				var isSingleTag = SingleTags[tagName] === 1,
 					element = this.firstChild;
-	
+
 				if (element == null) {
 					return string + (isSingleTag ? '/>' : '></' + tagName + '>');
 				}
-	
+
 				string += isSingleTag ? '/>' : '>';
-	
+
 				if (isSingleTag) {
 					string += '<!--~-->'
 				}
-	
+
 				while (element != null) {
 					string += element.toString();
 					element = element.nextSibling;
 				}
-	
+
 				if (isSingleTag)
 					return string + '<!--/~-->';
-	
+
 				return string + '</' + tagName + '>';
 			},
-	
+
 			// generic properties
 			get value () {
 				return this.attributes.value;
@@ -80,7 +79,7 @@
 				}
 				this.attributes.checked = 'checked';
 			},
-			
+
 			get textContent () {
 				var child = this.firstChild;
 				var txt = '';
@@ -89,18 +88,17 @@
 						txt += child.textContent;
 						continue;
 					}
-					
+
 					txt += child.textContent || '';
 					child = child.nextSibling;
 				}
 				return txt;
 			},
-			
+
 			set textContent (str) {
 				node_empty(this);
 				this.appendChild(document.createTextNode(str));
 			}
 		}
 	);
-
 }());

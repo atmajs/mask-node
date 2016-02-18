@@ -1,4 +1,4 @@
-(function(){	
+(function(){
 	builder_build = function(template, model, ctx, container, ctr, children){
 		if (container == null) {
 			container = document.createDocumentFragment();
@@ -20,7 +20,7 @@
 		}
 		return build(template, model, ctx, container, ctr, children);
 	};
-	
+
 	function build (node, model, ctx, container, ctr, children) {
 		if (node == null) {
 			return container;
@@ -42,16 +42,16 @@
 			}
 			return container;
 		}
-		
+
 		var tagName = node.tagName;
 		if (tagName === 'else')
 			return container;
-		
+
 		// Dom.STATEMENT
 		if (type === 15) {
 			var Handler = custom_Statements[tagName];
 			if (Handler == null) {
-				
+
 				if (custom_Tags[tagName] != null) {
 					// Dom.COMPONENT
 					type = 4;
@@ -59,14 +59,14 @@
 					log_error('<mask: statement is undefined', tagName);
 					return container;
 				}
-				
+
 			}
 			if (type === 15) {
 				Handler.render(node, model, ctx, container, ctr, children);
 				return container;
 			}
 		}
-		
+
 		// Dom.NODE
 		if (type === 1) {
 			if (tagName.charCodeAt(0) === 58) {
@@ -90,56 +90,57 @@
 		if (type === 4) {
 			element = document.createComponent(node, model, ctx, container, ctr);
 			container.appendChild(element);
-			container = element;
-			
-			var compo = build_component(node, model, ctx, element, ctr);
+			//- container = element;
+
+			var compo = build_component(node, model, ctx, container, ctr, element);
 			if (compo != null) {
 				element.setComponent(compo, model, ctx);
 
 				if (compo.async) {
-					return element;
+					return container;
 				}
 				if (compo.render) {
-					return element;
+					return container;
 				}
 				if (compo.model && compo.model !== model) {
 					model = compo.model;
 				}
-				
+
 				ctr = compo;
 				node = compo;
 				// collect childElements for the component
 				elements = [];
 			}
+			container = element;
 		}
 
 		buildChildNodes(node, model, ctx, container, ctr, elements);
-		
+
 		if (container.nodeType === Dom.COMPONENT) {
 			var fn = ctr.onRenderEndServer;
 			if (fn != null && ctr.async !== true) {
 				fn.call(ctr, elements, model, ctx, container, ctr);
 			}
 		}
-		
+
 		arr_pushMany(children, elements);
 		return container;
 	};
-	
+
 	function buildChildNodes (node, model, ctx, container, ctr, els) {
 		var nodes = node.nodes;
-		if (nodes == null) 
+		if (nodes == null)
 			return;
-		
+
 		if (is_ArrayLike(nodes) === false) {
 			build(nodes, model, ctx, container, ctr, els);
 			return;
 		}
-		
+
 		var imax = nodes.length,
 			i;
 		for(i = 0; i< imax; i++){
 			build(nodes[i], model, ctx, container, ctr, els);
 		}
-	};	
+	};
 }());

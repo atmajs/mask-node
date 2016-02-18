@@ -1,10 +1,10 @@
 var build_component;
 (function(){
-	build_component = function(node, model, ctx, container, ctr){
+	build_component = function(node, model, ctx, container, ctr, compoElement){
 		var compoName = node.compoName || node.tagName,
 			Handler   = node.controller || custom_Tags[compoName] || obj_create(node),
 			cache     = compo_getMetaInfo(Handler).cache || false;
-		
+
 		if (cache /* unstrict */) {
 			var compo = Cache.getCompo(model, ctx, compoName, Handler);
 			if (compo != null) {
@@ -15,7 +15,7 @@ var build_component;
 				return compo;
 			}
 		}
-		
+
 		var compo = _initController(Handler, node, model, ctx, container, ctr),
 			cache = compo_getMetaInfo(compo).cache;
 		if (cache /* unstrict */) {
@@ -30,7 +30,7 @@ var build_component;
 		if (compo.nodes == null) {
 			compo.nodes = node.nodes;
 		}
-		
+
 		var attr = obj_extend(compo.attr, node.attr),
 			mode = compo_getMetaVal(ctr, 'mode');
 		if (mode_SERVER_ALL === mode || mode_SERVER_CHILDREN === mode) {
@@ -49,27 +49,27 @@ var build_component;
 		if (mode === mode_CLIENT) {
 			compo.render = fn_doNothing;
 		}
-		
+
 		compo.attr = attr;
 		compo.parent = ctr;
-		
+
 		for (var key in attr) {
 			if (is_Function(attr[key])) {
 				attr[key] = attr[key]('attr', model, ctx, container, ctr, key);
 			}
 		}
-	
+
 		if (is_Function(compo.renderStart)) {
 			compo.renderStart(model, ctx, container);
 		}
-		
+
 		builder_pushCompo(ctr, compo);
 		if (compo.async === true) {
 			var resume = builder_resumeDelegate(
 				compo
 				, model
 				, ctx
-				, container
+				, compoElement
 				, null
 				, compo.onRenderEndServer
 			);
@@ -80,11 +80,11 @@ var build_component;
 		compo_wrapOnTagName(compo, node);
 
 		if (is_Function(compo.render)) {
-			compo.render(model, ctx, container, compo);
+			compo.render(model, ctx, compoElement, compo);
 		}
 		return compo;
 	};
-	
+
 	function _initController(Mix, node, model, ctx, el, ctr) {
 		if (is_Function(Mix)) {
 			return new Mix(node, model, ctx, el, ctr);

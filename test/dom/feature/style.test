@@ -5,8 +5,10 @@ UTest({
 				background: cyan;
 			}
 		`;
-		return $render(template).done(el => {
-			has_(el.textContent, 'background: cyan');
+		return $render(template).done((el, doc) => {
+			var style = doc.body.querySelector('style');
+			notEq_(style, null);
+			has_(style.textContent, 'background: cyan');
 		});
 	},
 	'should render scoped style' () {
@@ -30,7 +32,7 @@ UTest({
 			return UTest.domtest(el, `
 				find ('.styled') {
 					css ('border-width', '2px');
-					
+
 					find('input') {
 						css ('border-width', '4px');
 					}

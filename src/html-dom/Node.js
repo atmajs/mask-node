@@ -1,11 +1,12 @@
 (function() {
-	
+
 	HtmlDom.Node = class_create({
 		parentNode: null,
 		firstChild: null,
 		lastChild: null,
-
 		nextSibling: null,
+
+		nodeType: null,
 
 		get length() {
 			var count = 0,
@@ -27,7 +28,11 @@
 			}
 			return array;
 		},
-	
+
+		get ownerDocument () {
+			return new OwnerDocument(this);
+		},
+
 		querySelector: function(selector) {
 			var matcher = typeof selector === 'string'
 				? selector_parse(selector)
@@ -35,7 +40,7 @@
 				;
 			var el = this.firstChild,
 				matched;
-				
+
 			for(; el != null; el = el.nextSibling) {
 				if (selector_match(el, matcher))
 					return el;
@@ -46,7 +51,7 @@
 
 			el = this.firstChild;
 			for (;el != null; el = el.nextSibling) {
-				
+
 				if (typeof el.querySelector === 'function') {
 					matched = el.querySelector(matcher);
 
@@ -117,7 +122,7 @@
 				if (el == null)
 					// empty
 					return fragment;
-				
+
 				while (el != null) {
 					el.parentNode = this;
 					el = el.nextSibling;
@@ -154,7 +159,7 @@
 
 			return child;
 		},
-		
+
 		removeChild: function (node) {
 			if (node == null) {
 				return;
@@ -168,7 +173,7 @@
 			if (child == null) {
 				return;
 			}
-			
+
 			if (prev == null) {
 				// is first child;
 				this.firstChild = child.nextSibling;
@@ -178,9 +183,36 @@
 			if (this.lastChild === child) {
 				this.lastChild = prev;
 			}
-			
+
 			node.nextSibling = null;
 			node.parentNode = null;
+		}
+	});
+
+
+	var OwnerDocument = class_create({
+		_el: null,
+		_document: null,
+		_body: null,
+		constructor: function (el) {
+			this._el = el;
+		},
+		get body () {
+			if (this._body != null) {
+				return this._body;
+			}
+			var cursor = this._el,
+				el;
+			while(cursor != null) {
+				if (cursor.nodeType === Dom.NODE) {
+					el = cursor;
+				}
+				if (cursor.tagName === 'BODY' || cursor.parentNode == null) {
+					return (this._body = el);
+				}
+				cursor = cursor.parentNode;
+			}
+			return null;
 		}
 	});
 
