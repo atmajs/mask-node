@@ -59,6 +59,8 @@ var build_component;
 			}
 		}
 
+		builder_setCompoAttributes(compo, node, model, ctx, container);
+
 		if (is_Function(compo.renderStart)) {
 			compo.renderStart(model, ctx, container);
 		}
