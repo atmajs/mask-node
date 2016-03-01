@@ -1,11 +1,11 @@
 (function(){
-	
+
 	document = {
 		createDocumentFragment: function(){
 			return new HtmlDom.DocumentFragment();
 		},
 		createElement: function(name){
-			var Ctor = _HtmlTags[name] || HtmlDom.Element;
+			var Ctor = _HtmlTags[name.toLowerCase()] || HtmlDom.Element;
 			return new Ctor(name);
 		},
 		createTextNode: function(text){
@@ -17,7 +17,7 @@
 		createComponent: function(compo, model, ctx, container, ctr){
 			return new HtmlDom.Component(compo, model, ctx, container, ctr);
 		}
-	};	
+	};
 
 	var _HtmlTags = {
 		/*
@@ -79,6 +79,7 @@
 		tt: null,
 		ul: null,
 		video: null,
+		'!doctype': HtmlDom.DOCTYPE
 	};
-		
+
 }());

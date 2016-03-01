@@ -1,12 +1,12 @@
 var HtmlDom;
 (function(){
-	HtmlDom = {};	
+	HtmlDom = {};
 
 	obj_extend(Dom, {
 		DOCTYPE: 11,
 		UTILNODE: 12
 	});
-	
+
 	var SingleTags = {
 		'area': 1,
 		'base': 1,
@@ -25,23 +25,23 @@ var HtmlDom;
 		'track': 1,
 		'wbr': 1
 	};
-	
+
 	// import ./util/html.es6
 	// import ./util/node.js
 	// import ./util/traverse.js
 	// import ./util/stringify.js
 	// import ./jq/util/selector.js
-	
+
 	// import ./Node.js
-	// import ./Doctype.js
 	// import ./DocumentFragment.js
 	// import ./Element.js
 	// import ./TextNode.js
 	// import ./Component.js
+	// import ./Doctype.js
 	// import ./Util.js
 	// import ./Comment.js
 	// import ./ScriptElement.es6
-	
+
 	// import ./document.js
 
 }());
