@@ -90,6 +90,7 @@
 	}
 
 	function stringifyDocument(document, modules, meta) {
+		var html = trav_getChild(document, 'HTML');
 		var body = trav_getChild(html, 'BODY');
 		el_prepend(body, modules);
 		el_prepend(body, meta.header);
