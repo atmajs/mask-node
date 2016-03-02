@@ -17,8 +17,8 @@
   ],
   "main": "./lib/mask.node.js",
   "devDependencies": {
-    "atma": "latest",
-    "atma-loader-traceur": ">=1.0.19",
+    "atma": ">0.9.26",
+    "atma-loader-babel": ">=1.0.19",
     "includejs": "latest"
   },
   "scripts": {
@@ -33,10 +33,10 @@
   },
   "atma": {
     "plugins": [
-      "atma-loader-traceur"
+      "atma-loader-babel"
     ],
     "settings": {
-      "atma-loader-traceur": {
+      "atma-loader-babel": {
         "extensions": [
           "test",
           "es6"
