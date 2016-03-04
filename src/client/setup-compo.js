@@ -1,7 +1,7 @@
 var setup_compo,
 	setup_renderClient;
 (function(){
-	
+
 	setup_compo = function(meta, node, model, ctx, container, ctr, children){
 		if (meta.mask != null) {
 			setupClientMask(meta, Handler, node, model, ctx, ctr);
@@ -11,22 +11,22 @@ var setup_compo,
 			setupClientTemplate(meta.template, node, model, ctx, ctr);
 			return node;
 		}
-		
+
 		var compoName = meta.compoName,
 			Handler   = getHandler_(compoName, ctr),
 			maskNode = getMaskNode_(meta),
 			isStatic  = is_Function(Handler) === false,
 			compo = getCompo_(Handler, maskNode, model, ctx, container, ctr);
-		
+
 		resolveScope_(meta, compo, model, ctr);
-		
+
 		compo.ID = meta.ID;
 		compo.attr = meta.attr;
 		compo.model = model;
 		compo.parent = ctr;
 		compo.compoName = compoName;
 		compo.expression = meta.expression;
-		
+
 		if (compo.nodes == null) {
 			compo.nodes = maskNode.nodes;
 		}
@@ -34,18 +34,18 @@ var setup_compo,
 			ctr.components = [];
 		}
 		ctr.components.push(compo);
-		
-		var handleAttr = compo.meta && compo.meta.handleAttributes;
-		if (handleAttr != null && handleAttr(compo, model) === false) {
-			return node;
+
+		var readAttributes = compo.meta && compo.meta.readAttributes;
+		if (readAttributes != null) {
+			readAttributes.call(compo, compo, compo.attr, model, container);
 		}
-		
+
 		var renderStart = compo.renderStartClient || compo.onRenderStartClient /* deprecated */;
 		if (is_Function(renderStart)) {
 			renderStart.call(compo, model, ctx, container, ctr);
 			model = compo.model || model;
 		}
-		
+
 		var elements;
 		if (meta.single !== false) {
 			elements = [];
@@ -59,11 +59,11 @@ var setup_compo,
 				, elements
 			);
 		}
-		
+
 		if (is_Function(compo.renderEnd)) {
 			// save reference to the last element in a container relative to the current component
 			compo.placeholder = node;
-			
+
 			var overridenCompo = compo.renderEnd(
 				elements,
 				model,
@@ -77,19 +77,19 @@ var setup_compo,
 				compos[i] = overridenCompo;
 			}
 		}
-		
+
 		arr_pushMany(children, elements);
 		return node;
 	};
-	
+
 	setup_renderClient = function (template, el, model, ctx, ctr, children) {
 		var fragment = document.createDocumentFragment(),
 			container = el.parentNode;
-		
+
 		container.appendChild = mock_appendChildDelegate(fragment);
-		
+
 		mask.render(template, model, ctx, container, ctr, children);
-		
+
 		container.insertBefore(fragment, el);
 		container.appendChild = Node.prototype.appendChild;
 	};
@@ -106,7 +106,7 @@ var setup_compo,
 			expression: meta.expression,
 			scope: meta.scope
 		};
-		
+
 		/* Dangerous:
 		 *
 		 * Hack with mocking `appendChild`
@@ -122,53 +122,53 @@ var setup_compo,
 		 * Info: Appending to detached fragment has also perf. boost,
 		 * so it is not so bad idea.
 		 */
-		
+
 		var fragment = document.createDocumentFragment(),
 			container = el.parentNode;
-		
+
 		container.appendChild = mock_appendChildDelegate(fragment);
-		
+
 		mask.render(node, model, ctx, container, ctr);
-		
+
 		container.insertBefore(fragment, el);
 		container.appendChild = Node.prototype.appendChild;
 	}
-	
+
 	function setupClientTemplate(template, el, model, ctx, ctr) {
 		var fragment = document.createDocumentFragment(),
 			container = el.parentNode;
-		
+
 		container.appendChild = mock_appendChildDelegate(fragment);
-		
+
 		mask.render(template, model, ctx, container, ctr);
-		
+
 		container.insertBefore(fragment, el);
 		container.appendChild = Node.prototype.appendChild;
 	}
-	
+
 	function setupChildNodes(meta, nextSibling, model, ctx, container, ctr, elements) {
 		var textContent;
 		while(nextSibling != null){
-			
+
 			if (nextSibling.nodeType === Node.COMMENT_NODE) {
 				textContent = nextSibling.textContent;
-				
-				if (textContent === '/t#' + meta.ID) 
+
+				if (textContent === '/t#' + meta.ID)
 					break;
-				
+
 				if (textContent === '~') {
 					container   = nextSibling.previousSibling;
 					nextSibling = nextSibling.nextSibling;
 					continue;
 				}
-				
+
 				if (textContent === '/~') {
 					container   = container.parentNode;
 					nextSibling = nextSibling.nextSibling;
 					continue;
 				}
 			}
-			
+
 			var endRef = setup(
 				nextSibling
 				, model
@@ -177,21 +177,21 @@ var setup_compo,
 				, ctr
 				, elements
 			);
-			
-			if (endRef == null) 
+
+			if (endRef == null)
 				throw new Error('Unexpected end of the reference');
-			
+
 			nextSibling = endRef.nextSibling;
 		}
-		
+
 		return nextSibling;
 	}
-	
+
 	function getHandler_(compoName, ctr) {
 		var Handler = custom_Tags[compoName];
-		if (Handler != null) 
+		if (Handler != null)
 			return Handler;
-		
+
 		while(ctr != null) {
 			if (ctr.getHandler) {
 				Handler = ctr.getHandler(compoName);
@@ -201,7 +201,7 @@ var setup_compo,
 			}
 			ctr = ctr.parent;
 		}
-		
+
 		console.error('Client bootstrap. Component is not loaded', compoName);
 		return function() {};
 	}
@@ -209,7 +209,7 @@ var setup_compo,
 		var node;
 		if (meta.nodes) {
 			node = mask.parse(meta.nodes);
-			
+
 			if (node.type === mask.Dom.FRAGMENT) {
 				node = node.nodes[0];
 			}
@@ -232,10 +232,10 @@ var setup_compo,
 		if (Ctor != null) {
 			return new Ctor(node, model, ctx, container, ctr)
 		}
-		
+
 		return obj_create(Handler);
 	}
-	
+
 	function resolveScope_(meta, compo, model, ctr) {
 		var scope = meta.scope;
 		if (scope == null) {
