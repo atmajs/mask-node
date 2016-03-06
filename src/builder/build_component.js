@@ -52,6 +52,7 @@ var build_component;
 
 		compo.attr = attr;
 		compo.parent = ctr;
+		compo.expression = node.expression;
 
 		for (var key in attr) {
 			if (is_Function(attr[key])) {
