@@ -1,11 +1,13 @@
 var pathClientCompo = '/test/tmpl/compos/clientCompo.es6';
+var pathAsyncClientCompo = '/test/tmpl/compos/clientAsyncCompo.es6';
 
 UTest({
 	$config: {
 		'http.include': [
-			pathClientCompo
+			pathClientCompo,
+			pathAsyncClientCompo
 		]
-	},	
+	},
 	'clientCompo' () {
 		return $render(':clientCompo;', {
 			scripts: [
@@ -15,6 +17,23 @@ UTest({
 			$(el)
 				.has_('#foo')
 				.eq_ ('text', 'FooTitle');
+		});
+	},
+	'should support async onRenderStartClient' (done) {
+		$render('ClientAsyncCompo;', {
+			scripts: [
+				pathAsyncClientCompo
+			]
+		}).pipe((el, doc, win) => {
+			$(el).hasNot_('#foo')
+
+			win.app.find('ClientAsyncCompo').await(function(){
+				$(el)
+					.has_('#foo')
+					.eq_ ('text', 'Name: Foo');
+
+				done();
+			}, true);
 		});
 	}
 })

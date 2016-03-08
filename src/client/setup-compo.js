@@ -42,7 +42,24 @@ var setup_compo,
 
 		var renderStart = compo.renderStartClient || compo.onRenderStartClient /* deprecated */;
 		if (is_Function(renderStart)) {
-			renderStart.call(compo, model, ctx, container, ctr);
+			var dfr = renderStart.call(compo, model, ctx, container, ctr);
+
+			if (dfr != null && dfr.done) {
+				var resume = Compo.pause(compo, ctx);
+				dfr.done(resumeDelegate(
+					resume
+					, node
+					, meta
+					, isStatic
+					, compo
+					, model
+					, ctx
+					, container
+					, ctr
+					, children));
+				return trav_CompoEnd(meta.ID, node);
+			}
+
 			model = compo.model || model;
 		}
 
@@ -187,6 +204,20 @@ var setup_compo,
 		return nextSibling;
 	}
 
+	function trav_CompoEnd(id, el_) {
+		var el = el_.nextSibling;
+		while(el != null){
+			if (el.nodeType === Node.COMMENT_NODE)
+			{
+				var str = el.textContent;
+				if (str === '/t#' + id)
+					break;
+			}
+			el = el.nextSibling;
+		}
+		return el.nextSibling;
+	}
+
 	function getHandler_(compoName, ctr) {
 		var Handler = custom_Tags[compoName];
 		if (Handler != null)
@@ -247,5 +278,47 @@ var setup_compo,
 			return;
 		}
 		compo.scope = scope;
+	}
+
+	function resumeDelegate(resume, node, meta, isStatic, compo, model, ctx, container, ctr, children) {
+		return function () {
+			model = compo.model || model;
+
+			var elements;
+			if (meta.single !== false) {
+				elements = [];
+				node = setupChildNodes(
+					meta
+					, node.nextSibling
+					, model
+					, ctx
+					, container
+					, compo
+					, elements
+				);
+			}
+
+			if (is_Function(compo.renderEnd)) {
+				// save reference to the last element in a container relative to the current component
+				compo.placeholder = node;
+
+				var overridenCompo = compo.renderEnd(
+					elements,
+					model,
+					ctx,
+					container,
+					ctr
+				);
+				if (isStatic === true && overridenCompo != null) {
+					var compos = ctr.components,
+						i = compos.indexOf(compo);
+					compos[i] = overridenCompo;
+				}
+			}
+
+			arr_pushMany(children, elements);
+			resume();
+			return node;
+		}
 	}
 }());
