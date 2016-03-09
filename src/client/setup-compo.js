@@ -40,13 +40,12 @@ var setup_compo,
 			readAttributes.call(compo, compo, compo.attr, model, container);
 		}
 
-		var renderStart = compo.renderStartClient || compo.onRenderStartClient /* deprecated */;
+		var renderStart = compo.renderStartClient;
 		if (is_Function(renderStart)) {
-			var dfr = renderStart.call(compo, model, ctx, container, ctr);
+			renderStart.call(compo, model, ctx, container, ctr);
 
-			if (dfr != null && typeof dfr.done === 'function') {
-				var resume = dfr.done.bind(dfr);
-				dfr.done(resumeDelegate(
+			if (compo.async === true) {
+				compo.await(resumeDelegate(
 					resume
 					, node
 					, meta
@@ -59,7 +58,6 @@ var setup_compo,
 					, children));
 				return trav_CompoEnd(meta.ID, node);
 			}
-
 			model = compo.model || model;
 		}
 
