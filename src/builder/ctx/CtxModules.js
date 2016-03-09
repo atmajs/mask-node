@@ -1,4 +1,4 @@
-(function(){	
+(function(){
 	builder_CtxModules = class_create({
 		constructor: function () {
 			this._modules = [];
@@ -8,20 +8,22 @@
 				return;
 			}
 			this.push(module, owner);
-			
-			var imports = module.imports,
-				imax = imports.length,
+			var imports = module.imports;
+			if (imports == null) {
+				return;
+			}
+			var imax = imports.length,
 				i = -1;
 			while ( ++i < imax ) {
 				this.add(imports[i].module, module);
 			}
 		},
-		
+
 		push: function(module, owner) {
 			var arr = this._modules;
 			var i = arr.indexOf(module);
 			if (i !== -1) {
-				
+
 				if (owner != null) {
 					var i_owner = arr.indexOf(owner);
 					if (i > i_owner) {
@@ -34,7 +36,7 @@
 			}
 			arr.unshift(module);
 		},
-		
+
 		stringify: function(opts){
 			var modules = this._modules,
 				arr = [],
@@ -50,7 +52,7 @@
 			return mask_stringify(arr, opts);
 		}
 	});
-	
+
 	function createModuleNode(module) {
 		var node = new mask.Dom.Node('module');
 		var path = path_toRelative(module.path, path_resolveCurrent());
