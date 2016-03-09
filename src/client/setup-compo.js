@@ -44,8 +44,8 @@ var setup_compo,
 		if (is_Function(renderStart)) {
 			var dfr = renderStart.call(compo, model, ctx, container, ctr);
 
-			if (dfr != null && dfr.done) {
-				var resume = Compo.pause(compo, ctx);
+			if (dfr != null && typeof dfr.done === 'function') {
+				var resume = dfr.done.bind(dfr);
 				dfr.done(resumeDelegate(
 					resume
 					, node
