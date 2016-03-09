@@ -19,7 +19,7 @@ UTest({
 				.eq_ ('text', 'FooTitle');
 		});
 	},
-	'should support async onRenderStartClient' (done) {
+	'!should support async onRenderStartClient' (done) {
 		$render('ClientAsyncCompo;', {
 			scripts: [
 				pathAsyncClientCompo

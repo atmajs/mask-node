@@ -46,8 +46,7 @@ var setup_compo,
 
 			if (compo.async === true) {
 				compo.await(resumeDelegate(
-					resume
-					, node
+					node
 					, meta
 					, isStatic
 					, compo
@@ -278,7 +277,7 @@ var setup_compo,
 		compo.scope = scope;
 	}
 
-	function resumeDelegate(resume, node, meta, isStatic, compo, model, ctx, container, ctr, children) {
+	function resumeDelegate(node, meta, isStatic, compo, model, ctx, container, ctr, children) {
 		return function () {
 			model = compo.model || model;
 
@@ -315,7 +314,6 @@ var setup_compo,
 			}
 
 			arr_pushMany(children, elements);
-			resume();
 			return node;
 		}
 	}
