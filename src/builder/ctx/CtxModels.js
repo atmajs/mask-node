@@ -9,18 +9,21 @@
 			return add(this, model);
 		},
 		tryAppend: function(ctr){
-
-			if (mode_SERVER_ALL === ctr.mode)
+			if (meta_getModelMode(ctr).isServer()) {
 				return -1;
-
-			if (mode_model_NONE === ctr.modeModel)
-				return -1;
-
-			var model = ctr.modelRef != null
-				? '$ref:' + ctr.modelRef
-				: ctr.model
-				;
-			return add(this, model);
+			}
+			if (ctr.modelRef == null) {
+				return add(this, ctr.model);
+			}
+			var parent = ctr.parent;
+			while (parent != null) {
+				if (meta_getModelMode(parent).isServer()) {
+					return -1;
+				}
+				parent = parent.parent;
+			}
+			var ref = '$ref:' + ctr.modelRef;
+			return add(this, ref);
 		},
 
 		stringify: function(){

@@ -3,7 +3,7 @@ var build_component;
 	build_component = function(node, model, ctx, container, ctr, compoElement){
 		var compoName = node.compoName || node.tagName,
 			Handler   = node.controller || custom_Tags[compoName] || obj_create(node),
-			cache     = compo_getMetaInfo(Handler).cache || false;
+			cache     = meta_get(Handler).cache || false;
 
 		if (cache /* unstrict */) {
 			var compo = Cache.getCompo(model, ctx, compoName, Handler);
@@ -17,7 +17,7 @@ var build_component;
 		}
 
 		var compo = _initController(Handler, node, model, ctx, container, ctr),
-			cache = compo_getMetaInfo(compo).cache;
+			cache = meta_get(compo).cache;
 		if (cache /* unstrict */) {
 			Cache.cacheCompo(model, ctx, compoName, compo, cache);
 		}
@@ -30,35 +30,29 @@ var build_component;
 		if (compo.nodes == null) {
 			compo.nodes = node.nodes;
 		}
-
-		var attr = obj_extend(compo.attr, node.attr),
-			mode = compo_getMetaVal(ctr, 'mode');
-		if (mode_SERVER_ALL === mode || mode_SERVER_CHILDREN === mode) {
-			compo_setMetaVal(compo, 'mode', mode_SERVER_ALL);
-		}
-		if (attr['x-mode'] !== void 0) {
-			mode = attr['x-mode'];
-			compo_setMetaVal(compo, 'mode', mode);
-		}
-		if (attr['x-mode-model']  !== void 0) {
-			compo_setMetaVal(compo, 'modeModel', attr['x-mode-model']);
-		}
-		if (compo_isServerMode(compo) === false) {
-			compo.ID = ++ ctx._id;
-		}
-		if (mode === mode_CLIENT) {
-			compo.render = fn_doNothing;
-		}
-
-		compo.attr = attr;
-		compo.parent = ctr;
 		if (compo.expression == null) {
 			compo.expression = node.expression;
 		}
-		for (var key in attr) {
-			if (is_Function(attr[key])) {
-				attr[key] = attr[key]('attr', model, ctx, container, ctr, key);
+		compo.attr = obj_extend(compo.attr, node.attr);
+		compo.parent = ctr;
+
+		var key, fn, attr = compo.attr;
+		for(key in attr) {
+			fn = attr[key];
+			if (is_Function(fn)) {
+				attr[key] = fn('attr', model, ctx, container, ctr, key);
 			}
+		}
+
+		var renderMode = meta_getRenderMode(compo),
+			modelMode = meta_getModelMode(compo);
+
+		if (renderMode.isServer() === false) {
+			compo.ID = ++ ctx._id;
+		}
+		if (renderMode.isClient() === true) {
+			compo.render = fn_doNothing;
+			return;
 		}
 
 		builder_setCompoAttributes(compo, node, model, ctx, container);
