@@ -25,7 +25,7 @@ var build_component;
 			compo.compoName = compoName;
 		}
 		if (compo.model == null) {
-			compo.model = model;
+				compo.model = model;
 		}
 		if (compo.nodes == null) {
 			compo.nodes = node.nodes;
@@ -52,7 +52,7 @@ var build_component;
 		}
 		if (renderMode.isClient() === true) {
 			compo.render = fn_doNothing;
-			return;
+			return compo;
 		}
 
 		builder_setCompoAttributes(compo, node, model, ctx, container);
