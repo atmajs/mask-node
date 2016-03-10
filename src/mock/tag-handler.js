@@ -4,19 +4,32 @@ mock_TagHandler = (function() {
 	
 	EmptyHandler.prototype = {
 		render: function(){},
-		mode: 'client'
+		meta: {
+			mode: mode_CLIENT
+		}
 	};
 	
 	return {
 		create: function(tagName, Compo, mode){
-			
-			if (mode === 'client' || Compo.prototype.mode === 'client') {
+			if (mode === mode_CLIENT) {
+				return EmptyHandler;
+			}
+			var Proto = Compo.prototype;
+			if (Proto.mode === mode_CLIENT) {
+				/* obsolete, use meta object*/
+				return EmptyHandler;
+			}
+
+			var meta = Compo.prototype.meta;
+			if (meta == null) {
+				meta = Compo.prototype.meta = {};
+			}
+			if (meta.mode === mode_CLIENT) {
 				return EmptyHandler;
 			}
 			
-			Compo.prototype.mode = mode;
+			meta.mode = mode;
 			return Compo;
-			
 		},
 		
 		
