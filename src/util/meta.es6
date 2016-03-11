@@ -47,7 +47,7 @@ var mode_SERVER = 'server',
 				mode = mode_BOTH;
 				meta_setVal(mode, 'mode', mode);
 			}
-			if (mode == mode_SERVER_ALL || mode === mode_SERVER_CHILDREN) {
+			if (mode === mode_SERVER_ALL || mode === mode_SERVER_CHILDREN) {
 				meta_setVal(compo, 'mode', mode_SERVER_ALL);
 			}
 		}
@@ -65,7 +65,7 @@ var mode_SERVER = 'server',
 				mode = mode_BOTH;
 				meta_setVal(mode, 'modelMode', mode);
 			}
-			if (mode == mode_SERVER_ALL || mode === mode_SERVER_CHILDREN) {
+			if (mode === mode_SERVER_ALL || mode === mode_SERVER_CHILDREN) {
 				meta_setVal(compo, 'modelMode', mode_SERVER_ALL);
 			}
 		}
