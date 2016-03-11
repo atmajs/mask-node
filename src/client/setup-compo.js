@@ -212,7 +212,7 @@ var setup_compo,
 			}
 			el = el.nextSibling;
 		}
-		return el.nextSibling;
+		return el;
 	}
 
 	function getHandler_(compoName, ctr) {
