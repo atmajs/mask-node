@@ -51,7 +51,7 @@
 			: JSON.stringify
 			;
 		stringify = function (models) {
-			return models == null ? '{}' : fn(models);
+			return models == null ? null : fn(models);
 		};
 	}())
 }());

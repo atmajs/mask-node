@@ -23,23 +23,27 @@
 				return string;
 			},
 			write (stream) {
-				stream.write('<script');
+				var open = '<script',
+					close = '</script>'
 				var attrStr = html_serializeAttributes(this);
 				if (attrStr !== '') {
-					stream.print(' ' + attrStr);
+					open += ' ' + attrStr;
 				}
-				stream.print('>');
+				open += '>';
 
 				var content = is_Function(this.textContent)
 					? this.textContent()
 					: this.textContent;
-				if (content) {
-					stream.openBlock();
-					stream.write(content);
-					stream.closeBlock();
-				}
 
-				stream.write('</script>');
+				if (!content /*unstrict*/) {
+					stream.write(open + close);
+					return;
+				}
+				stream
+					.openBlock(open)
+					.write(content)
+					.closeBlock(close)
+					;
 			}
 		}
 	);

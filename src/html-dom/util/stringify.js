@@ -1,19 +1,25 @@
 (function(){
 
 	HtmlDom.stringify = function(document_, model, ctx, compo) {
-		var document = prepairDocument(document_);
-		var stream = new HtmlStream(ctx.config || {});
+		var document = prepairDocument(document_),
+			hasDoctype = _hasDoctype(document),
+			stream = new HtmlStream(ctx.config || {}),
+			hasComponents = compo != null
+				&& compo.components != null
+				&& compo.components.length !== 0;
 
-		if (compo == null || compo.components == null || compo.components.length === 0) {
-			stream.process(document_);
-			return stream.toString();
+		var meta, modules;
+
+		if (hasComponents) {
+			meta = comment_meta(ctx),
+			modules = comment_modules(ctx, stream.minify);
 		}
 
-		var meta    = comment_meta(ctx),
-			modules = comment_modules(ctx, stream.minify);
-
-		if (_hasDoctype(document)) {
+		if (hasDoctype) {
 			document = prepairDocument_withDoctype(document, modules, meta);
+		}
+
+		if (hasDoctype || hasComponents === false) {
 			stream.process(document);
 			return stream.toString();
 		}
@@ -25,14 +31,19 @@
 			return stream.toString();
 		}
 
+		if (meta == null && modules == null) {
+			stream.process(document);
+			return stream.toString();
+		}
+		
 		stream
-			.process(meta.header)
+			.process(meta && meta.header)
 			.newline()
 			.process(modules)
 			.newline()
 			.process(document)
 			.newline()
-			.process(meta.footer)
+			.process(meta && meta.footer)
 			;
 		return stream.toString();
 	};
@@ -85,11 +96,18 @@
 	}
 
 	function prepairDocument_withDoctype(document, modules, meta) {
+		if (modules == null && meta == null) {
+			return document;
+		}
 		var html = trav_getChild(document, 'HTML');
 		var body = trav_getChild(html, 'BODY');
-		el_prepend(body, modules);
-		el_prepend(body, meta.header);
-		el_append(body, meta.footer);
+		if (modules != null) {
+			el_prepend(body, modules);
+		}
+		if (meta != null) {
+			el_prepend(body, meta.header);
+			el_append(body, meta.footer);
+		}
 		return document;
 	}
 
@@ -101,8 +119,10 @@
 			var body = trav_getChild(html, 'BODY');
 			if (body != null){
 				el_prepend(body, modules);
-				el_prepend(body, meta.header);
-				el_append(body, meta.footer);
+				if (meta != null) {
+					el_prepend(body, meta.header);
+					el_append(body, meta.footer);
+				}
 			}else{
 				log_error('Body not found');
 			}
@@ -117,14 +137,11 @@
 			id_ = ctx._id;
 
 		if (model_ == null && ctx_ == null) {
-			return {
-				header: null,
-				footer: null
-			};
+			return null;
 		}
 
 		var headerJson = {
-				model: model_,
+				model: model_ || "{}",
 				ctx: ctx_,
 				ID: id_
 			},

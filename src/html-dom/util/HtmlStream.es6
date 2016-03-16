@@ -35,19 +35,19 @@ var HtmlStream,
 			return this;
 		},
 		openBlock: function(c){
-			this.indent++;
 			if (c != null) {
 				this.write(c);
 				this.newline();
 			}
+			this.indent++;
 			return this;
 		},
 		closeBlock: function(c){
+			this.indent--;
 			if (c != null) {
 				this.newline();
 				this.write(c);
 			}
-			this.indent--;
 			return this;
 		},
 		write: function(str){

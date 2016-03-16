@@ -17,7 +17,6 @@ UTest({
 	},
 	'should stringify script' () {
 		var html = render('script > "Foo"');
-		logger.log(html);
 		eq_(html, norm(`
 			<script>
 				Foo
@@ -27,7 +26,7 @@ UTest({
 });
 
 function render(tmpl) {
-	return mask.render(tmpl, null, { config: { debug: true }});
+	return mask.render(tmpl, null, { config: { prettyHtml: true }});
 }
 
 function norm(str) {

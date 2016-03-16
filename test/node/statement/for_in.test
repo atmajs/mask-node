@@ -14,9 +14,9 @@ UTest({
 			},
 			has: [
 				JSON.stringify(model),
-				'scope:{"key":"a","val":"A"}',
-				'scope:{"key":"b","val":"B"}',
-				'scope:{"key":"c","val":"C"}',
+				'{"key":"a","val":"A"}',
+				'{"key":"b","val":"B"}',
+				'{"key":"c","val":"C"}',
 				'>a:A</li>',
 				'>b:B</li>',
 				'>c:C</li>',
@@ -30,7 +30,7 @@ UTest({
 				p > for ((key, val) in letters) {
 					div {
 						'~[: key + val ]'
-						
+
 						for ((key, value) in numbers) {
 							span > '~[: key + val + value ]'
 						}
@@ -49,11 +49,10 @@ UTest({
 			},
 			has: [
 				JSON.stringify(model),
-				'scope:{"key":"a","val":"A"}',
-				'scope:{"key":"_1","value":1}',
-				'scope:{"key":"_2","value":2}',
-				'scope:{"key":"b","val":"B"}',
-				
+				'{"key":"a","val":"A"}',
+				'{"key":"_1","value":1}',
+				'{"key":"_2","value":2}',
+				'{"key":"b","val":"B"}',
 				'>aA<',
 				'>_1A1<',
 				'>_2A2<',
