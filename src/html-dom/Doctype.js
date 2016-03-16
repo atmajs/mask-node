@@ -4,6 +4,9 @@
 		nodeType: Dom.DOCTYPE,
 		toString: function(buffer){
 			return DEFAULT;
+		},
+		write: function (stream) {
+			stream.write(DEFAULT);
 		}
 	});
 

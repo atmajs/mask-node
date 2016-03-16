@@ -52,6 +52,56 @@
 				return string + '</' + tagName + '>';
 			},
 
+			write: function(stream) {
+				var tagName = this.tagName.toLowerCase(),
+					value, element, minify = stream.minify;
+
+				if (minify === false && tagName === 'pre') {
+					stream.minify = true;
+				}
+
+				var string = '<' + tagName,
+					attrStr = html_serializeAttributes(this);
+				if (attrStr !== '') {
+					string += attrStr;
+				}
+
+				stream.write(string);
+				var isSingleTag = SingleTags[tagName] === 1,
+					element = this.firstChild;
+
+				if (element == null) {
+					stream.print(isSingleTag ? '/>' : '></' + tagName + '>');
+					stream.minify = minify;
+					return stream;
+				}
+
+				stream.print(isSingleTag ? '/>' : '>');
+
+				if (isSingleTag) {
+					stream.newline();
+					stream.write('<!--~-->');
+				}
+
+				while (element != null) {
+					stream.openBlock(null);
+					stream.newline();
+					stream.process(element);
+					stream.closeBlock(null);
+					element = element.nextSibling;
+				}
+
+				if (isSingleTag) {
+					stream.newline();
+					stream.write('<!--/~-->');
+				}
+
+				stream.newline();
+				stream.write('</' + tagName + '>');
+				stream.minify = minify;
+				return stream;
+			},
+
 			// generic properties
 			get value () {
 				return this.attributes.value;

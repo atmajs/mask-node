@@ -120,6 +120,72 @@
 					compo.__cached = string;
 				}
 				return string;
+			},
+			write: function(stream) {
+				var compo = this.compo;
+				var cache = compo.__cached;
+				if (typeof cache === 'string') {
+					stream.write(cache);
+					return;
+				}
+				var streamCached = null;
+				var meta = meta_get(compo);
+				if (meta.cache /* unstrict */) {
+					streamCached = new HtmlStreamPipe(stream);
+					stream = streamCached;
+				}
+
+				if (meta.mode === mode_CLIENT) {
+					var json = {
+							mask: mask_stringify(this.node, stream.minify ? 0 : 4)
+						},
+						info = {
+							type: 'r',
+							single: true,
+						};
+
+					stream.write(Meta.stringify(json, info));
+					if (streamCached != null) {
+						compo.__cached = streamCached.toString();
+					}
+					return;
+				}
+
+				var	json = {
+						ID: this.ID,
+						modelID: this.modelID,
+						compoName: compo.compoName,
+						attr: compo.attr,
+						expression: compo.expression,
+						nodes: _serializeNodes(meta, this),
+						scope: _serializeScope(meta, compo)
+					},
+					info = {
+						single: this.firstChild == null && compo.toHtml == null,
+						type: 't',
+						mode: meta.mode
+					};
+
+				var compoOpen = Meta.stringify(json, info);
+				if (compoOpen) {
+					stream.openBlock(compoOpen);
+				}
+
+				if (compo.toHtml != null) {
+					stream.write(compo.toHtml());
+				} else {
+					_stringifyChildrenStream(this, stream);
+				}
+
+
+				var compoClose = Meta.close(json, info);
+				if (compoClose) {
+					stream.closeBlock(compoClose);
+				}
+				
+				if (streamCached != null) {
+					compo.__cached = streamCached.toString();
+				}
 			}
 		});
 
@@ -131,6 +197,16 @@
 			el = el.nextSibling;
 		}
 		return str;
+	}
+	function _stringifyChildrenStream(compoEl, stream) {
+		var el  = compoEl.firstChild;
+		while (el != null) {
+			stream.process(el);
+			el = el.nextSibling;
+			if (el != null) {
+				stream.newline();
+			}
+		}
 	}
 
 	function _initController(Mix, node, model, ctx, el, ctr) {

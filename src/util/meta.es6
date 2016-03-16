@@ -1,10 +1,4 @@
-var mode_SERVER = 'server',
-	mode_SERVER_ALL = 'server:all',
-	mode_SERVER_CHILDREN = 'server:children',
-	mode_CLIENT = 'client',
-	mode_BOTH = 'both',
-
-	meta_get,
+var meta_get,
 	meta_getVal,
 	meta_getRenderMode,
 	meta_getModelMode,

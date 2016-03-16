@@ -1,0 +1,67 @@
+global.HtmlDom = {
+	Comment: function(str){
+		return new String(str);
+	}
+};
+
+include
+	.inject('/src/const.js', '/src/helper/Meta.js', '/ref-utils/lib/utils.embed.js')
+	.done(() => {
+
+		UTest({
+			'handle components meta': {
+				'should serialize meta' (done) {
+					var	json = {
+							ID: 4,
+							compoName: 'Foo',
+							attr: {},
+							expression: 'a * b > 4',
+							scope: { bar: 'qux' }
+						},
+						info = {
+							single: false,
+							type: 't',
+						};
+
+					var comment = Meta.stringify(json, info);
+					has_(comment, '#' + json.ID);
+					hasNot_(comment, 'compoName');
+					has_(comment, json.compoName);
+					has_(comment, json.expression);
+					done(json, comment);
+				},
+				'should deserialize meta' (done, json, comment) {
+					var obj = Meta.parse(comment);
+					has_(obj, json);
+					eq_(obj.single, false);
+					done();
+				}
+			},
+			'handle attributes meta': {
+				'should serialize meta' (done) {
+					var	json = {
+							ID: 4,
+							name: 'class',
+							value: 'foo'
+						},
+						info = {
+							single: true,
+							type: 'a',
+						};
+
+					var comment = Meta.stringify(json, info);
+					has_(comment, '#' + json.ID);
+					hasNot_(comment, 'key');
+					has_(comment, json.name);
+					has_(comment, json.value);
+					done(json, comment);
+				},
+				'should deserialize meta' (done, json, comment) {
+					var obj = Meta.parse(comment);
+					has_(obj, json);
+					done();
+				}
+			}
+		})
+
+	})

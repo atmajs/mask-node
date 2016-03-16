@@ -1,6 +1,6 @@
 var html_serializeAttributes;
 (function(){
-	
+
 	html_serializeAttributes = function (node) {
 		var attr = node.attributes,
 			str  = '',
@@ -14,5 +14,5 @@ var html_serializeAttributes;
 		}
 		return str;
 	};
-	
+
 }());

@@ -61,7 +61,7 @@ var setup_compo,
 		}
 
 		var elements;
-		if (meta.single !== false) {
+		if (meta.single !== true) {
 			elements = [];
 			node = setupChildNodes(
 				meta
@@ -282,7 +282,7 @@ var setup_compo,
 			model = compo.model || model;
 
 			var elements;
-			if (meta.single !== false) {
+			if (meta.single !== true) {
 				elements = [];
 				node = setupChildNodes(
 					meta

@@ -1,9 +1,7 @@
-var Meta,
-	mock_TagHandler;
+var mock_TagHandler;
 
 (function(){
 
-	// import Meta.js
 	// import attr-handler.js
 	// import tag-handler.js
 	// import util-handler.js

@@ -1,6 +1,6 @@
 (function(){
 	var mask_render = Mask.render;
-		
+
 	obj_extend(Mask, {
 		toHtml: function(dom, model, ctx, ctr){
 			return HtmlDom.stringify(dom, model, ctx, ctr);
@@ -17,13 +17,13 @@
 				_ctx = ensureCtx(ctx),
 				dfr = new class_Dfr,
 				dom = mask_render(tmpl, model, _ctx, el, _ctr);
-			
+
 			if (_ctx.async === true) {
 				_ctx.done(resolve);
 			} else {
 				resolve();
 			}
-			
+
 			function resolve() {
 				var html = _ctx._rewrite == null && _ctx._redirect == null
 					? HtmlDom.stringify(dom, model, _ctx, _ctr)
@@ -33,7 +33,7 @@
 			return dfr;
 		}
 	});
-	
+
 	function ensureCtr(ctr) {
 		return ctr == null
 			? new Dom.Component

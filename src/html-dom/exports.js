@@ -29,6 +29,7 @@ var HtmlDom;
 	// import ./util/html.es6
 	// import ./util/node.js
 	// import ./util/traverse.js
+	// import ./util/HtmlStream.es6
 	// import ./util/stringify.js
 	// import ./jq/util/selector.js
 

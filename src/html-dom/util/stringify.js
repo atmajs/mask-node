@@ -2,49 +2,44 @@
 
 	HtmlDom.stringify = function(document_, model, ctx, compo) {
 		var document = prepairDocument(document_);
+		var stream = new HtmlStream(ctx.config || {});
 
 		if (compo == null || compo.components == null || compo.components.length === 0) {
-			return document.toString();
+			stream.process(document_);
+			return stream.toString();
 		}
 
 		var meta    = comment_meta(ctx),
-			modules = comment_modules(ctx);
+			modules = comment_modules(ctx, stream.minify);
 
-
-		if (_is_Document(document)) {
-			return stringifyDocument(document, modules, meta);
+		if (_hasDoctype(document)) {
+			document = prepairDocument_withDoctype(document, modules, meta);
+			stream.process(document);
+			return stream.toString();
 		}
 
 		var documentElement = trav_getDoc(document)
 		if (documentElement != null) {
-			return stringifyDocumentCompo(document, documentElement, modules, meta);
+			document = prepairDocument_withDocumentComponent(document, documentElement, modules, meta);
+			stream.process(document);
+			return stream.toString();
 		}
-		return (meta.header || '')
-				+ (modules  || '')
-				+ (document || '')
-				+ (meta.footer || '')
-				;
-	};
 
-	// @Obsolete (use doctype instead)
-	function stringifyDocumentCompo (document, documentElement, modules, meta) {
-		var html = trav_getChild(documentElement, 'HTML');
-		if (html != null) {
-			var body = trav_getChild(html, 'BODY');
-			if (body != null){
-				el_prepend(body, modules);
-				el_prepend(body, meta.header);
-				el_append(body, meta.footer);
-			}else{
-				log_error('Body not found');
-			}
-		}
-		return document.toString();
-	}
+		stream
+			.process(meta.header)
+			.newline()
+			.process(modules)
+			.newline()
+			.process(document)
+			.newline()
+			.process(meta.footer)
+			;
+		return stream.toString();
+	};
 
 	function prepairDocument(document_) {
 		var docEl = document_;
-		if (_is_Document(docEl) === false) {
+		if (_hasDoctype(docEl) === false) {
 			return docEl;
 		}
 		var html = trav_getChild(docEl, 'HTML');
@@ -89,14 +84,32 @@
 		return docEl;
 	}
 
-	function stringifyDocument(document, modules, meta) {
+	function prepairDocument_withDoctype(document, modules, meta) {
 		var html = trav_getChild(document, 'HTML');
 		var body = trav_getChild(html, 'BODY');
 		el_prepend(body, modules);
 		el_prepend(body, meta.header);
 		el_append(body, meta.footer);
-		return document.toString();
+		return document;
 	}
+
+
+	// @Obsolete (use doctype instead)
+	function prepairDocument_withDocumentComponent (document, documentElement, modules, meta) {
+		var html = trav_getChild(documentElement, 'HTML');
+		if (html != null) {
+			var body = trav_getChild(html, 'BODY');
+			if (body != null){
+				el_prepend(body, modules);
+				el_prepend(body, meta.header);
+				el_append(body, meta.footer);
+			}else{
+				log_error('Body not found');
+			}
+		}
+		return document;
+	}
+
 
 	function comment_meta(ctx) {
 		var model_ = ctx._models.stringify(),
@@ -124,11 +137,11 @@
 			footer: new HtmlDom.Comment(Meta.close(headerJson, headerInfo))
 		};
 	}
-	function comment_modules(ctx) {
+	function comment_modules(ctx, minify) {
 		if (ctx._modules == null) {
 			return null;
 		}
-		var str = ctx._modules.stringify();
+		var str = ctx._modules.stringify({ indent: minify ? 0 : 4 });
 		if (str == null || str === '') {
 			return null;
 		}
@@ -150,7 +163,7 @@
 		if (x == null) return;
 		el.insertBefore(x, el.firstChild)
 	}
-	function _is_Document(fragmentEl) {
+	function _hasDoctype(fragmentEl) {
 		if (fragmentEl.nodeType !== Dom.FRAGMENT) {
 			return false;
 		}
