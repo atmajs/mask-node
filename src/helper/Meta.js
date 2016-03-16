@@ -113,36 +113,6 @@ var Meta;
 			return _str.substring(start, end);
 		}
 
-		function parse_property(json) {
-			if (parser_Index > parser_Length - 5)
-				return false;
-
-
-			if (parser_String[parser_Index++] !== seperator_CHAR || parser_String[parser_Index++] !== ' '){
-				parser_Index = -1;
-				return false;
-			}
-
-			var index = parser_Index,
-				str = parser_String;
-
-			var colon = str.indexOf(':', index),
-				key = str.substring(index, colon);
-
-			var end = str.indexOf(seperator_CHAR + ' ', colon),
-				value = str.substring(colon + 1, end);
-
-
-			if (key === 'attr' || key === 'scope') {
-				value = JSON.parse(value);
-			}
-
-			json[key] = value;
-
-			parser_Index = end;
-			return true;
-		}
-
 	}());
 
 	function _obj_flatten(obj) {
