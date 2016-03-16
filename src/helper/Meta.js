@@ -268,7 +268,7 @@ var Meta;
 			{name: 'expression', type: 'string' },
 			{name: 'nodes', type: 'mask' },
 			{name: 'scope', type: 'object' },
-			{name: 'modelID', type: 'number' }
+			{name: 'modelID', type: 'string' }
 		];
 		var props = Serializer.prepairProps_(keys);
 		ComponentSerializer = {
