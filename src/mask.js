@@ -9,7 +9,7 @@
 			var _ctr = ensureCtr(ctr),
 				_ctx = ensureCtx(ctx),
 				dom = mask_render(tmpl, model, _ctx, el, _ctr);
-				
+
 			return HtmlDom.stringify(dom, model, _ctx, _ctr);
 		},
 		renderAsync: function(tmpl, model, ctx, el, ctr){
@@ -31,7 +31,40 @@
 				dfr.resolve(html);
 			}
 			return dfr;
-		}
+		},
+		build: function (tmpl, model, ctx, el, ctr) {
+			var _ctr = ensureCtr(ctr),
+				_ctx = ensureCtx(ctx),
+				dom = mask_render(tmpl, model, _ctx, el, _ctr);
+
+			return {
+				ctx: _ctx,
+				model: model,
+				component: _ctx,
+				element: dom
+			};
+		},
+		buildAsync: function(tmpl, model, ctx, el, ctr){
+			var _ctr = ensureCtr(ctr),
+				_ctx = ensureCtx(ctx),
+				dfr = new class_Dfr,
+				dom = mask_render(tmpl, model, _ctx, el, _ctr);
+
+			if (_ctx.async === true) {
+				_ctx.done(resolve);
+			} else {
+				resolve();
+			}
+			function resolve() {
+				dfr.resolve({
+					ctx: _ctx,
+					model: model,
+					component: _ctx,
+					element: dom
+				});
+			}
+			return dfr;
+		},
 	});
 
 	function ensureCtr(ctr) {
