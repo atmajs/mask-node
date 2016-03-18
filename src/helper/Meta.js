@@ -91,11 +91,16 @@ var Meta;
 				++_i;
 				json.ID = parseInt(consumeNext(), 10);
 			}
-			var propertyParserFn = Serializer.resolve(json).deserializeSingleProp,
+			var serializer = Serializer.resolve(json),
+				propertyParserFn = serializer.deserializeSingleProp,
+				propertyDefaultsFn = serializer.defaultProperties,
 				index = 0;
 			while (_i < _imax) {
 				var part = consumeNext();
 				propertyParserFn(json, part, index++);
+			}
+			if (propertyDefaultsFn != null) {
+				propertyDefaultsFn(json, index);
 			}
 			return json;
 		};
@@ -280,6 +285,17 @@ var Meta;
 			},
 			deserializeSingleProp: function(json, str, i){
 				return Serializer.deserializeSingleProp_(json, props, str, i);
+			},
+			defaultProperties: function(json, index) {
+				var arr = props.keysArr,
+					imax = arr.length,
+					i = index - 1;
+				while (++i < imax) {
+					var keyInfo = arr[i];
+					if (keyInfo.default) {
+						json[keyInfo.name] = keyInfo.default();
+					}
+				}
 			}
 		}
 	}());
