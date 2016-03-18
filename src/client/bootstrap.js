@@ -67,6 +67,13 @@ function bootstrap(container, Mix) {
 		util_pushComponents_(compo, fragmentCompo);
 	}
 
-	Compo.signal.emitIn(fragmentCompo, 'domInsert');
+	if (ctx.async === true) {
+		ctx.done(emitDomInsert);
+	} else {
+		emitDomInsert();
+	}
+	function emitDomInsert(args) {
+		Compo.signal.emitIn(fragmentCompo, 'domInsert');
+	}
 	return fragmentCompo;
 }
