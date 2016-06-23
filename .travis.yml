@@ -1,5 +1,10 @@
 language: node_js
 sudo: false
+
+# prevent travis from recursive gitsubmodule checkout
+git:
+  submodules: false
+
 node_js:
   - "5.6.0"
 env:
@@ -12,6 +17,7 @@ addons:
       - g++-4.8
       
 before_script:
+  - git submodule init && git submodule update
   - npm install
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
