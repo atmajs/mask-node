@@ -1,4 +1,4 @@
-import :counter as :counterRenamed from 'counter';
+import :counter as :counterRenamed from './counter';
 
 define foo {
 	tt > i > ' subcounter '

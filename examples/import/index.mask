@@ -1,8 +1,8 @@
 import from './heading';
-import from 'counter';
-import :counter as :counterRenamed from 'counter';
-import foo from 'subcounter';
-import :doubleCounter from 'doubleCounter';
+import from './counter';
+import :counter as :counterRenamed from './counter';
+import foo from './subcounter';
+import :doubleCounter from './doubleCounter';
 
 div name='counter-server' {
 	p > i > 'Server render'
