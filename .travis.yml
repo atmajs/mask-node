@@ -1,21 +1,9 @@
-language: node_js
 sudo: false
 
 # prevent travis from recursive gitsubmodule checkout
 git:
   submodules: false
 
-node_js:
-  - "6.6.0"
-env:
-  - CXX=g++-4.8
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.8
-      
 before_script:
   - git submodule init && git submodule update
   - npm install
@@ -37,3 +25,10 @@ before_script:
  
 script:
   - "npm test"
+
+language: node_js
+node_js:
+  - "6.6.0"
+compiler: clang-3.4
+env:
+  - CXX=clang-3.4
