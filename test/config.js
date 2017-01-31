@@ -24,10 +24,20 @@ module.exports = {
 		},
 		node: {
 			env: [
-				'test/node/utils.es6::Utils'
+				'test/node/utils.js::Utils'
 			],
 			$config: {
 				$before: function(done){
+					process.on("unhandledRejection", function(reason, p){
+					    console.log("Unhandled", reason, p); // log all your errors, "unsuppressing" them.
+					    throw reason; // optional, in case you want to treat these as errors
+					}); 
+
+					process.on("unhandledException", function(reason, p){
+					    console.log("Unhandled", reason, p); // log all your errors, "unsuppressing" them.
+					    throw reason; // optional, in case you want to treat these as errors
+					}); 
+	
 					include
 						.js('/lib/mask.node.js::Mask')
 						.done(function(resp){

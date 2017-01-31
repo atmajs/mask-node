@@ -1,3 +1,5 @@
+console.log('Helper');
+
 /* { template, ?model, ?models, ?eq:String, ?has:Array, ?hasNot:Array } */
 function RunTest(test){
 	var tmpl = test.template;
