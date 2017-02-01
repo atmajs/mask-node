@@ -1,0 +1,51 @@
+UTest({
+	async 'render simple html' () {
+		var template = `
+			<div>
+				<i>I am HTML</i>
+			</div>
+			if (false) {
+				<span>NOOPE</span>
+			}
+		`;
+		
+		var html = await mask.renderAsync(template);
+		hasNot_(html, 'NOOPE');
+		await UTest
+			.domtest
+			.use('cheerio')
+			.process(html, `
+				find ('div > i') {
+					text ('I am HTML');
+				}
+			`);
+	},
+	async '!render doctype' () {
+		var template = `
+			<!doctype html>
+			<html>
+				<head>
+					<script isomorph src='/foo.js' ></script>
+					<script> console.log('FOO'); </script>
+				</head>
+				<body>
+					<script data-run='auto'>
+						h4 > 'Hello'
+					</script>
+				</body>
+			</html>
+		`;
+		
+		var html = await mask.renderAsync(template);
+		console.log(html);
+		return;
+		await UTest
+			.domtest
+			.use('cheerio')
+			.process(html, `
+				find ('div > i') {
+					text ('I am HTML');
+				}
+			`);
+	}
+})

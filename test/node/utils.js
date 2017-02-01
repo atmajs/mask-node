@@ -1,5 +1,3 @@
-console.log('Helper');
-
 /* { template, ?model, ?models, ?eq:String, ?has:Array, ?hasNot:Array } */
 function RunTest(test){
 	var tmpl = test.template;
@@ -24,5 +22,53 @@ function RunTest(test){
 			&& test.hasNot.forEach(avoid => hasNot_(html, avoid));
 	}	
 }
+
+var TestHelper = {
+	/*
+	 * { path: content }
+	 */
+	registerFiles (Files) {
+
+		Object.keys(Files).forEach(key => {
+			this.registerFile(key, Files[key]);
+		});
+	},
+
+	registerFile (path, content) {
+		this._register('getFile', path, content);
+	},
+
+	/*
+	 * { path: content }
+	 */
+	registerScripts (Files) {
+
+		Object.keys(Files).forEach(key => {
+			this.registerScript(key, Files[key]);
+		});
+	},
+
+	registerScript (path, content) {
+		this._register('getScript', path, content);
+	},
+
+	_register (name, path, content) {
+		var getter = mask.cfg(name);
+
+		var rgxStr = path.replace(/\//g, '[/\\\\]');
+		var rgx = new RegExp(rgxStr, 'i');
+
+		mask.cfg(name, function(path){
+			if (rgx.test(path)) {
+				return (new mask.class.Deferred).resolve(content)
+			};
+			if (getter == null) {
+				return (new mask.class.Deferred).reject({code: 404, path: path});
+			}
+			return getter(path);
+		})
+	}
+}
+
 
 include.exports = {};

@@ -1,42 +1,12 @@
-var TestHelper = {
-	/*
-	 * { path: content }
-	 */
-	registerFiles (Files) {
-
-		Object.keys(Files).forEach(key => {
-			this.register(key, Files[key]);
-		});
-	},
-
-	register (path, content) {
-		var getFile = mask.cfg('getFile');
-		var rgx = new RegExp(path, 'i');
-
-		mask.cfg('getFile', function(path){
-			if (rgx.test(path)) {
-				return (new mask.class.Deferred).resolve(content)
-			};
-			if (getFile == null) {
-				return (new mask.class.Deferred).reject({code: 404, path: path});
-			}
-			return getFile(path);
-		})
-	}
-}
-
-TestHelper.registerFiles({
-	'foo.css': ` h2 {}`,
-	'bar.js': `var bar`,
-	'Button.mask': `
-		define Button {
-			button .btn > '~this.attr.text'
-		}
-	`
-});
-
 UTest({
 	async 'import template' () {
+		TestHelper.registerFiles({
+			'Button.mask': `
+				define Button {
+					button .btn > '~this.attr.text'
+				}
+			`
+		});
 		var template = `
 			import Button from 'Button.mask';
 			Button text='Hello';
@@ -51,6 +21,33 @@ UTest({
 				find ('button') {
 					hasClass ('btn');
 					text ('Hello');
+				}
+			`);
+	},
+
+	async 'import service' () {
+		TestHelper.registerScripts({
+			'services/SettingsService.js': {
+				get () {
+					return 'Foo'
+				}
+			}
+		});
+		var template = `
+			import SettingsService from services is server;
+			h4 > '~[SettingsService.get()]'
+		`;
+
+		var html = await mask.renderAsync(template);
+
+		has_(html, 'is server');
+		console.log(html);
+		await UTest
+			.domtest
+			.use('cheerio')
+			.process(html, `
+				find ('h4') {
+					text ('Foo');
 				}
 			`);
 	}
