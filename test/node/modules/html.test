@@ -20,7 +20,7 @@ UTest({
 				}
 			`);
 	},
-	async '!render doctype' () {
+	async 'render doctype' () {
 		var template = `
 			<!doctype html>
 			<html>
