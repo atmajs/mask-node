@@ -20,7 +20,7 @@ UTest({
 				}
 			`);
 	},
-	async '!render doctype' () {
+	async 'render doctype' () {
 		var template = `
 			<!doctype html>
 			<html>
@@ -37,14 +37,51 @@ UTest({
 		`;
 		
 		var html = await mask.renderAsync(template);
+		await UTest
+			.domtest
+			.use('cheerio')
+			.process(html, `
+				find ('head > script') {
+					eq ('length', 2);
+
+					eq (0) > attr ('src', '/foo.js');
+					eq (1) > text (" console.log('FOO'); ");
+				}
+				find ('body > script') {
+					eq ('length', 1);
+				}
+			`);
+	},
+	async '!render page' () {
+		var template = `
+			<!doctype html>
+			<html>
+				<head>
+					<script> console.log('FOO'); </script>
+				</head>
+				<body>
+					<script data-run='auto' type = 'text/mask'>
+						h4 > 'Hello'
+					</script>
+				</body>
+			</html>
+		`;
+		
+		var html = await mask.renderPageAsync(template);
 		console.log(html);
 		return;
 		await UTest
 			.domtest
 			.use('cheerio')
 			.process(html, `
-				find ('div > i') {
-					text ('I am HTML');
+				find ('head > script') {
+					eq ('length', 2);
+
+					eq (0) > attr ('src', '/foo.js');
+					eq (1) > text (" console.log('FOO'); ");
+				}
+				find ('body > script') {
+					eq ('length', 1);
 				}
 			`);
 	}

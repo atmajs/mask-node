@@ -32,6 +32,8 @@
 			}
 			return dfr;
 		},
+		renderPage: HtmlPage.render,
+		renderPageAsync: HtmlPage.renderAsync,
 		build: function (tmpl, model, ctx, el, ctr) {
 			var _ctr = ensureCtr(ctr),
 				_ctx = ensureCtx(ctx),
