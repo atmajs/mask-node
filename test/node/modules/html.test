@@ -115,7 +115,36 @@ UTest({
 				}
 				find ('.server') {
 					text ("I am server");
-				}				
+				}
+				find ('script') > eq ('length', 2);
+			`);
+	},
+
+	async 'should export module scripts to globals' () {
+		TestHelper.registerFiles({
+			'Foo.js': `
+				module.exports = 'I am module';
+			`
+		});
+		var template = `
+			<!doctype html>
+			<html>
+				<head>
+					<script src='Foo.js' isomorph export='myFoo'></script>					
+				</head>
+				<body>
+					<span>~[global.myFoo]</span>
+				</body>
+			</html>
+		`;
+		var html = await mask.renderPageAsync(template);		
+		await UTest
+			.domtest
+			.use('cheerio')
+			.process(html, `
+				find ('span') {
+					text ("I am module");
+				}
 			`);
 	}
 })
