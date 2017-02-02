@@ -43,10 +43,11 @@ var _scripts_handleSync,
 		return dfr;
 	};
 
-	custom_Tags['script'] = class_create(custom_Tags['script'], {
+	var ScriptTag = custom_Tags['script'];
+	custom_Tags['script'] = class_create(ScriptTag, {
 		render: function(model, ctx, el) {
 			if (ScriptNode.isBrowser(this)) {
-				this.super(model, ctx, el);
+				ScriptTag.prototype.render.call(this, model, ctx, el);
 			}
 			if (ScriptNode.isServer(this)) {
 				var node = ScriptNode.get(this);
@@ -87,20 +88,20 @@ var _scripts_handleSync,
 			var module = {
 				exports: (origExports = {})
 			};
-			self.fn.call(el, global, el.ownerDocument, module, module.exports);
+			this.fn.call(el, global, el.ownerDocument, module, module.exports);
 			if (this.exportName) {
 				global[this.exportName] = module.exports;
 			}
 		},
 		preloadAsync: function(){
 			var self = this;
-			return file_get(this.path).then(function(content) {
+			return __cfg.getFile(this.path).then(function(content) {
 				self.fn = new Function('window', 'document', 'module', 'exports', content);				
 			});
 		},
 		preloadSync: function(){
 			var self = this;
-			return file_get(this.path).then(function(content) {
+			return __cfg.getFile(this.path).then(function(content) {
 				self.fn = new Function('window', 'document', 'module', 'exports', content);				
 			});
 		}
@@ -121,7 +122,7 @@ var _scripts_handleSync,
 		var src = node.attr.src;
 
 		var endpoint = { path: src };
-		var path = Modules.resolvePath(endpoint, model, ctx, null, true);
+		var path = Module.resolvePath(endpoint, model, ctx, null, true);
 		return _scripts[path] || (_scripts[path] = new ScriptNode(path, node.attr.export));
 	};
 	var _scripts = {};

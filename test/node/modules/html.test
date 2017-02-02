@@ -20,12 +20,12 @@ UTest({
 				}
 			`);
 	},
-	async 'render doctype' () {
+	async '!render doctype' () {
 		var template = `
 			<!doctype html>
 			<html>
 				<head>
-					<script isomorph src='/foo.js' ></script>
+					<script src='/foo.js' ></script>
 					<script> console.log('FOO'); </script>
 				</head>
 				<body>
@@ -52,7 +52,7 @@ UTest({
 				}
 			`);
 	},
-	async '!render page' () {
+	async 'should evaluate also template from data-run `auto`' () {
 		var template = `
 			<!doctype html>
 			<html>
@@ -68,21 +68,54 @@ UTest({
 		`;
 		
 		var html = await mask.renderPageAsync(template);
-		console.log(html);
-		return;
 		await UTest
 			.domtest
 			.use('cheerio')
 			.process(html, `
-				find ('head > script') {
-					eq ('length', 2);
-
-					eq (0) > attr ('src', '/foo.js');
-					eq (1) > text (" console.log('FOO'); ");
-				}
-				find ('body > script') {
+				find ('body > h4') {
 					eq ('length', 1);
+
+					text ("Hello");
+				}				
+			`);
+	},
+
+	async 'should run server and isomorph scripts to globals' () {
+		TestHelper.registerFiles({
+			'IsomorphFoo.js': `
+				window.IsomorphFoo = 'I am isomorph';
+			`,
+			'ServerFoo.js': `
+				global.ServerFoo = 'I am server';
+			`
+		});
+		var template = `
+			<!doctype html>
+			<html>
+				<head>
+					<script src='IsomorphFoo.js' isomorph></script>
+					<script src='ServerFoo.js' server></script>
+					<script src='ClientFoo.js'></script>
+				</head>
+				<body>
+					<mask>
+						.isomorph > '~[global.IsomorphFoo]'
+						.server > '~[global.ServerFoo]'
+					</mask>
+				</body>
+			</html>
+		`;
+		var html = await mask.renderPageAsync(template);		
+		await UTest
+			.domtest
+			.use('cheerio')
+			.process(html, `
+				find ('.isomorph') {
+					text ("I am isomorph");
 				}
+				find ('.server') {
+					text ("I am server");
+				}				
 			`);
 	}
 })

@@ -21,7 +21,6 @@
 	// import /ref-mask/src/parser/
 
 	//#import html-dom/
-	//#import html-page/
 	//#import builder/
 
 	/*** Features ***/
@@ -32,7 +31,6 @@
 
 	//#import mock/mock
 	//#import cache/
-	//#import mask
 
 	/*** Libraries ***/
 	// import /ref-mask-compo/lib/compo.embed.js
@@ -42,6 +40,9 @@
 
 	// import /ref-mask/src/handlers/
 	// import handlers/document
+
+	//#import html-page/
+	//#import mask
 
 
 // import /ref-mask/src/umd-footer
