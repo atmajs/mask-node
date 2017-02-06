@@ -3,16 +3,24 @@
 
 	obj_extend(Mask, {
 		toHtml: function(dom, model, ctx, ctr){
-			return HtmlDom.stringify(dom, model, ctx, ctr);
+			var html = ctx == null || (ctx.rewrite == null && ctx._redirect == null)
+				? HtmlDom.stringify(dom, model, ctx, ctr)
+				: null;
+			return html;
 		},
 		render: function(tmpl, model, ctx, el, ctr){
 			var _ctr = ensureCtr(ctr),
 				_ctx = ensureCtx(ctx),
 				dom = mask_render(tmpl, model, _ctx, el, _ctr);
 
-			return HtmlDom.stringify(dom, model, _ctx, _ctr);
+			return Mask.toHtml(dom, model, _ctx, _ctr);
 		},
 		renderAsync: function(tmpl, model, ctx, el, ctr){
+			return this
+				.renderHtmlDomAsync(tmpl, model, ctx, el, ctr)
+				.then(Mask.toHtml);		
+		},
+		renderHtmlDomAsync: function(tmpl, model, ctx, el, ctr){
 			var _ctr = ensureCtr(ctr),
 				_ctx = ensureCtx(ctx),
 				dfr = new class_Dfr,
@@ -23,12 +31,8 @@
 			} else {
 				resolve();
 			}
-
-			function resolve() {
-				var html = _ctx._rewrite == null && _ctx._redirect == null
-					? HtmlDom.stringify(dom, model, _ctx, _ctr)
-					: null;
-				dfr.resolve(html);
+			function resolve() {				
+				dfr.resolve(dom, model, _ctx, _ctr);
 			}
 			return dfr;
 		},

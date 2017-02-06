@@ -47,6 +47,9 @@ var _scripts_handleSync,
 	custom_Tags['script'] = class_create(ScriptTag, {
 		render: function(model, ctx, el) {
 			if (ScriptNode.isBrowser(this)) {
+				// this.attr.export = null;
+				// this.attr.isomorph = null;
+
 				ScriptTag.prototype.render.call(this, model, ctx, el);
 			}
 			if (ScriptNode.isServer(this)) {
@@ -68,6 +71,9 @@ var _scripts_handleSync,
 			}
 			arr.push(ScriptNode.get(node, model, ctx));
 
+			delete node.attr.export;
+			delete node.attr.isomorph;
+		
 			if (ScriptNode.isServerOnly(node)) { 
 				return { remove: true };
 			}
@@ -123,7 +129,8 @@ var _scripts_handleSync,
 
 		var endpoint = { path: src };
 		var path = Module.resolvePath(endpoint, model, ctx, null, true);
-		return _scripts[path] || (_scripts[path] = new ScriptNode(path, node.attr.export));
+		var export_ = node.attr.export;
+		return _scripts[path] || (_scripts[path] = new ScriptNode(path, export_));
 	};
 	var _scripts = {};
 }());

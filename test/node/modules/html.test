@@ -146,5 +146,44 @@ UTest({
 					text ("I am module");
 				}
 			`);
+	},
+
+	async 'should render bootstrap meta' () {
+		TestHelper.registerFiles({
+			'Foo.js': `
+				module.exports = 'I am module';
+			`
+		});
+		var template = `
+			<!doctype html>
+			<html>
+				<head>
+					<script src='Foo.js' isomorph export='myFoo'></script>					
+				</head>
+				<body>
+					<mask>
+						define Foo { h4 > 'Foo' }
+						Foo;
+					</mask>
+				</body>
+			</html>
+		`;
+		var html = await mask.renderPageAsync(template, null, { 
+			config: { shouldAppendBootstrap: true }
+		});
+		
+		await UTest
+			.domtest
+			.use('cheerio')
+			.process(html, `
+				find ('h4') {
+					text ("Foo");
+				}
+
+				// mask.bootstrap.js should be added
+				find ('body') > children('script') {					
+					eq('length', 1);
+				}
+			`);
 	}
 })
