@@ -1,6 +1,6 @@
 module.exports = {
 	counter: 2,
-	increment () {
+	increment: function () {
 		this.counter++;
 	}
-}
+};
