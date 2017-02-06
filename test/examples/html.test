@@ -14,9 +14,9 @@ UTest({
 				
 				UTest
 					.domtest(doc.body, `
-						find ('i') > text ('2')
+						find ('i') > text ('2');
 						find ('button')   > do click;
-						find ('i') > text ('3')
+						find ('i') > text ('3');
 					`)
 					.always(done);
 			});
