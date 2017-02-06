@@ -180,9 +180,9 @@ UTest({
 					text ("Foo");
 				}
 
-				// mask.bootstrap.js should be added
+				// mask bootstrap should be added
 				find ('body') > children('script') {					
-					eq('length', 1);
+					eq('length', 2);
 				}
 			`);
 	}
