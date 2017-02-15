@@ -1,7 +1,7 @@
 {
   "name": "-",
   "description": "MaskJS for Node.JS",
-  "version": "0.59.6",
+  "version": "0.60.0",
   "homepage": "http://atmajs.com/mask",
   "contributors": [],
   "author": "Alexander Kit <alex.kit@atmajs.com>",
