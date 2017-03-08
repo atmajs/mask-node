@@ -3,7 +3,8 @@ var builder_componentID = 0,
 	builder_buildSVG,
 	builder_Ctx,
 	builder_CtxModels,
-	builder_CtxModules;
+	builder_CtxModules,
+	builder_resumeDelegate;
 	
 (function() {
 	
