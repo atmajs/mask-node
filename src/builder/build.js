@@ -136,11 +136,7 @@
 			build(nodes, model, ctx, container, ctr, els);
 			return;
 		}
-
-		var imax = nodes.length,
-			i;
-		for(i = 0; i< imax; i++){
-			build(nodes[i], model, ctx, container, ctr, els);
-		}
+		
+		build_many(nodes, model, ctx, container, ctr, els);
 	};
 }());

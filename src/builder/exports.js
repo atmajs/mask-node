@@ -19,8 +19,10 @@ var builder_componentID = 0,
 	
 	// import /ref-mask/src/builder/ctx
 	// import /ref-mask/src/builder/util
+	// import /ref-mask/src/builder/delegate/build_many
 	// import /ref-mask/src/builder/delegate/build_node
 	// import /ref-mask/src/builder/delegate/build_textNode
+	// import /ref-mask/src/builder/delegate/build_decorators
 	
 	// import build
 
