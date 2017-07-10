@@ -3,10 +3,9 @@
 
 	obj_extend(Mask, {
 		toHtml: function(dom, model, ctx, ctr){
-			var html = ctx == null || (ctx.rewrite == null && ctx._redirect == null)
+			return ctx == null || (ctx._rewrite == null && ctx._redirect == null)
 				? HtmlDom.stringify(dom, model, ctx, ctr)
-				: null;
-			return html;
+				: '';
 		},
 		render: function(tmpl, model, ctx, el, ctr){
 			var _ctr = ensureCtr(ctr),
