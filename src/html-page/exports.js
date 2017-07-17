@@ -16,7 +16,7 @@ var HtmlPage;
 		renderAsync: function (tmpl, model, ctx) {
 
 			return _scripts_handleAsync(tmpl, model, ctx)
-				.then(ast => {
+				.then(function (ast) {
 					var ast2 = _transformMaskAutoTemplates(ast);
 
 					if (ctx && ctx.config && ctx.config.shouldAppendBootstrap) {
