@@ -1,4 +1,4 @@
-define :counter {
+define Counter {
 	function onRenderStart () {
 		this.model = { counter: 0 };
 	}
