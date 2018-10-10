@@ -1,3 +1,0 @@
-define A {
-	span name='a_upper' > 'A'
-}

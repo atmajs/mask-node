@@ -1,6 +1,0 @@
-import A from './a_upper';
-
-define a {
-	span name='a_lower' > 'a';
-	A;
-}
