@@ -1,6 +1,6 @@
 module.exports = {
 	suites: {
-		
+
 		dom: {
 			env: [
 				'ref-mask/lib/mask.js',
@@ -31,22 +31,24 @@ module.exports = {
 					process.on("unhandledRejection", function(reason, p){
 					    console.log("Unhandled", reason, p); // log all your errors, "unsuppressing" them.
 					    throw reason; // optional, in case you want to treat these as errors
-					}); 
+					});
 
 					process.on("unhandledException", function(reason, p){
 					    console.log("Unhandled", reason, p); // log all your errors, "unsuppressing" them.
 					    throw reason; // optional, in case you want to treat these as errors
-					}); 
-	
+					});
+
 					include
 						.js('/lib/mask.node.js::Mask')
 						.done(function(resp){
+							console.log(resp.Mask.render);
 							global.mask = resp.Mask;
+							global.MaskNode = resp.Mask;
 							done();
 						});
 				}
 			},
-			tests: 'test/node/**.test'
+			tests: 'test/node/**.spec.ts'
 		},
 		examples: {
 			exec: 'dom',

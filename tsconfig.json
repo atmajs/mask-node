@@ -1,0 +1,36 @@
+{
+    "exclude": [
+        "node_modules",
+        "ts_temp"
+	],
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "baseUrl": "./",
+        "paths": {
+            "@core/*": [
+                "ref-mask/src/*"
+            ],
+            "@utils/*": [
+                "ref-utils/src/*"
+            ],
+            "@mask-j/*": [
+                "ref-mask/projects/mask-j/src/jmask/*"
+            ],
+            "@compo/*": [
+                "ref-mask/projects/mask-compo/src/*"
+            ],
+            "@binding/*": [
+                "ref-mask/projects/mask-binding/src/*"
+            ],
+            "@project/*": [
+                "ref-mask/projects/*"
+            ],
+            "@mask-node/*": [
+                "src/*"
+            ]
+
+        },
+        "module": "commonjs",
+        "target": "es6"
+    }
+}
