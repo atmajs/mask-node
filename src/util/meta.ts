@@ -9,7 +9,7 @@ import { class_create } from '@utils/class';
 
 const mods = {
     [mode_SERVER]: 1,
-    [mode_SERVER_CHILDREN]: 1, 
+    [mode_SERVER_CHILDREN]: 1,
     [mode_SERVER_ALL]: 1,
     [mode_CLIENT]: 1,
     [mode_BOTH]: 1
@@ -123,7 +123,7 @@ function getMetaVal(compo, prop, attrProp?) {
 
 class CompoMeta {
     static create (ctr?) {
-        let meta = ctr.meta ?? ctr.$meta;
+        let meta = ctr?.meta ?? ctr?.$meta;
         if (meta) {
             return meta;
         }

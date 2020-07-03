@@ -15,6 +15,9 @@ export const documentInn = {
         const Ctor = HtmlTags[name.toLowerCase()] ?? ElementNodeInn;
         return new Ctor(name);
     },
+    createElementNS (ns, name) {
+        return documentInn.createElement(name);
+    },
     createTextNode (text) {
         return new TextNodeInn(text);
     },

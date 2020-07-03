@@ -90,6 +90,8 @@ export function build_compoFactory(build: Function, config: IBuilderConfig) {
 
         if (is_Function(compo.render)) {
             compo.render(model, ctx, container, compo);
+            // Overriden render behaviour - do not render subnodes
+            return null;
         }
         return compo;
     };
