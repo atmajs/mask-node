@@ -1,17 +1,20 @@
-import { class_create } from '@utils/class';
-import { DomB } from './DomB';
 
-export const TextNodeInn = class_create({
-    nodeType: DomB.TEXTNODE,
-    nextSibling: null,
-    textContent: '',
-    constructor: function TextNode(text) {
+import { DomB } from './DomB';
+import { NodeBase } from './NodeBase';
+
+export class TextNodeInn extends NodeBase {
+    nodeType = DomB.TEXTNODE
+
+    textContent = ''
+
+    constructor (text) {
+        super();
         this.textContent = String(text == null ? '' : text);
-    },
-    toString: function () {
+    }
+    toString () {
         return escape(this.textContent);
     }
-});
+};
 
 function escape(html) {
     return html

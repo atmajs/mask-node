@@ -11,9 +11,9 @@ export function rendererB_toHtml(dom, model, ctx, ctr) {
 };
 
 export function rendererB_build(tmpl, model, ctx, el, ctr) {
-    var _ctr = ensureCtr(ctr),
-        _ctx = ensureCtx(ctx),
-        dom = renderer_render(tmpl, model, _ctx, el, _ctr);
+    let _ctr = ensureCtr(ctr);
+    let _ctx = ensureCtx(ctx);
+    let dom = renderer_render(tmpl, model, _ctx, el, _ctr);
 
     return {
         ctx: _ctx,
@@ -45,9 +45,9 @@ export function rendererB_buildAsync(tmpl, model, ctx, el, ctr) {
 };
 
 export function rendererB_render(tmpl, model, ctx, el?, ctr?) {
-    var _ctr = ensureCtr(ctr),
-        _ctx = ensureCtx(ctx),
-        dom = renderer_render(tmpl, model, _ctx, el, _ctr);
+    let _ctr = ensureCtr(ctr);
+    let _ctx = ensureCtx(ctx);
+    let dom = renderer_render(tmpl, model, _ctx, el, _ctr);
 
     return rendererB_toHtml(dom, model, _ctx, _ctr);
 };

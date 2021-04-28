@@ -1,13 +1,14 @@
-import { class_create } from '@utils/class';
 import { DomB } from './DomB';
 import { Meta } from '@mask-node/helper/Meta';
+import { NodeBase } from './NodeBase';
 
-export const UtilNodeInn = class_create({
-    meta: null,
-    nodeType: DomB.UTILNODE,
-    nextSibling: null,
-    firstChild: null,
-    constructor: function (type, name, value, attrName) {
+export class UtilNodeInn extends NodeBase {
+    meta = null
+    nodeType = DomB.UTILNODE
+
+
+    constructor (type, name, value, attrName) {
+        super();
         this.meta = {
             utilType: type,
             utilName: name,
@@ -15,11 +16,12 @@ export const UtilNodeInn = class_create({
             attrName: attrName,
             current: null
         };
-    },
-    appendChild: function (el) {
-        this.firstChild = el;
-    },
-    toString: function () {
+    }
+    // seems is implenented in NodeBase
+    // appendChild (el) {
+    //     this.firstChild = el;
+    // }
+    toString  () {
         var json = this.meta,
             info = {
                 type: 'u',
@@ -36,4 +38,4 @@ export const UtilNodeInn = class_create({
             + Meta.close(json, info)
             ;
     }
-});
+};

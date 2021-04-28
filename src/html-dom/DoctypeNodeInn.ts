@@ -2,14 +2,15 @@ import { class_createEx } from '@utils/class';
 import { DomB } from './DomB';
 import { ElementNodeInn } from './ElementNodeInn';
 
-export const DoctypeNodeInn = class_createEx(ElementNodeInn, {
-    nodeType: DomB.DOCTYPE,
-    toString: function (buffer) {
+export class DoctypeNodeInn extends ElementNodeInn {
+    nodeType = DomB.DOCTYPE
+
+    toString () {
         return DEFAULT;
-    },
-    write: function (stream) {
+    }
+    write  (stream) {
         stream.write(DEFAULT);
     }
-});
+};
 
 var DEFAULT = '<!DOCTYPE html>';

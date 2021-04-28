@@ -1,11 +1,12 @@
 import { IBuilderConfig } from '@core/builder/delegate/IBuilderConfig';
-import { builder_buildFactory } from '@core/builder/delegate/builder_buildFactory';
+
 import { DomB } from '@mask-node/html-dom/DomB';
 import { builder_Ctx } from '@core/builder/exports';
 import { builder_CtxModels } from '../ctx/CtxModels';
 import { builder_CtxModules } from '../ctx/CtxModules';
 import { Cache } from '../../cache/exports'
 import { HtmlDom } from '@mask-node/html-dom/exports';
+import { builder_buildFactory } from './builder_buildFactory';
 
 
 export function builder_buildDelegate(opts: IBuilderConfig) {

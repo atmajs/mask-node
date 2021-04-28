@@ -1,15 +1,18 @@
 import { DomB } from './DomB';
 import { selector_parse, selector_match } from './jq/util/selector';
-import { class_create } from '@utils/class';
 
 
-export const NodeBase = class_create({
-    parentNode: null,
-    firstChild: null,
-    lastChild: null,
-    nextSibling: null,
 
-    nodeType: null,
+export abstract class NodeBase {
+    tagName?:string = null
+
+    parentNode: NodeBase = null
+    firstChild: NodeBase = null
+    lastChild: NodeBase = null
+    nextSibling: NodeBase = null
+
+    nodeType: number = null
+
 
     get length() {
         var count = 0,
@@ -20,7 +23,7 @@ export const NodeBase = class_create({
             el = el.nextSibling;
         }
         return count;
-    },
+    }
 
     get childNodes() {
         var array = [],
@@ -30,13 +33,13 @@ export const NodeBase = class_create({
             el = el.nextSibling;
         }
         return array;
-    },
+    }
 
     get ownerDocument() {
         return new OwnerDocument(this);
-    },
+    }
 
-    querySelector: function (selector) {
+    querySelector (selector) {
         var matcher = typeof selector === 'string'
             ? selector_parse(selector, null)
             : selector
@@ -63,9 +66,9 @@ export const NodeBase = class_create({
             }
         }
         return null;
-    },
+    }
 
-    appendChild: function (child) {
+    appendChild (child) {
 
         if (child == null)
             return child;
@@ -104,9 +107,9 @@ export const NodeBase = class_create({
         }
         child.parentNode = this;
         return child;
-    },
+    }
 
-    insertBefore: function (child, anchor) {
+    insertBefore (child, anchor) {
         var prev = this.firstChild;
         if (prev !== anchor) {
             while (prev != null && prev.nextSibling !== anchor) {
@@ -161,9 +164,9 @@ export const NodeBase = class_create({
         child.nextSibling = anchor;
 
         return child;
-    },
+    }
 
-    removeChild: function (node) {
+    removeChild (node) {
         if (node == null) {
             return;
         }
@@ -190,16 +193,16 @@ export const NodeBase = class_create({
         node.nextSibling = null;
         node.parentNode = null;
     }
-});
+};
 
 
-var OwnerDocument = class_create({
-    _el: null,
-    _document: null,
-    _body: null,
-    constructor: function (el) {
+class OwnerDocument {
+    _el = <NodeBase> null
+    _document = null
+    _body = null
+    constructor (el: NodeBase) {
         this._el = el;
-    },
+    }
     get body() {
         if (this._body != null) {
             return this._body;
@@ -217,4 +220,4 @@ var OwnerDocument = class_create({
         }
         return null;
     }
-});
+};

@@ -69,6 +69,7 @@ common:
     'parsers/content.ts': 'content/style.ts'
     'modules/await.ts': 'mask\-compo/src/exports.ts'
     'DoctypeNodeInn.ts': 'ElementNodeInn.ts'
+    'builder_buildFactory.ts': 'builder/BuilderData.ts'
 
   package:
     module: commonjs

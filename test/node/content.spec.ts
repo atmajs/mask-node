@@ -16,6 +16,7 @@ UTest({
         `;
         var html = mask.render(template);
 
-        console.log(html);
+        has_(html, '<style');
+        has_(html, 'foo > .name');
     }
 })

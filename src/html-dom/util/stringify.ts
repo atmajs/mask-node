@@ -15,11 +15,12 @@ export function stringifyInn(document_, model, ctx, compo) {
             && compo.components != null
             && compo.components.length !== 0;
 
-    var meta, modules;
+    let meta;
+    let modules;
 
     if (hasComponents) {
-        meta = comment_meta(ctx),
-            modules = comment_modules(ctx, stream.minify);
+        meta = comment_meta(ctx);
+        modules = comment_modules(ctx, stream.minify);
     }
 
     if (hasDoctype) {
@@ -42,7 +43,6 @@ export function stringifyInn(document_, model, ctx, compo) {
         stream.process(document);
         return stream.toString();
     }
-
     stream
         .process(meta && meta.header)
         .newline()

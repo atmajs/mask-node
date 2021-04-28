@@ -11,13 +11,16 @@ import { builder_resumeDelegate } from '@core/builder/resume';
 import { compo_wrapOnTagName } from '@mask-node/util/compo';
 
 export function build_compoFactory(build: Function, config: IBuilderConfig) {
+
     return function build_compo(node, model, ctx, container, ctr, children) {
-        var compoName = node.compoName || node.tagName,
-            Handler = node.controller || custom_Tags[compoName] || obj_create(node),
-            cache = meta_get(Handler).cache || false;
+        let compoName = node.compoName ?? node.tagName;
+        let Handler = node.controller ?? custom_Tags[compoName] ?? obj_create(node);
+        let cache = meta_get(Handler).cache ?? false;
+
 
         if (cache /* unstrict */) {
-            var compo = Cache.getCompo(model, ctx, compoName, Handler);
+            let compo = Cache.getCompo(model, ctx, compoName, Handler);
+            console.log('GOT CACHED', compo);
             if (compo != null) {
                 if (compo.__cached) {
                     compo.render = fn_doNothing;
@@ -27,9 +30,10 @@ export function build_compoFactory(build: Function, config: IBuilderConfig) {
             }
         }
 
-        var compo = _initController(Handler, node, model, ctx, container, ctr),
-            cache = meta_get(compo).cache;
+        let compo = _initController(Handler, node, model, ctx, container, ctr);
+        cache = meta_get(compo).cache;
         if (cache /* unstrict */) {
+            console.log('CACHING');
             Cache.cacheCompo(model, ctx, compoName, compo, cache);
         }
         if (compo.compoName == null) {
@@ -90,8 +94,6 @@ export function build_compoFactory(build: Function, config: IBuilderConfig) {
 
         if (is_Function(compo.render)) {
             compo.render(model, ctx, container, compo);
-            // Overriden render behaviour - do not render subnodes
-            return null;
         }
         return compo;
     };
