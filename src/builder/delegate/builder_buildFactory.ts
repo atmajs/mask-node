@@ -90,8 +90,6 @@ export function builder_buildFactory (config: IBuilderConfig) {
 
         // Dom.COMPONENT
         if (type === 4) {
-			debugger;
-			console.log('buildFactory:: compo')
             element = (document as any).createComponent(node, model, ctx, container, ctr);
             container.appendChild(element);
             //- container = element;
