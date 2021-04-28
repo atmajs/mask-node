@@ -1,5 +1,6 @@
 apps:
   node-default:
+    file: src/mask.ts
     outputMain: lib/mask.node.js
     package:
       moduleWrapperCustomPath: "./src/node-wrapper.js"
@@ -46,8 +47,57 @@ apps:
             quote_style: 1
             indent_level: 2
             comments: "^!"
+
+  bootstrap:
+    file: src/client/bootstrap.ts
+    outputMain: lib/mask.bootstrap.js
+    package:
+      moduleWrapperCustomPath: "./src/bootstrap-wrapper.js"
+    settings:
+      atma-io-middleware-condcomments:
+        defines:
+          BROWSER: true
+          NODE: false
+      atma-io-middleware-uglify:
+        uglify:
+          warnings: true
+          compress:
+            dead_code: true
+            unused: true
+            arguments: false
+            booleans: false
+            collapse_vars: false
+            comparisons: false
+            conditionals: false
+            hoist_funs: false
+            hoist_props: false
+            hoist_vars: false
+            if_return: false
+            inline: false
+            join_vars: false
+            keep_fnames: true
+            loops: false
+            negate_iife: false
+            reduce_funcs: false
+            reduce_vars: false
+            switches: false
+            typeofs: false
+            properties: false
+            sequences: false
+            side_effects: false
+            drop_debugger: false
+            global_defs:
+              DEBUG: false
+          mangle: false
+          parse: {}
+          output:
+            beautify: true
+            braces: true
+            quote_style: 1
+            indent_level: 2
+            comments: "^!"
+
 common:
-  file: src/mask.ts
   rewrites:
     '/ref-mask/src/builder/delegate/build_component.ts': '/src/builder/delegate/build_component.ts'
     '/ref-mask/src/builder/delegate/builder_buildFactory.ts': '/src/builder/delegate/builder_buildFactory.ts'
@@ -74,7 +124,6 @@ common:
   package:
     module: commonjs
     moduleWrapper: custom
-    moduleWrapperCustomPath: "./src/node-wrapper.js"
     commonjs:
       output: simplified
     import:

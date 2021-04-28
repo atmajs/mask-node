@@ -1,62 +1,61 @@
-import { Meta } from '@mask-node/helper/Meta';
-
+import { MetaParser } from '@mask-node/helper/MetaParser';
 
 var __models,
-	__ID = 0;
+    __ID = 0;
 
 export function bootstrap(container, Mix) {
-	if (container == null)
-		container = document.body;
+    if (container == null)
+        container = document.body;
 
-	var compo, fragmentCompo;
-	if (Mix == null) {
-		fragmentCompo = compo = new mask.Compo();
-	}
-	else if (typeof Mix === 'function') {
-		fragmentCompo = compo = new Mix();
-	} else {
-		compo = Mix;
-		fragmentCompo = new mask.Compo();
-		fragmentCompo.parent = compo
-	}
+    var compo, fragmentCompo;
+    if (Mix == null) {
+        fragmentCompo = compo = new mask.Compo();
+    }
+    else if (typeof Mix === 'function') {
+        fragmentCompo = compo = new Mix();
+    } else {
+        compo = Mix;
+        fragmentCompo = new mask.Compo();
+        fragmentCompo.parent = compo
+    }
 
-	var metaNode = trav_getMeta(container.firstChild),
-		metaContent = metaNode && metaNode.textContent,
-		meta = metaContent && Meta.parse(metaContent);
+    var metaNode = trav_getMeta(container.firstChild),
+        metaContent = metaNode && metaNode.textContent,
+        meta = metaContent && MetaParser.parse(metaContent);
 
 
-	if (meta == null || meta.type !== 'm') {
-		console.error('Mask.Bootstrap: meta information not found', container);
-		return;
-	}
+    if (meta == null || meta.type !== 'm') {
+        console.error('Mask.Bootstrap: meta information not found', container);
+        return;
+    }
 
-	if (meta.ID != null)
-		mask.setCompoIndex(__ID = meta.ID);
+    if (meta.ID != null)
+        mask.setCompoIndex(__ID = meta.ID);
 
-	__models = model_parse(meta.model);
+    __models = model_parse(meta.model);
 
-	var model = compo.model = __models.m1,
-		el = metaNode.nextSibling,
-		ctx = meta.ctx;
-	if (ctx != null) {
-		ctx = JSON.parse(ctx);
-	} else {
-		ctx = {};
-	}
+    var model = compo.model = __models.m1,
+        el = metaNode.nextSibling,
+        ctx = meta.ctx;
+    if (ctx != null) {
+        ctx = JSON.parse(ctx);
+    } else {
+        ctx = {};
+    }
 
-	setup(el, model, ctx, el.parentNode, fragmentCompo);
+    setup(el, model, ctx, el.parentNode, fragmentCompo);
 
-	if (fragmentCompo !== compo) {
-		util_pushComponents_(compo, fragmentCompo);
-	}
+    if (fragmentCompo !== compo) {
+        util_pushComponents_(compo, fragmentCompo);
+    }
 
-	if (ctx.async === true) {
-		ctx.done(emitDomInsert);
-	} else {
-		emitDomInsert();
-	}
-	function emitDomInsert(args) {
-		Compo.signal.emitIn(fragmentCompo, 'domInsert');
-	}
-	return fragmentCompo;
+    if (ctx.async === true) {
+        ctx.done(emitDomInsert);
+    } else {
+        emitDomInsert();
+    }
+    function emitDomInsert() {
+        mask.Compo.signal.emitIn(fragmentCompo, 'domInsert');
+    }
+    return fragmentCompo;
 }
