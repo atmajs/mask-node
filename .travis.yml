@@ -16,17 +16,16 @@ addons:
 
 before_script:
   - git submodule update --init
-  - npm install
   - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
   - sleep 4
   - cd ref-mask
-  - npm install
+  - npm i
   - git submodule update --init
   - npm run build
   - cd ../
   - sleep 4
-  - npm run build
+  - npm run build &
+  - sleep 4
   - npm run server &
   - sleep 7
   - firefox http://localhost:5777/utest/ &
