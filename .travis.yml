@@ -26,9 +26,9 @@ before_script:
   - sleep 4
   - npm run build
   - sleep 4
-  - npm run server
-  - sleep 7
-  - firefox http://localhost:5777/utest/
+  - npm run server &
+  - sleep 8
+  - firefox http://localhost:5777/utest/ &
   - sleep 8
 
 script:
