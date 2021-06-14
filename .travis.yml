@@ -24,11 +24,11 @@ before_script:
   - npm run build
   - cd ../
   - sleep 4
-  - npm run build &
+  - npm run build
   - sleep 4
-  - npm run server &
+  - npm run server
   - sleep 7
-  - firefox http://localhost:5777/utest/ &
+  - firefox http://localhost:5777/utest/
   - sleep 8
 
 script:
