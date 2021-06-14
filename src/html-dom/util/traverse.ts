@@ -6,19 +6,18 @@ export function trav_getDoc(el, _deep?) {
     if (el != null && el.nodeType === DomB.FRAGMENT)
         el = el.firstChild;
 
-    if (el == null)
+    if (el == null) {
         return null;
-
-    if (el instanceof Component === false)
-        return null;
-
-    if (el.compoName === ':document')
+    }
+    if (el.compoName === ':document') {
         return el;
-
-    if (_deep == null)
+    }
+    if (_deep == null) {
         _deep = 0;
-    if (_deep === 4)
+    }
+    if (_deep === 4) {
         return null;
+    }
 
     var doc;
     doc = trav_getDoc(el.nextSibling, _deep);

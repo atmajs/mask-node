@@ -44,7 +44,7 @@ export function rendererB_buildAsync(tmpl, model, ctx, el, ctr) {
     return dfr;
 };
 
-export function rendererB_render(tmpl, model, ctx, el?, ctr?) {
+export function rendererB_render(tmpl, model?, ctx?, el?, ctr?) {
     let _ctr = ensureCtr(ctr);
     let _ctx = ensureCtx(ctx);
     let dom = renderer_render(tmpl, model, _ctx, el, _ctr);

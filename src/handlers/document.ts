@@ -9,6 +9,7 @@ import { builder_build } from '@mask-node/builder/dom/build';
 custom_Tags[':document'] = class_create({
     isDocument: true,
     meta: {
+        template: 'merge',
         mode: mode_SERVER
     },
     render: function (model, ctx, fragment, ctr) {

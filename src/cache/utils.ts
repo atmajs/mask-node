@@ -1,6 +1,6 @@
 
 export function cache_toHtmlDelegate(html) {
-	return function(){
-		return html;
-	};
+    return function(){
+        return html;
+    };
 }

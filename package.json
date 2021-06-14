@@ -18,22 +18,26 @@
     "main": "./lib/mask.node.js",
     "devDependencies": {
         "@types/sinon": "^7.0.5",
-        "app-bundler": "0.0.88",
-        "atma": "^0.12.19",
+        "app-bundler": "^0.0.96",
+        "atma": "^0.12.33",
         "atma-io": "^1.2.28",
         "atma-io-middleware-condcomments": "^1.2.8",
         "atma-io-middleware-importer": "^1.1.37",
         "atma-io-middleware-uglify": "^1.1.21",
         "atma-io-middleware-yml": "^1.1.25",
-        "atma-loader-ts": "^1.1.12",
-        "dts-bundle": "^0.7.3"
+        "atma-loader-ts": "^1.1.15",
+        "dts-bundle": "^0.7.3",
+        "maskjs": "^0.72.27"
     },
     "scripts": {
         "test": "atma test",
         "build": "app-bundler",
+        "watch": "app-bundler --watch",
         "build-debug": "app-bundler --inspect-brk",
-        "server": "atma server",
-        "examples": "atma custom examples/index"
+        "server": "atma server --TEST",
+        "server-debug": "atma --inspect-brk server --TEST",
+        "examples": "atma run examples/index",
+        "examples-debug": "atma --inspect-brk run examples/index"
     },
     "keywords": [],
     "engines": {
@@ -66,12 +70,21 @@
                     "js": "ts"
                 },
                 "routes": {
+                    "@core": "/ref-mask/src/{0}",
                     "@utils": "/ref-utils/src/{0}",
-                    "@core": "/src/{0}",
-                    "@compo": "/projects/mask-compo/src/{0}",
-                    "@mask-j": "/projects/mask-j/src/jmask/{0}",
-                    "@binding": "/projects/mask-binding/src/{0}",
-                    "@project": "/projects/{0}"
+                    "@mask-j": "/ref-mask/projects/mask-j/src/jmask/{0}",
+                    "@compo": "/ref-mask/projects/mask-compo/src/{0}",
+                    "@binding": "/ref-mask/projects/mask-binding/src/{0}",
+                    "@project": "/ref-mask/projects/{0}",
+                    "@mask-node": "/src/{0}"
+                },
+                "rewrite": {
+                    "/ref-mask/src/builder/delegate/build_component": "/src/builder/delegate/build_component",
+                    "/ref-mask/src/builder/delegate/builder_buildFactory": "/src/builder/delegate/builder_buildFactory",
+                    "/ref-mask/src/builder/delegate/exports": "/src/builder/delegate/exports",
+                    "/ref-mask/src/custom/mock-attributes": "/src/mock/attr-handler",
+                    "/ref-mask/src/custom/mock-utils": "/src/mock/util-handler",
+                    "/ref-mask/src/custom/mock-tags": "/src/mock/tag-handler"
                 },
                 "lazy": {
                     "/custom/*": [
@@ -136,6 +149,9 @@
                             ],
                             "@project/*": [
                                 "projects/*"
+                            ],
+                            "@mask-node/*": [
+                                "src/*"
                             ]
                         },
                         "#if (TEST)": {
@@ -152,6 +168,5 @@
     },
     "app-bundler": {
         "config": "package.yml"
-    },
-    "dependencies": {}
+    }
 }

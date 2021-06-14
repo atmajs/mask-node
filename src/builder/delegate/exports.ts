@@ -8,7 +8,6 @@ import { Cache } from '../../cache/exports'
 import { HtmlDom } from '@mask-node/html-dom/exports';
 import { builder_buildFactory } from './builder_buildFactory';
 
-
 export function builder_buildDelegate(opts: IBuilderConfig) {
     if (opts.document == null) {
         opts.document = <any> HtmlDom.document;

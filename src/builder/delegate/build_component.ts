@@ -20,7 +20,6 @@ export function build_compoFactory(build: Function, config: IBuilderConfig) {
 
         if (cache /* unstrict */) {
             let compo = Cache.getCompo(model, ctx, compoName, Handler);
-            console.log('GOT CACHED', compo);
             if (compo != null) {
                 if (compo.__cached) {
                     compo.render = fn_doNothing;
@@ -33,7 +32,6 @@ export function build_compoFactory(build: Function, config: IBuilderConfig) {
         let compo = _initController(Handler, node, model, ctx, container, ctr);
         cache = meta_get(compo).cache;
         if (cache /* unstrict */) {
-            console.log('CACHING');
             Cache.cacheCompo(model, ctx, compoName, compo, cache);
         }
         if (compo.compoName == null) {

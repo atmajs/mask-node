@@ -1,7 +1,10 @@
 import { MetaParser } from '@mask-node/helper/MetaParser';
+import { model_parse } from './model';
+import { setup } from './setup';
+import { trav_getMeta } from './traverse';
+import { util_pushComponents_ } from './utils';
+import { setRootID, setRootModel } from './vars';
 
-var __models,
-    __ID = 0;
 
 export function bootstrap(container, Mix) {
     if (container == null)
@@ -29,12 +32,15 @@ export function bootstrap(container, Mix) {
         return;
     }
 
-    if (meta.ID != null)
-        mask.setCompoIndex(__ID = meta.ID);
+    if (meta.ID != null) {
+        setRootID(meta.ID);
+        mask.setCompoIndex(meta.ID);
+    }
 
-    __models = model_parse(meta.model);
+    let rootModel = model_parse(meta.model);
+    setRootModel(rootModel);
 
-    var model = compo.model = __models.m1,
+    var model = compo.model = rootModel.m1,
         el = metaNode.nextSibling,
         ctx = meta.ctx;
     if (ctx != null) {

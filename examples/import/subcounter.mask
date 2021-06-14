@@ -1,6 +1,6 @@
 import Counter as CounterRenamed from './counter';
 
 define foo {
-	tt > i > ' subcounter '
-	CounterRenamed;
+    tt > i > ' subcounter '
+    CounterRenamed;
 }

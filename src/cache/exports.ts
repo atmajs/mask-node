@@ -49,7 +49,6 @@ export const Cache = {
         let info = cached.__cacheInfo;
         let key = info.getKey(model, ctx);
         let compo = cached[key];
-        console.log('By key', key, compo)
 
         // check if cached data is already present, due to async. components
         return compo == null || compo.__cached == null

@@ -2,13 +2,13 @@ import * as Controller from 'SimpleAppController.js';
 
 define SimpleApp extends Controller {
 
-	slot bumpVersion () {
-		this.increment();
-	}
+    slot bumpVersion () {
+        this.increment();
+    }
 
-	h4 > 'Simple App'
-	i > '~[bind: this.counter]'
+    h4 > 'Simple App'
+    i > '~[bind: this.counter]'
 
-	button x-tap='bumpVersion' > 'Bump'
+    button x-tap='bumpVersion' > 'Bump'
 }
 

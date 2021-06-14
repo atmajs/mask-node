@@ -6,12 +6,13 @@ import { log_error } from '@core/util/reporters';
 import { HtmlStream } from './HtmlStream';
 import { documentInn } from '../documentInn';
 import { trav_getChild, trav_getDoc } from './traverse';
+import { DoctypeNodeInn } from '../DoctypeNodeInn';
 
 export function stringifyInn(document_, model, ctx, compo) {
-    var document = prepairDocument(document_),
-        hasDoctype = _hasDoctype(document),
-        stream = new HtmlStream(ctx.config || {}),
-        hasComponents = compo != null
+    let document = prepairDocument(document_);
+    let hasDoctype = _hasDoctype(document);
+    let stream = new HtmlStream(ctx.config || {});
+    let hasComponents = compo != null
             && compo.components != null
             && compo.components.length !== 0;
 
@@ -32,7 +33,7 @@ export function stringifyInn(document_, model, ctx, compo) {
         return stream.toString();
     }
 
-    var documentElement = trav_getDoc(document)
+    let documentElement = trav_getDoc(document)
     if (documentElement != null) {
         document = prepairDocument_withDocumentComponent(document, documentElement, modules, meta);
         stream.process(document);
@@ -56,24 +57,36 @@ export function stringifyInn(document_, model, ctx, compo) {
 };
 
 function prepairDocument(document_) {
-    var docEl = document_;
+    let docEl = document_;
     if (_hasDoctype(docEl) === false) {
-        return docEl;
+
+        let document = trav_getDoc(docEl);
+        if (document) {
+            let fragmentEl = documentInn.createDocumentFragment();
+            fragmentEl.appendChild(new DoctypeNodeInn());
+            let arr = document.childNodes;
+            for (let i = 0; i < arr.length; i++) {
+                fragmentEl.appendChild(arr[i]);
+            }
+            docEl = fragmentEl;
+        } else {
+            return docEl;
+        }
     }
-    var html = trav_getChild(docEl, 'HTML');
+    let html = trav_getChild(docEl, 'HTML');
     if (html == null) {
         html = documentInn.createElement('html');
 
-        var doctype = trav_getChild(docEl, '!DOCTYPE');
+        let doctype = trav_getChild(docEl, '!DOCTYPE');
         docEl.removeChild(doctype);
 
-        var fragmentEl = documentInn.createDocumentFragment();
+        let fragmentEl = documentInn.createDocumentFragment();
         fragmentEl.appendChild(doctype);
         fragmentEl.appendChild(html);
 
-        var el = docEl.firstChild;
+        let el = docEl.firstChild;
         while (el != null) {
-            var next = el.nextSibling;
+            let next = el.nextSibling;
             if (el !== doctype && el !== html) {
                 docEl.removeChild(el);
                 html.appendChild(el);
@@ -84,13 +97,13 @@ function prepairDocument(document_) {
         docEl = fragmentEl;
     }
 
-    var head = trav_getChild(html, 'HEAD');
-    var body = trav_getChild(html, 'BODY');
+    let head = trav_getChild(html, 'HEAD');
+    let body = trav_getChild(html, 'BODY');
     if (body == null) {
         body = documentInn.createElement('body');
-        var el = html.firstChild;
+        let el = html.firstChild;
         while (el != null) {
-            var next = el.nextSibling;
+            let next = el.nextSibling;
             if (el !== head) {
                 html.removeChild(el);
                 body.appendChild(el);
@@ -106,8 +119,8 @@ function prepairDocument_withDoctype(document, modules, meta) {
     if (modules == null && meta == null) {
         return document;
     }
-    var html = trav_getChild(document, 'HTML');
-    var body = trav_getChild(html, 'BODY');
+    let html = trav_getChild(document, 'HTML');
+    let body = trav_getChild(html, 'BODY');
     if (modules != null) {
         el_prepend(body, modules);
     }
@@ -121,9 +134,9 @@ function prepairDocument_withDoctype(document, modules, meta) {
 
 // @Obsolete (use doctype instead)
 function prepairDocument_withDocumentComponent(document, documentElement, modules, meta) {
-    var html = trav_getChild(documentElement, 'HTML');
+    let html = trav_getChild(documentElement, 'HTML');
     if (html != null) {
-        var body = trav_getChild(html, 'BODY');
+        let body = trav_getChild(html, 'BODY');
         if (body != null) {
             el_prepend(body, modules);
             if (meta != null) {
@@ -139,7 +152,7 @@ function prepairDocument_withDocumentComponent(document, documentElement, module
 
 
 function comment_meta(ctx) {
-    var model_ = ctx._models.stringify(),
+    let model_ = ctx._models.stringify(),
         ctx_ = ctx_stringify(ctx),
         id_ = ctx._id;
 
@@ -147,7 +160,7 @@ function comment_meta(ctx) {
         return null;
     }
 
-    var headerJson = {
+    let headerJson = {
         model: model_ || "{}",
         ctx: ctx_,
         ID: id_
@@ -165,12 +178,12 @@ function comment_modules(ctx, minify) {
     if (ctx._modules == null) {
         return null;
     }
-    var str = ctx._modules.stringify({ indent: minify ? 0 : 4 });
+    let str = ctx._modules.stringify({ indent: minify ? 0 : 4 });
     if (str == null || str === '') {
         return null;
     }
 
-    var comment = Meta.stringify({
+    let comment = Meta.stringify({
         mask: str
     }, {
         type: 'r',
@@ -191,7 +204,7 @@ function _hasDoctype(fragmentEl) {
     if (fragmentEl.nodeType !== DomB.FRAGMENT) {
         return false;
     }
-    var el = fragmentEl.firstChild;
+    let el = fragmentEl.firstChild;
     while (el != null) {
         if (el.nodeType === DomB.DOCTYPE) {
             return true;

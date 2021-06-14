@@ -1,5 +1,5 @@
 import { mode_SERVER, mode_SERVER_ALL } from '@mask-node/const';
-import { HtmlDom } from '@mask-node/html-dom/exports';
+import { CommentNode } from '@mask-node/html-dom/CommentNode';
 import { MetaParser } from './MetaParser';
 import { Serializer } from './MetaSerializer';
 
@@ -8,15 +8,15 @@ const seperator_CHAR = String.fromCharCode(seperator_CODE);
 
 
 export const Meta = {
-    stringify: function (json, info) {
+    stringify (json, info) {
         switch (info.mode) {
             case mode_SERVER:
             case mode_SERVER_ALL:
                 return '';
         }
-        var type = info.type,
-            isSingle = info.single,
-            string = type;
+        let type = info.type;
+        let isSingle = info.single;
+        let string = type;
 
         if (json.ID) {
             string += '#' + json.ID;
@@ -26,9 +26,9 @@ export const Meta = {
         if (isSingle) {
             string += '/';
         }
-        return new HtmlDom.Comment(string).toString();
+        return new CommentNode(string).toString();
     },
-    close: function (json, info) {
+    close (json, info) {
         if (info.single === true) {
             return '';
         }
@@ -37,11 +37,11 @@ export const Meta = {
             case mode_SERVER_ALL:
                 return '';
         }
-        var string = '/' + info.type + (json.ID ? '#' + json.ID : '');
-        return new HtmlDom.Comment(string).toString();
+        let string = '/' + info.type + (json.ID ? '#' + json.ID : '');
+        return new CommentNode(string).toString();
     },
 
-    parse: function (str) {
+    parse (str) {
         return MetaParser.parse(str);
     }
 };

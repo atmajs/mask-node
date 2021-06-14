@@ -1,4 +1,10 @@
+// import { documentInn } from '@mask-node/html-dom/documentInn';
+// import { rendererB_render } from '@mask-node/renderer/exports';
+// global.document = documentInn;
+
 declare var MaskNode;
+
+
 
 UTest({
     'same lib' () {
@@ -14,7 +20,9 @@ UTest({
                 }
             }
         `;
-        var html = mask.render(template);
+
+        const html = MaskNode.render(template);
+
 
         has_(html, '<style');
         has_(html, 'foo > .name');

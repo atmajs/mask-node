@@ -75,7 +75,6 @@ export class ComponentNode extends NodeBase {
         }
     }
     toString() {
-        console.log('COMMPONENT TO String');
         var compo = this.compo;
         if (compo.__cached != null) {
             return compo.__cached;

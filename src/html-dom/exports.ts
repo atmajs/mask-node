@@ -9,6 +9,7 @@ import { DocumentFragmentInn } from './DocumentFragmentInn';
 import { documentInn } from './documentInn';
 import { stringifyInn } from './util/stringify';
 import { DoctypeNodeInn } from './DoctypeNodeInn';
+import { setDocument } from '@utils/refs';
 
 export namespace HtmlDom {
     export const document = documentInn;
@@ -26,3 +27,7 @@ export namespace HtmlDom {
 
     export const stringify = stringifyInn;
 }
+
+
+// Set document to refs to be accessable from other modules
+setDocument(documentInn);

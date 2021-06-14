@@ -102,6 +102,9 @@ common:
     '/ref-mask/src/builder/delegate/build_component.ts': '/src/builder/delegate/build_component.ts'
     '/ref-mask/src/builder/delegate/builder_buildFactory.ts': '/src/builder/delegate/builder_buildFactory.ts'
     '/ref-mask/src/builder/delegate/exports.ts': '/src/builder/delegate/exports.ts'
+    '/ref-mask/src/custom/mock-attributes.ts': '/src/mock/attr-handler.ts'
+    '/ref-mask/src/custom/mock-utils.ts': '/src/mock/util-handler.ts'
+    '/ref-mask/src/custom/mock-tags.ts': '/src/mock/tag-handler.ts'
   dependencies:
     'parsers/.+.ts': 'custom/exports.ts'
     'feature/.+.ts': 'custom/exports.ts'

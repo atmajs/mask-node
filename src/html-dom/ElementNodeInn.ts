@@ -11,9 +11,9 @@ export class ElementNodeInn extends NodeBase {
     nodeType = DomB.NODE
     attributes: { [key: string]: any } = Object.create(null)
 
-    constructor(name) {
+    constructor(name?: string) {
         super();
-        this.tagName = name.toUpperCase();
+        this.tagName = name?.toUpperCase();
     }
     setAttribute(key, value) {
         this.attributes[key] = value;

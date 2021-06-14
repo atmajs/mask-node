@@ -1,29 +1,29 @@
 UTest({
     'cache (meta object)'() {
 
-        mask.registerHandler(':test', mask.Compo({
+        mask.registerHandler('TestCached', mask.Compo({
             meta: {
                 cache: true,
                 mode: 'server',
             },
             template: "h4 > 'Hello'",
             onRenderStart: assert.avoid(
-                '`:test` should be rendered once'
+                '`TestCached` should be rendered once'
                 , 1
                 , function () { }
             )
         }));
-        var html = mask.render(':test');
-        eq_(html, mask.render(':test'));
-        eq_(html, mask.render(':test'));
+        var html = mask.render('TestCached');
+        eq_(html, mask.render('TestCached'));
+        eq_(html, mask.render('TestCached'));
 
         has_(html, '<h4>Hello</h4>');
     },
 
-    '!cache by property (root object)'() {
+    'cache by property (root object)'() {
         let renderCount = 0;
 
-        mask.registerHandler(':foo', mask.Compo({
+        mask.registerHandler('FooCached', mask.Compo({
             cache: {
                 byProperty: 'ctx.page'
             },
@@ -32,23 +32,23 @@ UTest({
             onRenderStart: () => ++renderCount
         }));
 
-        debugger;
-        mask.render(':foo', null, { page: 'baz' });
+
+        mask.render('FooCached', null, { page: 'baz' });
         eq_(renderCount, 1);
 
-        mask.render(':foo', null, { page: 'baz' });
+        mask.render('FooCached', null, { page: 'baz' });
         eq_(renderCount, 1);
-        return;
 
-        mask.render(':foo', null, { page: 'qux' });
+
+        mask.render('FooCached', null, { page: 'qux' });
         eq_(renderCount, 2);
 
-        mask.render(':foo', null, { page: 'qux' });
+        mask.render('FooCached', null, { page: 'qux' });
         eq_(renderCount, 2);
 
-        mask.render(':foo');
+        mask.render('FooCached');
         eq_(renderCount, 3);
 
-        has_(mask.render(':foo'), '<h4>Hello</h4>');
+        has_(mask.render('FooCached'), '<h4>Hello</h4>');
     }
 })
