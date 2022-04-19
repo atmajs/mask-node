@@ -4,7 +4,7 @@ import { path_resolveCurrent, path_isRelative, path_combine, path_toLocalFile } 
 
 declare var require;
 
-__cfg.getFile = function (path) {
+__cfg.getFile ??= function (path) {
     var dfr = new class_Dfr;
     var fs = require('fs');
     var filename = path_toLocalFile(resolvePath(path));
@@ -20,7 +20,7 @@ __cfg.getFile = function (path) {
     });
     return dfr;
 };
-__cfg.getScript = function (path) {
+__cfg.getScript ??= function (path) {
     var dfr = new class_Dfr;
     var filename = path_toLocalFile(resolvePath(path));
 

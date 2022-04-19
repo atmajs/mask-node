@@ -18,14 +18,14 @@
     "main": "./lib/mask.node.js",
     "devDependencies": {
         "@types/sinon": "^7.0.5",
-        "app-bundler": "^0.0.96",
-        "atma": "^0.12.33",
-        "atma-io": "^1.2.28",
+        "app-bundler": "^0.1.2",
+        "atma": "^0.15.12",
+        "atma-io": "^1.2.60",
         "atma-io-middleware-condcomments": "^1.2.8",
         "atma-io-middleware-importer": "^1.1.37",
         "atma-io-middleware-uglify": "^1.1.21",
         "atma-io-middleware-yml": "^1.1.25",
-        "atma-loader-ts": "^1.1.15",
+        "atma-loader-ts": "^1.1.18",
         "dts-bundle": "^0.7.3",
         "maskjs": "^0.72.27"
     },
